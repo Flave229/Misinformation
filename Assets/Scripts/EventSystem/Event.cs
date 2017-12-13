@@ -1,0 +1,9 @@
+﻿namespace Assets.Scripts.EventSystem
+{
+    public enum Event
+    {
+        LISTENING_DEVICE_PLACED,
+        PLACE_LISTENING_DEVICE,
+        LEFT_MOUSE_CLICK
+    }
+}

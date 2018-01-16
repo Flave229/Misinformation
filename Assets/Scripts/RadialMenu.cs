@@ -25,11 +25,13 @@ namespace Assets.Scripts
         private GameObject[] bedObj;
         List<GameObject> InteractableObjs = new List<GameObject>();//
         List<RadialButton> Buttons = new List<RadialButton>();
+        private GameObject _Camera;
 
         private void Start()
         {
             inputManager = InputManager.Instance();
             character = technician.GetComponent<Character2D>();
+            _Camera = GameObject.FindGameObjectWithTag("MainCamera");
             AddToObjList();
         }
 
@@ -111,17 +113,30 @@ namespace Assets.Scripts
             }
         }
 
-        private void PlayerFarFromMenu()
-        {
-            if (Vector2.Distance(mouseLocation, technician.transform.position) > 10.0f)
-            {
-                for (int i = 0; i < Buttons.Count; i++)
-                {
-                    Buttons[i].AnimateOut();
-                    Destroy(gameObject);
-                }
+        private void PlayerFarFromMenu() 
 
-            }
+
+             
+             
+
+        {
+            Vector3 cameraPosition = _Camera.transform.position;
+           // Camera camera = _Camera.transform.GetComponent<Camera>();
+            //Rect cameraRect = m_Camera.rect;
+            float top = cameraPosition.y - 5.0f;
+            float bottom = cameraPosition.y + 5.0f;
+            float left = cameraPosition.x - 10.0f;
+            float right = cameraPosition.x + 10.0f;
+
+            if (mouseLocation.x < left)
+                Destroy(gameObject);
+            if (mouseLocation.x > right)
+                Destroy(gameObject);
+            if (mouseLocation.y < top)
+                Destroy(gameObject);
+            if (mouseLocation.y > bottom)
+                Destroy(gameObject);
+
         }
 
         private void ShowRadialMenu()
@@ -188,9 +203,10 @@ namespace Assets.Scripts
         {
             if (Input.GetMouseButtonUp(1))
             {
-                PlayerFarFromMenu();
                 ShowRadialMenu();
+                PlayerFarFromMenu();
             }
+            PlayerFarFromMenu();
         }
     }
 }

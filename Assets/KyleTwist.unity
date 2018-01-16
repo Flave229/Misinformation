@@ -2292,7 +2292,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 150
+  field of view: 36
   orthographic: 1
   orthographic size: 4
   m_Depth: -1
@@ -5597,6 +5597,7 @@ MonoBehaviour:
   Days: 0
   CurrentObjective: {fileID: 0}
   _fundingAmount: 2000
+  RecievingFunding: 0
 --- !u!4 &484116700
 Transform:
   m_ObjectHideFlags: 0
@@ -13686,7 +13687,7 @@ Prefab:
     - target: {fileID: 224627372353600074, guid: 91765467a42b67b458701b6019629df8,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: -3.9641206
+      value: -3.4
       objectReference: {fileID: 0}
     - target: {fileID: 224627372353600074, guid: 91765467a42b67b458701b6019629df8,
         type: 2}
@@ -19145,7 +19146,7 @@ MonoBehaviour:
   dropdownsToCheck: []
   QueueHide: 0
   player: {fileID: 0}
-  Typewirter: {fileID: 0}
+  Typewriter: {fileID: 0}
 --- !u!114 &1556709256
 MonoBehaviour:
   m_ObjectHideFlags: 0

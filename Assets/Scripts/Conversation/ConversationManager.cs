@@ -321,7 +321,7 @@ namespace Assets.Scripts.Conversation
         {
             int truthfulness = 0;
 
-            if (_randomNumber.Next(10) <= general.GetKnow())
+            if (_randomNumber.Next(10) <= general.GetKnowledge())
                 truthfulness += 10;
 
             if (_randomNumber.Next(10) <= general.GetTrust())

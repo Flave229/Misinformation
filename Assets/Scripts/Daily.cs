@@ -41,6 +41,14 @@ namespace Assets.Scripts
         {
             GameManager.Instance().GetDailyReport().Show();
             TransitioningDay = true;
+
+            var generalList = GameManager.Instance().GeneralList;
+            foreach (GameObject gameObject in generalList)
+            {
+                var general = gameObject.GetComponent<General.General>();
+                general.UpdateKnowledgeValue(-1);
+                general.UpdateTrustValue(1);
+            }
         }
 
         public void GenerateGenerals()

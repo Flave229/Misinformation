@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/MenuScene.unity
     guid: da270ba0aaf945540a10bb54fb283dab
   - enabled: 0
-    path: 
+    path: Assets/TristanTestScene.unity
     guid: b219315188aefc3478fc322d0886a89b
   - enabled: 0
     path: 
@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: 
     guid: c06bad1fd41e260458f6917b495cce64
   - enabled: 0
-    path: 
+    path: Assets/TristanTestScene.unity
     guid: b219315188aefc3478fc322d0886a89b
   - enabled: 1
     path: Assets/CreditScene.unity

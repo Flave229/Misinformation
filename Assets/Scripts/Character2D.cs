@@ -24,6 +24,7 @@ namespace Assets.Scripts
         public JobType JobType;
         public float WalkSpeed = 0.1f;
         public bool FacingRight = true;
+        public bool Pause;
 
         public void Awake()
         {
@@ -36,7 +37,7 @@ namespace Assets.Scripts
         public void Start()
         {
             if (JobType == JobType.TECHNICIAN)
-                MovementAi = new PlayerMovementAI(this, new AStarPathfinding());
+                	MovementAi = new PlayerMovementAI(this, new AStarPathfinding());
             else
             {
                 MovementAi = new NPCMovementAI(this, new AStarPathfinding());
@@ -59,7 +60,7 @@ namespace Assets.Scripts
 
         private void FixedUpdate()
         {
-            if (Timer.Instance().Paused)
+            if (Timer.Instance().Paused || Pause)
                 return;
 
             MovementAi.CheckAndMoveToNextPathNode();
@@ -75,17 +76,17 @@ namespace Assets.Scripts
         {
             //Do the actual movement.
             //Check we are facing the correct direction.
-            if (JobType == JobType.TECHNICIAN && _inputManager.m_DirectionHorizontal != 0.0f)
-            {
-                if (_inputManager.m_DirectionHorizontal < 0.0f)
-                    FaceRight();
-                else if (_inputManager.m_DirectionHorizontal > 0.0f)
-                    FaceLeft();
-
-                Animator.SetBool("IDLE", false);
-                MovementAi.ClearPath();
-                transform.position = new Vector3(transform.position.x + (WalkSpeed * _inputManager.m_DirectionHorizontal), transform.position.y, transform.position.z);
-            }
+//            if (JobType == JobType.TECHNICIAN && _inputManager.m_DirectionHorizontal != 0.0f)
+//            {
+//                if (_inputManager.m_DirectionHorizontal < 0.0f)
+//                    FaceRight();
+//                else if (_inputManager.m_DirectionHorizontal > 0.0f)
+//                    FaceLeft();
+//
+//                Animator.SetBool("IDLE", false);
+//                MovementAi.ClearPath();
+//                transform.position = new Vector3(transform.position.x + (WalkSpeed * _inputManager.m_DirectionHorizontal), transform.position.y, transform.position.z);
+//            }
 
             var movementPath = MovementAi.GetCurrentPath();
 
@@ -147,9 +148,11 @@ namespace Assets.Scripts
                     Vector3 mousePlacement = (Vector3)eventPacket;
                     MovementAi.CreatePathTo(mousePlacement);
                     break;
-                case Event.LEFT_MOUSE_CLICK:
-                    Vector2 mouseClickPosition = (Vector2)eventPacket;
-                    MovementAi.CreatePathTo(mouseClickPosition);
+			case Event.LEFT_MOUSE_CLICK:
+				Vector2 mouseClickPosition = (Vector2)eventPacket;
+				if (this.gameObject.GetComponent<Technician> ().IsActive) {
+					MovementAi.CreatePathTo (mouseClickPosition);
+				}
                     break;
             }
         }

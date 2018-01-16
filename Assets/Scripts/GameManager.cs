@@ -72,7 +72,7 @@ namespace Assets.Scripts
             GeneralList.AddRange(GameObject.FindGameObjectsWithTag("General"));
             ListeningDevList.AddRange(GameObject.FindGameObjectsWithTag("ListeningDevice"));
 			TechList.AddRange (GameObject.FindGameObjectsWithTag ("Player"));
-			TechList [0].gameObject.GetComponent<Technician> ().isActive = true;
+			TechList [0].gameObject.GetComponent<Technician> ().IsActive = true;
 			ActiveTech = TechList [0];
 			ActiveTechNum = 0;
 
@@ -109,15 +109,14 @@ namespace Assets.Scripts
 
 		public void CycleTech()
 		{
-			ActiveTech.gameObject.GetComponent<Technician> ().isActive = false;
-			if (ActiveTechNum == (TechList.Count - 1)) {
+			ActiveTech.gameObject.GetComponent<Technician> ().IsActive = false;
+			if (ActiveTechNum == (TechList.Count - 1))
 				ActiveTechNum = 0;
-			} else {
+			else
 				ActiveTechNum++;
-			}
-			ActiveTech = TechList [ActiveTechNum];
-			ActiveTech.gameObject.GetComponent<Technician> ().isActive = true;
 
+			ActiveTech = TechList [ActiveTechNum];
+			ActiveTech.gameObject.GetComponent<Technician>().IsActive = true;
 		}
 
         public List<GameObject> GetList()

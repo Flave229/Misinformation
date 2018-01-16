@@ -6,7 +6,9 @@ namespace Assets.Scripts
     {
         private int _translationSkill;
         private int _equipmentSkill;
-        private int _motivation;        
+        private int _motivation;
+        public bool IsActive;
+
         void Start()
         {        
         }

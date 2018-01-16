@@ -75,17 +75,17 @@ namespace Assets.Scripts
         {
             //Do the actual movement.
             //Check we are facing the correct direction.
-            if (JobType == JobType.TECHNICIAN && _inputManager.m_DirectionHorizontal != 0.0f)
-            {
-                if (_inputManager.m_DirectionHorizontal < 0.0f)
-                    FaceRight();
-                else if (_inputManager.m_DirectionHorizontal > 0.0f)
-                    FaceLeft();
-
-                Animator.SetBool("IDLE", false);
-                MovementAi.ClearPath();
-                transform.position = new Vector3(transform.position.x + (WalkSpeed * _inputManager.m_DirectionHorizontal), transform.position.y, transform.position.z);
-            }
+//            if (JobType == JobType.TECHNICIAN && _inputManager.m_DirectionHorizontal != 0.0f)
+//            {
+//                if (_inputManager.m_DirectionHorizontal < 0.0f)
+//                    FaceRight();
+//                else if (_inputManager.m_DirectionHorizontal > 0.0f)
+//                    FaceLeft();
+//
+//                Animator.SetBool("IDLE", false);
+//                MovementAi.ClearPath();
+//                transform.position = new Vector3(transform.position.x + (WalkSpeed * _inputManager.m_DirectionHorizontal), transform.position.y, transform.position.z);
+//            }
 
             var movementPath = MovementAi.GetCurrentPath();
 

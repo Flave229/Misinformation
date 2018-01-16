@@ -95,7 +95,7 @@ namespace Assets.Scripts
             return _instance ?? (_instance = new GameManager());
         }
 
-        public List<GameObject> GetList()
+        public List<GameObject> GetListeningDevices()
         {
             return ListeningDevList;
         }

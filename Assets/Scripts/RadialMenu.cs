@@ -134,13 +134,16 @@ namespace Assets.Scripts
             {
                 if (selected.title == "PlaceObject")
                 {
-                    for (int i = 0; i < InteractableObjs.Count; i++)
+                    if (GameManager.Instance().FundingAmount > 0) //May need to change depending what direction listening devices taken.
                     {
-                        if (Vector2.Distance(mouseLocation, InteractableObjs[i].transform.position) < 2.0f)
+                        for (int i = 0; i < InteractableObjs.Count; i++)
                         {
-                            DoAIStuff(1.0f);
+                            if (Vector2.Distance(mouseLocation, InteractableObjs[i].transform.position) < 2.0f)
+                            {
+                                DoAIStuff(1.0f);
 
-                            Debug.Log(selected.title + " was selected");
+                                Debug.Log(selected.title + " was selected");
+                            }
                         }
                     }
                 }

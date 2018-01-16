@@ -1,37 +1,61 @@
 ﻿using Assets.Scripts.EventSystem;
 using Assets.Scripts.EventSystem.EventPackets;
+using System.Collections.Generic;
 using UnityEngine;
 using Event = Assets.Scripts.EventSystem.Event;
+
 
 namespace Assets.Scripts
 {
     public class ListeningDevice : MonoBehaviour
     {
-        public static void PlaceInRoom(Room room, Vector3 position)
-        {
-            GameObject listeningDevice = Resources.Load<GameObject>("ListeningDevice");
-            Vector3 placementPosition = new Vector3(position.x, position.y - 0.83f, position.z);
-            listeningDevice = Object.Instantiate(listeningDevice, placementPosition, Quaternion.identity);
-
-            GameManager gameManager = GameManager.Instance();
-            gameManager.ListeningDevList.Add(listeningDevice);
-            gameManager.FundingAmount -= 400;
-            ListeningDevicePlacedPacket eventPacket = new ListeningDevicePlacedPacket
-            {
-                Device = listeningDevice,
-                PlacedRoom = room
-            };
-            EventMessenger.Instance().FireEvent(Event.LISTENING_DEVICE_PLACED, eventPacket);
-        }
+        private int durability;
+        private float dPeriod = 10;
 
         public void Start ()
         {
-
+            durability = 2;
         }
 	
-        void Update ()
+        public void Update ()
         {
-		
+            if (durability <= 0)
+                DestroyDevice();
+
+            if (dPeriod <= 0)
+            {
+                if(durability != 0)
+                {
+                    Degrade();
+                    ResetDPeriod();
+                }
+            }
+            else
+            {
+                dPeriod -= Time.deltaTime;
+            }
+            Debug.Log("Durability = " + durability);
         }
+
+        private void ResetPeriod()
+        {
+            dPeriod = 10;
+        }
+
+        public void Degrade()
+        {
+            durability--;
+        }
+
+        public void DestroyDevice()
+        {
+            Destroy(transform.gameObject);
+        }
+
+        public void ResetDPeriod()
+        {
+            dPeriod = 10;
+        }
+
     }
 }

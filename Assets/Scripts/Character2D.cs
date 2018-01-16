@@ -24,6 +24,7 @@ namespace Assets.Scripts
         public JobType JobType;
         public float WalkSpeed = 0.1f;
         public bool FacingRight = true;
+        public bool Pause;
 
         public void Awake()
         {
@@ -59,7 +60,7 @@ namespace Assets.Scripts
 
         private void FixedUpdate()
         {
-            if (Timer.Instance().Paused)
+            if (Timer.Instance().Paused || Pause)
                 return;
 
             MovementAi.CheckAndMoveToNextPathNode();

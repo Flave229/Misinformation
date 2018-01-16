@@ -87,22 +87,24 @@ namespace Assets.Scripts
         {
             m_OpenClose = animator.GetBool("OpenClose");
 
-            //_delay = _delay.ToDictionary(element => element.Key, element => (element.Value - Time.deltaTime));
+            _delay = _delay.ToDictionary(element => element.Key, element => (element.Value - Time.deltaTime));
 
-            //List<Character2D> charactersToRemove = new List<Character2D>();
-            //foreach(var a in _delay)
-            //{
-            //    if(a.Value <= 0.0f)
-            //    {
-            //        a.Key.transform.position = m_ConnectingDoor.transform.position;
-            //        a.Key.CurrentRoom = m_ConnectingDoor.m_ParentRoom;
-            //        charactersToRemove.Add(a.Key);
-            //    }
-            //}
-            //foreach(Character2D character in charactersToRemove)
-            //{
-            //    _delay.Remove(character);
-            //}
+            List<Character2D> charactersToRemove = new List<Character2D>();
+            foreach(var a in _delay)
+            {
+                if(a.Value <= 0.0f)
+                {
+                    a.Key.transform.position = m_ConnectingDoor.transform.position;
+                    a.Key.CurrentRoom = m_ConnectingDoor.m_ParentRoom;
+                    a.Key.Pause = false;
+                    a.Key.gameObject.SetActive(true);
+                    charactersToRemove.Add(a.Key);
+                }
+            }
+            foreach(Character2D character in charactersToRemove)
+            {
+                _delay.Remove(character);
+            }
         }
 
         public void ActivateEvent(Character2D character)
@@ -112,15 +114,17 @@ namespace Assets.Scripts
                 coroutine = OpenDoor();
                 StartCoroutine(coroutine);
 
-                //if (m_ConnectingDoor.m_DoorType == DoorType.Door_Down || m_ConnectingDoor.m_DoorType == DoorType.Door_Up)
-                //{
-                //    _delay.Add(character, _defaultCooldown);
-                //}
-                //else
-                //{
+                if (m_ConnectingDoor.m_DoorType == DoorType.Door_Down || m_ConnectingDoor.m_DoorType == DoorType.Door_Up)
+                {
+                    _delay.Add(character, _defaultCooldown);
+                    character.Pause = true;
+                    character.gameObject.SetActive(false);
+                }
+                else
+                {
                     character.transform.position = m_ConnectingDoor.transform.position;
                     character.CurrentRoom = m_ConnectingDoor.m_ParentRoom;
-                //}
+                }
             }
         }
 

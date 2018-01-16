@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/JacobScene.unity
-  isLoaded: 1
-  isActive: 1

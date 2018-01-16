@@ -4,7 +4,7 @@ namespace Assets.Scripts
 {
     public class Camera2DFollow : MonoBehaviour
     {
-        private bool m_Active = false;
+        private bool m_Active = true;
 
         public Transform target;
 		public Camera camera;
@@ -44,6 +44,7 @@ namespace Assets.Scripts
         // Update is called once per frame
         private void Update()
         {
+			target = GameManager.Instance ().ActiveTech.transform;
 			if (Input.GetKeyDown(KeyCode.O))
 			{
 				m_Active = !m_Active;

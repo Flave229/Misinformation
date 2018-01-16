@@ -52,6 +52,7 @@ namespace Assets.Scripts
         TranslatorSkill TranslatorSkillLvl;
         EquipmentSpecialistSkill EquipSpecSkillLvl;
         MotivationSkill MotivationLvl;
+		public bool isActive;
         bool testBoolDebugLog = true; // test value for debug log 
 
         //random speed between 0.25 and 0.4

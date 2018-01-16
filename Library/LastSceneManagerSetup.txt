@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/KyleTwist.unity
+- path: Assets/DavidSmith.unity
   isLoaded: 1
   isActive: 1

@@ -37,7 +37,7 @@ namespace Assets.Scripts
         public void Start()
         {
             if (JobType == JobType.TECHNICIAN)
-                MovementAi = new PlayerMovementAI(this, new AStarPathfinding());
+                	MovementAi = new PlayerMovementAI(this, new AStarPathfinding());
             else
             {
                 MovementAi = new NPCMovementAI(this, new AStarPathfinding());
@@ -148,9 +148,11 @@ namespace Assets.Scripts
                     Vector3 mousePlacement = (Vector3)eventPacket;
                     MovementAi.CreatePathTo(mousePlacement);
                     break;
-                case Event.LEFT_MOUSE_CLICK:
-                    Vector2 mouseClickPosition = (Vector2)eventPacket;
-                    MovementAi.CreatePathTo(mouseClickPosition);
+			case Event.LEFT_MOUSE_CLICK:
+				Vector2 mouseClickPosition = (Vector2)eventPacket;
+				if (this.gameObject.GetComponent<Technician> ().isActive) {
+					MovementAi.CreatePathTo (mouseClickPosition);
+				}
                     break;
             }
         }

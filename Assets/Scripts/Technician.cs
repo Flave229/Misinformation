@@ -8,9 +8,11 @@ namespace Assets.Scripts
         private int _equipmentSkill;
         private int _motivation;
         public bool IsActive;
+		public int Salary;
 
         void Start()
         {        
+			Salary = 100 + (_translationSkill * 20) + (_equipmentSkill * 20) + (_motivation * 10);
         }
         
         void Update()
@@ -27,5 +29,17 @@ namespace Assets.Scripts
             Debug.Log("Equipment Specialist Skill: " + _equipmentSkill);
             Debug.Log("Motivation: " + _motivation);
         }
+
+
+		public void UpdateSalary()
+		{
+			Salary = 100 + (_translationSkill * 20) + (_equipmentSkill * 20) + (_motivation * 10);
+		}
+
+        public int GetEquipmentSkill()
+        {
+            return _equipmentSkill;
+        }
+
     }
 }

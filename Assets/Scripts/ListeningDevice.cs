@@ -11,10 +11,17 @@ namespace Assets.Scripts
     {
         private int durability;
         private float dPeriod = 10;
+        private double _quality;
+        private GameObject _player;
+        private Technician _technician;
 
         public void Start ()
         {
+            _player = GameObject.FindGameObjectWithTag("Player");
+            _technician = _player.GetComponent<Technician>();
             durability = 2;
+            _quality = (double)((_technician.GetEquipmentSkill() + 1)) / 10;
+            Debug.Log("Quality = " + _quality);
         }
 	
         public void Update ()
@@ -34,7 +41,7 @@ namespace Assets.Scripts
             {
                 dPeriod -= Time.deltaTime;
             }
-            Debug.Log("Durability = " + durability);
+            Debug.Log("Quality = " + _quality);
         }
 
         private void ResetPeriod()
@@ -56,6 +63,5 @@ namespace Assets.Scripts
         {
             dPeriod = 10;
         }
-
     }
 }

@@ -118,6 +118,15 @@ namespace Assets.Scripts
 			ActiveTech = TechList [ActiveTechNum];
 			ActiveTech.gameObject.GetComponent<Technician>().IsActive = true;
 		}
+
+		public void Salary()
+		{
+			foreach(GameObject t in TechList)
+			{
+				t.GetComponent<Technician> ().UpdateSalary ();
+				FundingAmount = FundingAmount - t.GetComponent<Technician> ().Salary;
+			}
+		}
         
         public List<GameObject> GetListeningDevices()
         {

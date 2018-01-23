@@ -24,6 +24,7 @@ namespace Assets.Scripts
         public JobType JobType;
         public float WalkSpeed = 0.1f;
         public bool FacingRight = true;
+        public bool Pause;
 
         public void Awake()
         {
@@ -59,7 +60,7 @@ namespace Assets.Scripts
 
         private void FixedUpdate()
         {
-            if (Timer.Instance().Paused)
+            if (Timer.Instance().Paused || Pause)
                 return;
 
             MovementAi.CheckAndMoveToNextPathNode();
@@ -149,7 +150,7 @@ namespace Assets.Scripts
                     break;
 			case Event.LEFT_MOUSE_CLICK:
 				Vector2 mouseClickPosition = (Vector2)eventPacket;
-				if (this.gameObject.GetComponent<Technician> ().isActive) {
+				if (this.gameObject.GetComponent<Technician> ().IsActive) {
 					MovementAi.CreatePathTo (mouseClickPosition);
 				}
                     break;

@@ -2617,7 +2617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 2
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 836389737}
   m_OpenClose: 0
@@ -2822,7 +2822,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 1
+  m_DoorType: 3
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 1046962792}
   m_OpenClose: 0
@@ -6704,7 +6704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 2
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 2027076901}
   m_OpenClose: 0
@@ -7341,7 +7341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 2
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 1632723720}
   m_OpenClose: 0
@@ -7546,7 +7546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 2
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 1086510129}
   m_OpenClose: 0
@@ -10804,7 +10804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 3
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 1873305189}
   m_OpenClose: 0
@@ -11984,6 +11984,7 @@ MonoBehaviour:
   JobType: 0
   WalkSpeed: 0.1
   FacingRight: 1
+  Pause: 0
 --- !u!212 &820506644
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12187,7 +12188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 3
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 191097920}
   m_OpenClose: 0
@@ -14233,7 +14234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 3
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 1013860217}
   m_OpenClose: 0
@@ -14702,7 +14703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 2
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 982226875}
   m_OpenClose: 0
@@ -15238,7 +15239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 2
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 195481468}
   m_OpenClose: 0
@@ -16226,7 +16227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 3
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 519690233}
   m_OpenClose: 0
@@ -18111,6 +18112,7 @@ MonoBehaviour:
   JobType: 1
   WalkSpeed: 0.05
   FacingRight: 1
+  Pause: 0
 --- !u!212 &1234366203
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -22562,7 +22564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 3
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 507070385}
   m_OpenClose: 0
@@ -25181,7 +25183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 2
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 745033195}
   m_OpenClose: 0
@@ -25383,7 +25385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 3
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 2135860632}
   m_OpenClose: 0
@@ -25580,6 +25582,7 @@ MonoBehaviour:
   JobType: 1
   WalkSpeed: 0.05
   FacingRight: 1
+  Pause: 0
 --- !u!212 &1911981189
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -25852,7 +25855,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 3
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 2062964712}
   m_OpenClose: 0
@@ -26596,7 +26599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 3
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 2085177443}
   m_OpenClose: 0
@@ -26919,7 +26922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 3
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 473513978}
   m_OpenClose: 0
@@ -27771,7 +27774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 2
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 1942396291}
   m_OpenClose: 0
@@ -28388,7 +28391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 2
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 2016494300}
   m_OpenClose: 0
@@ -29100,6 +29103,7 @@ MonoBehaviour:
   JobType: 1
   WalkSpeed: 0.05
   FacingRight: 1
+  Pause: 0
 --- !u!212 &2132249347
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -29353,7 +29357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3995916cacb1b3c40b1bdec2faad27c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoorType: 0
+  m_DoorType: 2
   m_ParentRoom: {fileID: 0}
   m_ConnectingDoor: {fileID: 1875642237}
   m_OpenClose: 0

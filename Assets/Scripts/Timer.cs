@@ -11,7 +11,7 @@ namespace Assets.Scripts
 
         public bool Paused { get; set; }
 
-        private Timer()
+        public Timer()
         {
             _lastInspectedTime = DateTime.Now;
         }

@@ -75,6 +75,8 @@ namespace Assets.Scripts.General
                     {
                         SeenListeningDevices.Add(listeningDeviceData.Device);
                         Debug.Log(Name.FirstName + " " + Name.LastName + " spotted a listening device!");
+                        UpdateTrustValue(((int)(UnityEngine.Random.value * -2)) - 1);
+
                     }
 
                     break;

@@ -181,6 +181,7 @@ namespace Assets.Scripts
         {
             return _dailyReport;
         }
+        
     }
     
 }

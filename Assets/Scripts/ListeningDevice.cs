@@ -13,11 +13,19 @@ namespace Assets.Scripts
 		public GameObject toolTip;
         private int durability;
         private float dPeriod = 10;
+        private double _quality;
+        private GameObject _player;
+        private Technician _technician;
 
         public void Start ()
         {
+            _player = GameObject.FindGameObjectWithTag("Player");
+            _technician = _player.GetComponent<Technician>();
             durability = 2;
-			toolTip = GameObject.Find ("HoverText");
+			      toolTip = GameObject.Find ("HoverText");
+            _quality = (double)((_technician.GetEquipmentSkill() + 1)) / 10;
+            Debug.Log("Quality = " + _quality);
+
         }
 	
         public void Update ()
@@ -37,7 +45,7 @@ namespace Assets.Scripts
             {
                 dPeriod -= Time.deltaTime;
             }
-            Debug.Log("Durability = " + durability);
+            Debug.Log("Quality = " + _quality);
         }
 
 		void OnMouseOver()
@@ -69,10 +77,11 @@ namespace Assets.Scripts
         {
             dPeriod = 10;
         }
-
+        
 		public int GetDurability()
 		{
 			return durability;
 		}
+
     }
 }

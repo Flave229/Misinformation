@@ -12051,7 +12051,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbdb6a03e5c72294e8f9dca45fa36836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 0
+  IsActive: 0
 --- !u!1 &833648086
 GameObject:
   m_ObjectHideFlags: 0
@@ -13863,6 +13863,7 @@ GameObject:
   m_Component:
   - component: {fileID: 961261670}
   - component: {fileID: 961261671}
+  - component: {fileID: 961261672}
   m_Layer: 0
   m_Name: plant
   m_TagString: Interactable
@@ -13925,6 +13926,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &961261672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 961261669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ab8b85527142274590d0aacb5077847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  options: []
 --- !u!1 &961514250
 GameObject:
   m_ObjectHideFlags: 0
@@ -17654,7 +17667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbdb6a03e5c72294e8f9dca45fa36836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 0
+  IsActive: 0
 --- !u!95 &1197693686
 Animator:
   serializedVersion: 3
@@ -17691,6 +17704,7 @@ MonoBehaviour:
   JobType: 0
   WalkSpeed: 0.1
   FacingRight: 1
+  Pause: 0
 --- !u!212 &1197693688
 SpriteRenderer:
   m_ObjectHideFlags: 0

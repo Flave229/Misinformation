@@ -23,7 +23,7 @@ namespace Assets.Scripts
         private GameObject[] chairObj;
         private GameObject[] plantObj;
         private GameObject[] bedObj;
-        List<GameObject> InteractableObjs = new List<GameObject>();//
+        List<GameObject> InteractableObjs = new List<GameObject>();
         List<RadialButton> Buttons = new List<RadialButton>();
         private GameObject _Camera;
 
@@ -48,7 +48,6 @@ namespace Assets.Scripts
         private void AddToObjList()
         {
             int i = 0;
-            //AND HERE
             for (i = 0; i < chairObj.Length; ++i)
             {
                 InteractableObjs.Add(chairObj[i]);
@@ -78,7 +77,7 @@ namespace Assets.Scripts
                 newButton.title = obj.options[i].title;
                 newButton.myMenu = this;
                 newButton.AnimateIn();
-                Buttons.Add(newButton); //THIS HERE IS THE PROBLEM BOY
+                Buttons.Add(newButton);
             }
             RadialMenuText();
         }
@@ -113,12 +112,7 @@ namespace Assets.Scripts
             }
         }
 
-        private void PlayerFarFromMenu() 
-
-
-             
-             
-
+        private void PlayerFarFromMenu()
         {
             Vector3 cameraPosition = _Camera.transform.position;
            // Camera camera = _Camera.transform.GetComponent<Camera>();

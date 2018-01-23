@@ -75,8 +75,7 @@ namespace Assets.Scripts.AI.Movement_AI
                 Vector2 boxColliderPosition = new Vector2(boxCollider.transform.position.x, boxCollider.transform.position.y);
                 if (CollisionBox.PointInBoxCollision(boxColliderPosition + boxCollider.offset, new Vector2(boxCollider.size.x, boxCollider.size.y), position) == false)
                     continue;
-
-                Debug.Log("I think I am in " + room.name);
+                
                 clickedRoom = room;
                 break;
             }

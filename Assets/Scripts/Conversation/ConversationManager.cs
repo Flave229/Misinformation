@@ -151,19 +151,15 @@ namespace Assets.Scripts.Conversation
             {
                 case 11:
                     general1ConversationData.Lying = true;
-                    Debug.Log("Gen 1 knows and is lying");
                     break;
                 case 1:
                     general1ConversationData.Lying = true;
-                    Debug.Log("Gen 1 doesn't know and is lying");
                     break;
                 case 0:
                     general1ConversationData.Lying = false;
-                    Debug.Log("Gen 1 doesn't know and isn't lying");
                     break;
                 case 10:
                     general1ConversationData.Lying = false;
-                    Debug.Log("Gen 1 knows and isn't lying");
                     break;
             }
 
@@ -173,41 +169,33 @@ namespace Assets.Scripts.Conversation
                     TrueEvent = !TrueEvent;
                     TruePlace = !TruePlace;
                     general2ConversationData.Lying = true;
-                    Debug.Log("Gen 2 knows and is lying");
                     break;
                 case 1:
                     general2ConversationData.Lying = true;
-                    Debug.Log("Gen 2 doesn't know and is lying");
                     break;
                 case 0:
                     general2ConversationData.Lying = false;
-                    Debug.Log("Gen 2 doesn't know and isn't lying");
                     break;
                 case 10:
                     general2ConversationData.Lying = false;
-                    Debug.Log("Gen 2 knows and isn't lying");
                     break;
             }
 
             if (TrueEvent && TruePlace)
             {                 //error where if one is not true then the reponce is positive, need to debug
                 response = 0;
-                Debug.Log("Gen 2 Agrees");
             }
             else if (TrueEvent && !TruePlace)
             {
                 response = 12;
-                Debug.Log("Agree on event but not Place");
             }
             else if (!TrueEvent && TruePlace)
             {
                 response = 11;
-                Debug.Log("Agree on Place not event");
             }
             else if (!TrueEvent && !TruePlace)
             {
                 response = 3;
-                Debug.Log("Gen 2 Disagrees");
             }
 
             return response;

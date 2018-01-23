@@ -77,12 +77,17 @@ namespace Assets.Scripts
         {
             dPeriod = 10;
         }
+
+        public double GetQuality()
+        {
+            return _quality;
+        }
         
 		public int GetDurability()
 		{
 			return durability;
 		}
-
+    
 		public double GetQuality()
 		{
 			return _quality;

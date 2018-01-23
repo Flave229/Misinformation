@@ -37,8 +37,6 @@ namespace Assets.Scripts
 
             if (m_Camera.fieldOfView <= m_FinalFOV && Vector3.Distance(m_Camera.transform.position, m_FinalPosition) <= 0.1f)
             {
-                Debug.Log("Complete"+ m_Camera.transform.position);
-
                 transform.gameObject.SetActive(false);
                 m_MainCamera.SetActive(true);
 

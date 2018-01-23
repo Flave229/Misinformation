@@ -37,7 +37,5 @@ namespace Assets.Scripts
 			isEntered = true;
 			tooltipText = newText;
 		}
-
-
 	}
 }

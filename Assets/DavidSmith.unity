@@ -8733,7 +8733,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 584181109}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67a000b17cc631c4bb074497e5325a46, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c2891dc3e442774f98c37126e427cf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tooltipText: 
@@ -13952,7 +13952,6 @@ GameObject:
   m_Component:
   - component: {fileID: 961261670}
   - component: {fileID: 961261671}
-  - component: {fileID: 961261672}
   m_Layer: 0
   m_Name: plant
   m_TagString: Plant
@@ -14015,18 +14014,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!114 &961261672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 961261669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ab8b85527142274590d0aacb5077847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  options: []
 --- !u!1 &961514250
 GameObject:
   m_ObjectHideFlags: 0

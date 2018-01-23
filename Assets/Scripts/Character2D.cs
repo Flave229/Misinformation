@@ -141,7 +141,6 @@ namespace Assets.Scripts
 
         public void ConsumeEvent(Event subscribeEvent, object eventPacket)
         {
-            Debug.Log("Tech is consuming event " + subscribeEvent.ToString());
             switch (subscribeEvent)
             {
                 case Event.PLACE_LISTENING_DEVICE:

@@ -34,7 +34,7 @@ namespace Assets.Scripts
             {
                 dPeriod -= Time.deltaTime;
             }
-            Debug.Log("Durability = " + durability);
+            //Debug.Log("Durability = " + durability);
         }
 
         private void ResetPeriod()

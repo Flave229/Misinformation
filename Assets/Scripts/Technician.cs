@@ -27,5 +27,10 @@ namespace Assets.Scripts
             Debug.Log("Equipment Specialist Skill: " + _equipmentSkill);
             Debug.Log("Motivation: " + _motivation);
         }
+
+        public int GetEquipmentSkill()
+        {
+            return _equipmentSkill;
+        }
     }
 }

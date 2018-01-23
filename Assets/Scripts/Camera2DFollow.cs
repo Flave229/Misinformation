@@ -38,6 +38,7 @@ namespace Assets.Scripts
             m_OffsetZ            = (transform.position - target.position).z;
             transform.parent     = null;
 			lastMousePos = Vector3.zero;
+			camera = GetComponent<Camera> ();
         }
 
 

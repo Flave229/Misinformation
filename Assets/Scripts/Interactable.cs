@@ -22,6 +22,5 @@ namespace Assets.Scripts
                 RadialMenuSpawner.ins.SpawnMenu(this);
             }
         }
-
     }
 }

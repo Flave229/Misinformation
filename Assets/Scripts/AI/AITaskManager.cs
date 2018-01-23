@@ -123,8 +123,6 @@ namespace Assets.Scripts.AI
                 Toilet chosenToilet = toilets[randomGenerator.Next(0, toilets.Count - 1)];
                 chosenToilet.Occupied = true;
                 Vector2 toiletPosition = chosenToilet.transform.position;
-
-                Debug.Log("General going to the toilet, targeting location " + toiletPosition);
                 
                 Stack<ITask> taskChain = new Stack<ITask>();
                 taskChain.Push(new UseToiletTask(new ToiletData
@@ -159,8 +157,6 @@ namespace Assets.Scripts.AI
                 chosenBed.Occupied = true;
                 Vector2 bedPosition = chosenBed.transform.position;
 
-                Debug.Log("General going to bed, targeting location " + bedPosition);
-
                 Stack<ITask> taskChain = new Stack<ITask>();
                 taskChain.Push(new SleepTask(new SleepData
                 {
@@ -193,8 +189,6 @@ namespace Assets.Scripts.AI
                 Chair chosenChair = chairs[randomGenerator.Next(0, chairs.Count - 1)];
                 chosenChair.Occupied = true;
                 Vector2 chairPosition = chosenChair.transform.position;
-
-                Debug.Log("General going to sit down, targeting location " + chairPosition);
                 
                 Stack<ITask> taskChain = new Stack<ITask>();
                 taskChain.Push(new SitTask(new SitData

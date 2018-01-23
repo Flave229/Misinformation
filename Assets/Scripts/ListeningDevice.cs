@@ -2,6 +2,7 @@
 using Assets.Scripts.EventSystem.EventPackets;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Event = Assets.Scripts.EventSystem.Event;
 
 
@@ -9,6 +10,7 @@ namespace Assets.Scripts
 {
     public class ListeningDevice : MonoBehaviour
     {
+		public GameObject toolTip;
         private int durability;
         private float dPeriod = 10;
         private double _quality;
@@ -20,8 +22,10 @@ namespace Assets.Scripts
             _player = GameObject.FindGameObjectWithTag("Player");
             _technician = _player.GetComponent<Technician>();
             durability = 2;
+			      toolTip = GameObject.Find ("HoverText");
             _quality = (double)((_technician.GetEquipmentSkill() + 1)) / 10;
             Debug.Log("Quality = " + _quality);
+
         }
 	
         public void Update ()
@@ -44,6 +48,15 @@ namespace Assets.Scripts
             Debug.Log("Quality = " + _quality);
         }
 
+		void OnMouseOver()
+		{
+			toolTip.GetComponent<FollowMouse>().UpdateText ("Listening Device\n" + "Durability = " + GetDurability ());
+		}
+		void OnMouseExit()
+		{
+			toolTip.GetComponent<FollowMouse>().isEntered = false;
+		}
+
         private void ResetPeriod()
         {
             dPeriod = 10;
@@ -56,6 +69,7 @@ namespace Assets.Scripts
 
         public void DestroyDevice()
         {
+			toolTip.GetComponent<FollowMouse> ().UpdateText ("");
             Destroy(transform.gameObject);
         }
 
@@ -68,5 +82,10 @@ namespace Assets.Scripts
         {
             return _quality;
         }
+        
+		public int GetDurability()
+		{
+			return durability;
+		}
     }
 }

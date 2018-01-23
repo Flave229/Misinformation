@@ -29,6 +29,7 @@ namespace Assets.Scripts.AI.Tasks
 
             _speechBubble = null;
             _speechText = null;
+            //_speechText.SetActive(false);
             //_speechBubble.SetActive(false);
         }
 
@@ -62,19 +63,23 @@ namespace Assets.Scripts.AI.Tasks
 				SoundManager.Instance ().PlaySingleDistance (_converseData.ConversationPartnerTaskData.General.gameObject, "generalConversation2", 1.0f, 10.0f);
                 _converseData.Speech = conversation[_converseData.General];
                 _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
-                _speechBubble = GameObject.Instantiate(Resources.Load<GameObject>("SpeechBubble"));
-                  _speechText = GameObject.Instantiate(new GameObject("SpeechText"));
-                _speechText.AddComponent<TextMesh>();
-                 _speechText.GetComponent<TextMesh>().text = _speechBubble.GetComponent<Text>().text;
-                _speechBubble.AddComponent<TextMesh>();
-                _speechBubble.transform.parent = GameObject.Find("CanvasConversation").transform;
-                //_speechBubble.
-                _speechBubble.GetComponent<Text>().text = "This is some Text";
-                 _speechText.transform.parent = GameObject.Find(_speechBubble.name).transform;
-                _speechBubble.transform.position = new Vector3(_converseData.General.transform.position.x - 0.4f, _converseData.General.transform.position.y + 1.0f, 0.0f);
-                _speechText.transform.position = _speechBubble.transform.position;
+                _speechBubble = GameObject.Instantiate(Resources.Load<GameObject>("TestPrefab"));
+                _speechBubble.transform.parent = _converseData.General.transform;
+              //  _speechText = GameObject.Instantiate(new GameObject("SpeechText"));
+              //_speechText = GameObject.Find("ConversationText");
+              // _speechText.AddComponent<Text>();
+              //_speechText.GetComponent<TextMesh>().text = _speechBubble.GetComponent<Text>().text;
+              //_speechText.GetComponent<Text>().text = _speechBubble.GetComponent<Text>().text;
+              // _speechBubble.AddComponent<TextMesh>();
+              // _speechBubble.transform.parent = GameObject.Find("CanvasConversation").transform;
+              //_speechBubble.
+              //_speechBubble.GetComponent<Text>().text = "This is some Text/This is a Test";
+              // _speechText.transform.parent = GameObject.Find(_speechBubble.name).transform;
+              // _speechBubble.transform.GetChild(0).gameObject.GetComponent<Text>().text = "This is a Test";
+                _speechBubble.transform.position = new Vector3(_converseData.General.transform.position.x - 0.4f, _converseData.General.transform.position.y + 1.0f, 0.0f);        
+               // _speechText.transform.position = _speechBubble.transform.position;
                 _speechBubble.SetActive(true);
-                _speechText.SetActive(true);
+               // _speechText.SetActive(true);
             }
 
 

@@ -74,7 +74,7 @@ namespace Assets.Scripts
 			EfxSource.clip = _allAudio [name];
 			EfxSource.Play ();
 
-			if (desAudio = true)
+			if (desAudio == true)
 			Destroy (emitter.GetComponent<AudioSource> (), EfxSource.clip.length + 1);
 		}
 
@@ -97,7 +97,7 @@ namespace Assets.Scripts
 			EfxSource.clip = _allAudio [name];
 			EfxSource.Play ();
 
-			if (desAudio = true)
+			if (desAudio == true)
 				Destroy (emitter.GetComponent<AudioSource> (), EfxSource.clip.length + 1);
 		}
     }

@@ -87,11 +87,7 @@ namespace Assets.Scripts
 		{
 			return durability;
 		}
-    
-		public double GetQuality()
-		{
-			return _quality;
-		}
+
 
     }
 }

@@ -17,6 +17,8 @@ namespace Assets.Scripts.AI.Tasks
         {
             _dataPacket = dataPacket;
             _targetedFurniture = null;
+            System.Random random = new System.Random();
+            _secondsSearching = random.Next(6, 15);
         }
 
         public void Execute()
@@ -27,8 +29,11 @@ namespace Assets.Scripts.AI.Tasks
                 return;
 
             double generalPerception = (double)(_dataPacket.General.GetPerception()) / 10;
+
+            if (_dataPacket.Furniture.HasListeningDevice() == false)
+                SetCompleted();
+
             double deviceQuality = _dataPacket.Furniture.GetListeningDevice().GetQuality();
-            
             double chanceToFind = 0.25 * (0.2 * deviceQuality) * (0.25 * generalPerception);
             System.Random random = new System.Random();
             if (random.NextDouble() <= chanceToFind)

@@ -211,7 +211,7 @@ namespace Assets.Scripts.AI
             List<GameObject> untrustingGenerals = generalList.Where(x => x.GetComponent<General.General>().GetTrust() < 3).ToList();
             int untrustingGeneralCount = untrustingGenerals.Count;
 
-            float taskChance = (float)(untrustingGeneralCount * 5) / (_startingTimeInSeconds) * Time.deltaTime;
+            float taskChance = (float)(untrustingGeneralCount * 15) / (_startingTimeInSeconds) * Time.deltaTime;
             Random randomGenerator = new Random();
             if (randomGenerator.NextDouble() <= taskChance)
             {
@@ -237,12 +237,12 @@ namespace Assets.Scripts.AI
         private GameObject FindPotentialListeningDeviceObject()
         {
             List<GameObject> potentialListeningDevices = GameObject.FindObjectsOfType<BuggableFurniture>().Select(x => x.gameObject).OfType<GameObject>().ToList();
-            //potentialListeningDevices.AddRange(GameObject.FindGameObjectsWithTag("Plant").OfType<GameObject>().ToList());
-            //potentialListeningDevices.AddRange(GameObject.FindGameObjectsWithTag("Bed").OfType<GameObject>().ToList());
+
+            if (potentialListeningDevices.Count == 0)
+                return null;
 
             System.Random random = new System.Random();
             int randomIndex = random.Next(0, potentialListeningDevices.Count);
-
             return potentialListeningDevices.ElementAt(randomIndex);
         }
     }

@@ -34,6 +34,7 @@ namespace Assets.Scripts.AI
             ChanceToGoToToilet(generalList, generalCount);
             ChanceToGoToBed(generalList, generalCount);
             ChanceToSit(generalList, generalCount);
+            ChanceToSearchForListeningDevices(generalList);
         }
 
         private void ChanceToConverse(List<GameObject> generalList, int generalCount)
@@ -209,6 +210,46 @@ namespace Assets.Scripts.AI
 
                 generalOne.Tasks.AddToStack(new AITaskChain(taskChain));
             }
+        }
+
+        private void ChanceToSearchForListeningDevices(List<GameObject> generalList)
+        {
+            List<GameObject> untrustingGenerals = generalList.Where(x => x.GetComponent<General.General>().GetTrust() < 3).ToList();
+            int untrustingGeneralCount = untrustingGenerals.Count;
+
+            float taskChance = (float)(untrustingGeneralCount * 5) / (_startingTimeInSeconds) * Time.deltaTime;
+            Random randomGenerator = new Random();
+            if (randomGenerator.NextDouble() <= taskChance)
+            {
+                int generalIndex = randomGenerator.Next(0, untrustingGeneralCount);
+                Character2D generalOne = generalList[generalIndex].GetComponent<Character2D>();
+
+                GameObject targetedFurniture = FindPotentialListeningDeviceObject();
+
+                generalOne.Tasks.AddToStack(new FindListeningDeviceTask(new FindListeningDeviceData
+                {
+                    General = generalList[generalIndex].GetComponent<General.General>(),
+                    Furniture = targetedFurniture.GetComponent<BuggableFurniture>()
+                }));
+                generalOne.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
+                {
+                    GeneralMovementAI = generalOne.MovementAi,
+                    Location = targetedFurniture.transform.position
+                }));
+
+            }
+        }
+
+        private GameObject FindPotentialListeningDeviceObject()
+        {
+            List<GameObject> potentialListeningDevices = GameObject.FindObjectsOfType<BuggableFurniture>().Select(x => x.gameObject).OfType<GameObject>().ToList();
+            //potentialListeningDevices.AddRange(GameObject.FindGameObjectsWithTag("Plant").OfType<GameObject>().ToList());
+            //potentialListeningDevices.AddRange(GameObject.FindGameObjectsWithTag("Bed").OfType<GameObject>().ToList());
+
+            System.Random random = new System.Random();
+            int randomIndex = random.Next(0, potentialListeningDevices.Count);
+
+            return potentialListeningDevices.ElementAt(randomIndex);
         }
     }
 }

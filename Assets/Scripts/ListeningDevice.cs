@@ -63,5 +63,10 @@ namespace Assets.Scripts
         {
             dPeriod = 10;
         }
+
+        public double GetQuality()
+        {
+            return _quality;
+        }
     }
 }

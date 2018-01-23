@@ -50,7 +50,7 @@ namespace Assets.Scripts
 
 		void OnMouseOver()
 		{
-			toolTip.GetComponent<FollowMouse>().UpdateText ("Listening Device\n" + "Durability = " + GetDurability ());
+			toolTip.GetComponent<FollowMouse>().UpdateText ("Listening Device\n" + "Durability = " + GetDurability () + "\nQuality = " + (GetQuality() * 10) );
 		}
 		void OnMouseExit()
 		{
@@ -81,6 +81,11 @@ namespace Assets.Scripts
 		public int GetDurability()
 		{
 			return durability;
+		}
+
+		public double GetQuality()
+		{
+			return _quality;
 		}
 
     }

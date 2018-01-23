@@ -2,6 +2,7 @@
 using Assets.Scripts.Conversation;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.AI.Tasks
 {
@@ -15,6 +16,7 @@ namespace Assets.Scripts.AI.Tasks
         private readonly float _defaultTimeWaiting;
         private float _timeWaiting;
         private GameObject _speechBubble;
+        private GameObject _speechText;
 
         public ConverseTask(ConverseData converseData)
         {
@@ -25,8 +27,9 @@ namespace Assets.Scripts.AI.Tasks
             _converseData = converseData;
             _conversationManager = ConversationManager.Instance();
 
-            _speechBubble = Object.Instantiate(Resources.Load<GameObject>("SpeechBubble"));
-            _speechBubble.SetActive(false);
+            _speechBubble = null;
+            _speechText = null;
+            //_speechBubble.SetActive(false);
         }
 
         public void Execute()
@@ -59,9 +62,23 @@ namespace Assets.Scripts.AI.Tasks
 				SoundManager.Instance ().PlaySingleDistance (_converseData.ConversationPartnerTaskData.General.gameObject, "generalConversation2", 1.0f, 10.0f);
                 _converseData.Speech = conversation[_converseData.General];
                 _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
+                _speechBubble = GameObject.Instantiate(Resources.Load<GameObject>("SpeechBubble"));
+                  _speechText = GameObject.Instantiate(new GameObject("SpeechText"));
+                _speechText.AddComponent<TextMesh>();
+                 _speechText.GetComponent<TextMesh>().text = _speechBubble.GetComponent<Text>().text;
+                _speechBubble.AddComponent<TextMesh>();
+                _speechBubble.transform.parent = GameObject.Find("CanvasConversation").transform;
+                //_speechBubble.
+                _speechBubble.GetComponent<Text>().text = "This is some Text";
+                 _speechText.transform.parent = GameObject.Find(_speechBubble.name).transform;
                 _speechBubble.transform.position = new Vector3(_converseData.General.transform.position.x - 0.4f, _converseData.General.transform.position.y + 1.0f, 0.0f);
+                _speechText.transform.position = _speechBubble.transform.position;
                 _speechBubble.SetActive(true);
+                _speechText.SetActive(true);
             }
+
+
+                
 
             if (_converseData.Talking)
             {
@@ -80,7 +97,9 @@ namespace Assets.Scripts.AI.Tasks
 
         public void SetCompleted()
         {
-            Object.Destroy(_speechBubble);
+            if(_speechBubble != null)
+                Object.Destroy(_speechBubble);
+
             _completed = true;
         }
 

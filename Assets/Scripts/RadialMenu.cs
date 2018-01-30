@@ -115,20 +115,22 @@ namespace Assets.Scripts
         private void PlayerFarFromMenu()
         {
             Vector3 cameraPosition = _Camera.transform.position;
-           // Camera camera = _Camera.transform.GetComponent<Camera>();
-            //Rect cameraRect = m_Camera.rect;
-            float top = cameraPosition.y - 5.0f;
-            float bottom = cameraPosition.y + 5.0f;
-            float left = cameraPosition.x - 10.0f;
-            float right = cameraPosition.x + 10.0f;
+            Camera camera = _Camera.transform.GetComponent<Camera>();
+            Rect cameraRect = camera.pixelRect;
+            float top = cameraRect.yMin;
+            float bottom = cameraRect.yMax;
+            float left = cameraRect.xMin;
+            float right = cameraRect.xMax;
 
-            if (mouseLocation.x < left)
+            Vector2 screenBounds = camera.WorldToScreenPoint(new Vector2(mouseLocation.x, mouseLocation.y));
+
+            if (screenBounds.x < left)
                 Destroy(gameObject);
-            if (mouseLocation.x > right)
+            if (screenBounds.x > right)
                 Destroy(gameObject);
-            if (mouseLocation.y < top)
+            if (screenBounds.y < top)
                 Destroy(gameObject);
-            if (mouseLocation.y > bottom)
+            if (screenBounds.y > bottom)
                 Destroy(gameObject);
 
         }
@@ -203,7 +205,7 @@ namespace Assets.Scripts
                 ShowRadialMenu();
                 PlayerFarFromMenu();
             }
-            PlayerFarFromMenu();
+            PlayerFarFromMenu();  //THIS REMOVES RADIAL MENU WHEN OUT OF CAMERA SPACE
         }
     }
 }

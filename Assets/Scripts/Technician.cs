@@ -10,7 +10,7 @@ namespace Assets.Scripts
         public bool IsActive;
 
         void Start()
-        {        
+        {
         }
         
         void Update()

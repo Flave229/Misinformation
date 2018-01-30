@@ -26,7 +26,6 @@ namespace Assets.Scripts.AI.Tasks
             _timeWaiting = _defaultTimeWaiting;
             _converseData = converseData;
             _conversationManager = ConversationManager.Instance();
-
             _speechBubble = GameObject.FindGameObjectWithTag("ConversationPanel");
             // _speechBubble = null; // will be changed since using tags is inefficient but it will be used like this for now to make it work - R.Walters
             // _speechText = null;
@@ -114,8 +113,8 @@ namespace Assets.Scripts.AI.Tasks
 
         public void SetCompleted()
         {
-           // if(_speechBubble != null)
-              //  Object.Destroy(_speechBubble);
+            if(_speechBubble != null)
+                Object.Destroy(_speechBubble);
 
             _completed = true;
         }

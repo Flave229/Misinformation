@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 using Assets.Scripts.AI.TaskData;
+using Assets.Scripts.EventSystem;
+using Assets.Scripts.EventSystem.EventPackets;
+using Event = Assets.Scripts.EventSystem.Event;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.AI.Tasks
 {
@@ -8,6 +12,7 @@ namespace Assets.Scripts.AI.Tasks
         private PathfindData _pathfindData;
         private bool _completed;
         private bool _movementNodeGenerated;
+        List<GameObject> TechnicianList = new List<GameObject>();
 
         public PlaceListeningDeviceTask(PathfindData pathfindData)
         {
@@ -16,12 +21,18 @@ namespace Assets.Scripts.AI.Tasks
 
         public void Execute()
         {
-            GameObject technician = GameObject.FindGameObjectWithTag("Player");
-            float distance = _pathfindData.Location.x - technician.transform.position.x;
-            if (distance <= 2.0f && !IsComplete())
+            TechnicianList = GameManager.Instance().GetTechList();
+            for (int i = 0; i < TechnicianList.Count; i++)
             {
-                ListeningDevice.PlaceInRoom(technician.GetComponent<Character2D>().CurrentRoom, technician.transform.position);
-                _completed = true;
+                if (TechnicianList[i].GetComponent<Technician>().IsActive == true)
+                {
+                    float distance = _pathfindData.Location.x - TechnicianList[i].transform.position.x;
+                    if (distance <= 2.0f && !IsComplete())
+                    {
+                        PlaceInRoom(TechnicianList[i].GetComponent<Character2D>().CurrentRoom, TechnicianList[i].transform.position);
+                        _completed = true;
+                    }
+                }
             }
         }
 
@@ -38,6 +49,23 @@ namespace Assets.Scripts.AI.Tasks
         public bool GetCeilingLock()
         {
             return false;
+        }
+
+        public static void PlaceInRoom(Room room, Vector3 position)
+        {
+            GameObject listeningDevice = Resources.Load<GameObject>("ListeningDevice");
+            Vector3 placementPosition = new Vector3(position.x, position.y - 0.83f, position.z);
+            listeningDevice = Object.Instantiate(listeningDevice, placementPosition, Quaternion.identity);
+
+            GameManager gameManager = GameManager.Instance();
+            gameManager.ListeningDevList.Add(listeningDevice);
+            gameManager.FundingAmount -= 400;
+            ListeningDevicePlacedPacket eventPacket = new ListeningDevicePlacedPacket
+            {
+                Device = listeningDevice,
+                PlacedRoom = room
+            };
+            EventMessenger.Instance().FireEvent(Event.LISTENING_DEVICE_PLACED, eventPacket);
         }
     }
 }

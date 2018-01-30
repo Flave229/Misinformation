@@ -17,6 +17,7 @@ TagManager:
   - Plant
   - Canvas
   - ConversationPanel
+  - TestText
   layers:
   - Default
   - TransparentFX

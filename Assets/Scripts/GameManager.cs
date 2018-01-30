@@ -11,7 +11,10 @@ namespace Assets.Scripts
     {
         public List<GameObject> ListeningDevList = new List<GameObject>();
         public List<GameObject> GeneralList = new List<GameObject>();
+		public List<GameObject> TechList = new List<GameObject> ();
         public List<Name> GeneralNameList = new List<Name>();
+		public GameObject ActiveTech;
+		public int ActiveTechNum;
         public int Days;
 
         public Objective CurrentObjective;
@@ -59,7 +62,7 @@ namespace Assets.Scripts
 
         private void AwakeSingletonManagers()
         {
-            SoundManager.Instance();
+            SoundManager.Instance();            
             InputManager.Instance();
             AITaskManager.Instance();
         }
@@ -68,6 +71,10 @@ namespace Assets.Scripts
         {
             GeneralList.AddRange(GameObject.FindGameObjectsWithTag("General"));
             ListeningDevList.AddRange(GameObject.FindGameObjectsWithTag("ListeningDevice"));
+			TechList.AddRange (GameObject.FindGameObjectsWithTag ("Player"));
+			TechList [0].gameObject.GetComponent<Technician> ().IsActive = true;
+			ActiveTech = TechList [0];
+			ActiveTechNum = 0;
 
             _fundingText = GameObject.FindGameObjectsWithTag("FundingText")[0].GetComponent<Text>();
             _fundingText.text = "£" + FundingAmount.ToString("0000");
@@ -88,14 +95,40 @@ namespace Assets.Scripts
             {
                 _dailyManager.EndDay();
             }
+				
+			if(Input.GetKeyUp(KeyCode.Tab))
+			{
+				CycleTech ();
+			}
         }
 
         public static GameManager Instance()
         {
             return _instance ?? (_instance = new GameManager());
         }
+        
+		public void CycleTech()
+		{
+			ActiveTech.gameObject.GetComponent<Technician> ().IsActive = false;
+			if (ActiveTechNum == (TechList.Count - 1))
+				ActiveTechNum = 0;
+			else
+				ActiveTechNum++;
 
-        public List<GameObject> GetList()
+			ActiveTech = TechList [ActiveTechNum];
+			ActiveTech.gameObject.GetComponent<Technician>().IsActive = true;
+		}
+
+		public void Salary()
+		{
+			foreach(GameObject t in TechList)
+			{
+				t.GetComponent<Technician> ().UpdateSalary ();
+				FundingAmount = FundingAmount - t.GetComponent<Technician> ().Salary;
+			}
+		}
+        
+        public List<GameObject> GetListeningDevices()
         {
             return ListeningDevList;
         }
@@ -104,6 +137,11 @@ namespace Assets.Scripts
         {
             return GeneralList;
         }
+
+		public List<GameObject> GetTechList()
+		{
+			return TechList;
+		}
 
         public void UpdateCurrentDate()
         {
@@ -152,6 +190,7 @@ namespace Assets.Scripts
         {
             return _dailyReport;
         }
+        
     }
     
 }

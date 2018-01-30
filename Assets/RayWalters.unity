@@ -2738,10 +2738,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 820506645}
+  camera: {fileID: 199994924}
+  useKeyboardInput: 1
+  useMouseInput: 1
+  allowScreenEdgeMovement: 1
   damping: 1
   lookAheadFactor: 1
   lookAheadReturnSpeed: 0.1
   lookAheadMoveThreshold: 0.1
+  maximumZoom: 1
+  minimumZoom: 20
+  lookDamper: 5
+  screenEdgeSize: 10
+  screenEdgeSpeed: 1
+  smoothing: 1
+  smoothingFactor: 0.1
+  panSpeed: 1
 --- !u!1 &202387314
 GameObject:
   m_ObjectHideFlags: 0
@@ -6887,6 +6899,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ListeningDevList: []
   GeneralList: []
+  TechList: []
+  ActiveTech: {fileID: 0}
+  ActiveTechNum: 0
   Days: 0
   CurrentObjective: {fileID: 0}
   _fundingAmount: 2000
@@ -11791,6 +11806,7 @@ MonoBehaviour:
   JobType: 0
   WalkSpeed: 0.1
   FacingRight: 1
+  Pause: 0
 --- !u!212 &820506644
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11859,6 +11875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbdb6a03e5c72294e8f9dca45fa36836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsActive: 0
 --- !u!1 &833648086
 GameObject:
   m_ObjectHideFlags: 0
@@ -17919,6 +17936,7 @@ MonoBehaviour:
   JobType: 1
   WalkSpeed: 0.05
   FacingRight: 1
+  Pause: 0
 --- !u!212 &1234366203
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -25276,6 +25294,7 @@ MonoBehaviour:
   JobType: 1
   WalkSpeed: 0.05
   FacingRight: 1
+  Pause: 0
 --- !u!212 &1911981189
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -28679,6 +28698,7 @@ MonoBehaviour:
   JobType: 1
   WalkSpeed: 0.05
   FacingRight: 1
+  Pause: 0
 --- !u!212 &2132249347
 SpriteRenderer:
   m_ObjectHideFlags: 0

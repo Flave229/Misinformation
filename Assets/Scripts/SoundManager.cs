@@ -10,7 +10,7 @@ namespace Assets.Scripts
 
         public AudioSource EfxSource;
         public AudioSource MusicSource;
-		public GameObject Player;
+        public Camera Camera;
 		public float setEfxVolume = 1.0f;
 		public float setMusicVolume = 0.7f;
 
@@ -28,7 +28,7 @@ namespace Assets.Scripts
         {
 			_allAudio = new Dictionary<string, AudioClip>();
 			gameObject.AddComponent<AudioSource> ();
-			MusicSource = Player.AddComponent<AudioSource> ();
+			MusicSource = Camera.gameObject.AddComponent<AudioSource> (); 
             var loadAudio = Resources.LoadAll<AudioClip>("Sounds");
             foreach (AudioClip t in loadAudio)
             {
@@ -74,7 +74,7 @@ namespace Assets.Scripts
 			EfxSource.clip = _allAudio [name];
 			EfxSource.Play ();
 
-			if (desAudio = true)
+			if (desAudio == true)
 			Destroy (emitter.GetComponent<AudioSource> (), EfxSource.clip.length + 1);
 		}
 
@@ -97,7 +97,7 @@ namespace Assets.Scripts
 			EfxSource.clip = _allAudio [name];
 			EfxSource.Play ();
 
-			if (desAudio = true)
+			if (desAudio == true)
 				Destroy (emitter.GetComponent<AudioSource> (), EfxSource.clip.length + 1);
 		}
     }

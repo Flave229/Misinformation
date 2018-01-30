@@ -16,6 +16,7 @@ TagManager:
   - Bed
   - Plant
   - Canvas
+  - TestText
   layers:
   - Default
   - TransparentFX

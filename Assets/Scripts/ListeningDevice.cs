@@ -45,7 +45,6 @@ namespace Assets.Scripts
             {
                 dPeriod -= Time.deltaTime;
             }
-            Debug.Log("Quality = " + _quality);
         }
 
 		void OnMouseOver()
@@ -87,7 +86,6 @@ namespace Assets.Scripts
 		{
 			return durability;
 		}
-
 
     }
 }

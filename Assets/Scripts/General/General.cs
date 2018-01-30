@@ -25,9 +25,10 @@ namespace Assets.Scripts.General
 
         void Awake()
         {
-            _perception = UnityEngine.Random.Range(0, 10);
-            _trust = UnityEngine.Random.Range(0, 5);
-            _knowledge = UnityEngine.Random.Range(0, 5);
+            System.Random random = new System.Random();
+            _perception = random.Next(0, 10);
+            _trust = random.Next(0, 5);
+            _knowledge = random.Next(0, 5);
         }
 
         public void Start ()

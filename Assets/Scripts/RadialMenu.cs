@@ -90,13 +90,13 @@ namespace Assets.Scripts
             {
                 taskChain.Push(new PlaceListeningDeviceTask(new PathfindData
                 {
-                    GeneralMovementAI = character.MovementAi,
+                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
                     Location = mouseLocation
                 }));
 
                 taskChain.Push(new PathfindToLocationTask(new PathfindData
                 {
-                    GeneralMovementAI = character.MovementAi,
+                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
                     Location = mouseLocation
                 }));
                 character.Tasks.AddToStack(new AITaskChain(taskChain));
@@ -105,7 +105,7 @@ namespace Assets.Scripts
             {
                 taskChain.Push(new PathfindToLocationTask(new PathfindData
                 {
-                    GeneralMovementAI = character.MovementAi,
+                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
                     Location = mouseLocation
                 }));
                 character.Tasks.AddToStack(new AITaskChain(taskChain));

@@ -34,6 +34,7 @@ namespace Assets.Scripts
             GameManager.Instance().Days++;
             GameManager.Instance().UpdateCurrentDate();
             Timer.Instance().ResetRemainingTime();
+			GameManager.Instance ().Salary ();
             TransitioningDay = false;
         }
 

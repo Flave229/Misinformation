@@ -12,6 +12,7 @@ namespace Assets.Scripts.General
     {
         private int _trust;
         private int _knowledge;
+        private int _perception;
 
         List<GameObject> SeenListeningDevices = new List<GameObject>();
         List<GameObject> GeneralsList = new List<GameObject> ();
@@ -20,6 +21,14 @@ namespace Assets.Scripts.General
 
         public General()
         {
+        }
+
+        void Awake()
+        {
+            System.Random random = new System.Random();
+            _perception = random.Next(0, 10);
+            _trust = random.Next(0, 5);
+            _knowledge = random.Next(0, 5);
         }
 
         public void Start ()
@@ -59,12 +68,6 @@ namespace Assets.Scripts.General
             //Does this character know about these listening devices if they do then don't inform-R.Walters
         }
 
-        void Awake()
-        {
-            _trust = UnityEngine.Random.Range(0, 5);
-            _knowledge = UnityEngine.Random.Range(0, 5);
-        }
-
         public void ConsumeEvent(Event subscribeEvent, object eventPacket)
         {
             switch (subscribeEvent)
@@ -96,6 +99,11 @@ namespace Assets.Scripts.General
         public int GetTrust()
         {
             return _trust;
+        }
+
+        public int GetPerception()
+        {
+            return _perception;
         }
     }
 }

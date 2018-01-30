@@ -141,8 +141,7 @@ namespace Assets.Scripts.AI.Movement_AI
                 Vector2 boxColliderPosition = new Vector2(boxCollider.transform.position.x, boxCollider.transform.position.y);
                 if (CollisionBox.PointInBoxCollision(boxColliderPosition + boxCollider.offset, new Vector2(boxCollider.size.x, boxCollider.size.y), position) == false)
                     continue;
-
-                Debug.Log("General targeting room " + room.name);
+                
                 chosenRoom = room;
                 break;
             }

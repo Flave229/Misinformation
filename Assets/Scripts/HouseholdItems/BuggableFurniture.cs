@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.HouseholdItems
 {
-    class BuggableObject : MonoBehaviour
+    public class BuggableFurniture : MonoBehaviour
     {
         private ListeningDevice _placedListeningDevice;
 

@@ -34,13 +34,14 @@ namespace Assets.Scripts.AI
             ChanceToGoToToilet(generalList, generalCount);
             ChanceToGoToBed(generalList, generalCount);
             ChanceToSit(generalList, generalCount);
+            ChanceToSearchForListeningDevices(generalList);
         }
 
         private void ChanceToConverse(List<GameObject> generalList, int generalCount)
         {
             if (generalCount >= 2)
             {
-                float chanceToConverse = (float)(3 * generalCount) / _startingTimeInSeconds * Time.deltaTime;
+                float chanceToConverse = (float)(300 * generalCount) / _startingTimeInSeconds * Time.deltaTime;
 
                 Random randomGenerator = new Random();
                 if (randomGenerator.NextDouble() <= chanceToConverse)
@@ -122,8 +123,6 @@ namespace Assets.Scripts.AI
                 Toilet chosenToilet = toilets[randomGenerator.Next(0, toilets.Count - 1)];
                 chosenToilet.Occupied = true;
                 Vector2 toiletPosition = chosenToilet.transform.position;
-
-                Debug.Log("General going to the toilet, targeting location " + toiletPosition);
                 
                 Stack<ITask> taskChain = new Stack<ITask>();
                 taskChain.Push(new UseToiletTask(new ToiletData
@@ -158,8 +157,6 @@ namespace Assets.Scripts.AI
                 chosenBed.Occupied = true;
                 Vector2 bedPosition = chosenBed.transform.position;
 
-                Debug.Log("General going to bed, targeting location " + bedPosition);
-
                 Stack<ITask> taskChain = new Stack<ITask>();
                 taskChain.Push(new SleepTask(new SleepData
                 {
@@ -192,8 +189,6 @@ namespace Assets.Scripts.AI
                 Chair chosenChair = chairs[randomGenerator.Next(0, chairs.Count - 1)];
                 chosenChair.Occupied = true;
                 Vector2 chairPosition = chosenChair.transform.position;
-
-                Debug.Log("General going to sit down, targeting location " + chairPosition);
                 
                 Stack<ITask> taskChain = new Stack<ITask>();
                 taskChain.Push(new SitTask(new SitData
@@ -209,6 +204,46 @@ namespace Assets.Scripts.AI
 
                 generalOne.Tasks.AddToStack(new AITaskChain(taskChain));
             }
+        }
+
+        private void ChanceToSearchForListeningDevices(List<GameObject> generalList)
+        {
+            List<GameObject> untrustingGenerals = generalList.Where(x => x.GetComponent<General.General>().GetTrust() < 3).ToList();
+            int untrustingGeneralCount = untrustingGenerals.Count;
+
+            float taskChance = (float)(untrustingGeneralCount * 15) / (_startingTimeInSeconds) * Time.deltaTime;
+            Random randomGenerator = new Random();
+            if (randomGenerator.NextDouble() <= taskChance)
+            {
+                int generalIndex = randomGenerator.Next(0, untrustingGeneralCount);
+                Character2D generalOne = generalList[generalIndex].GetComponent<Character2D>();
+
+                GameObject targetedFurniture = FindPotentialListeningDeviceObject();
+
+                generalOne.Tasks.AddToStack(new FindListeningDeviceTask(new FindListeningDeviceData
+                {
+                    General = generalList[generalIndex].GetComponent<General.General>(),
+                    Furniture = targetedFurniture.GetComponent<BuggableFurniture>()
+                }));
+                generalOne.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
+                {
+                    GeneralMovementAI = generalOne.MovementAi,
+                    Location = targetedFurniture.transform.position
+                }));
+
+            }
+        }
+
+        private GameObject FindPotentialListeningDeviceObject()
+        {
+            List<GameObject> potentialListeningDevices = GameObject.FindObjectsOfType<BuggableFurniture>().Select(x => x.gameObject).OfType<GameObject>().ToList();
+
+            if (potentialListeningDevices.Count == 0)
+                return null;
+
+            System.Random random = new System.Random();
+            int randomIndex = random.Next(0, potentialListeningDevices.Count);
+            return potentialListeningDevices.ElementAt(randomIndex);
         }
     }
 }

@@ -22,10 +22,6 @@ namespace Assets.Scripts
         private Text nameObj;
         private Text defaultName;
         //Add interactable objects here
-        private GameObject[] chairObj;
-        private GameObject[] plantObj;
-        private GameObject[] bedObj;
-        List<GameObject> InteractableObjs = new List<GameObject>();
         List<RadialButton> Buttons = new List<RadialButton>();
         List<GameObject> Buggable;
         private GameObject _Camera;
@@ -35,38 +31,15 @@ namespace Assets.Scripts
             inputManager = InputManager.Instance();
             character = technician.GetComponent<Character2D>();
             _Camera = GameObject.FindGameObjectWithTag("MainCamera");
-            AddToObjList();
+            //AddToObjList();
         }
 
         private void InitialiseInteractableList()
         {
             Buggable = UnityEngine.GameObject.FindObjectsOfType<BuggableFurniture>().Select(x => x.gameObject).ToList();
-
-            //ADD NEW TAGGED ITEMS HERE
-            /*
-            chairObj = GameObject.FindGameObjectsWithTag("Chair");
-            plantObj = GameObject.FindGameObjectsWithTag("Plant");
-            bedObj = GameObject.FindGameObjectsWithTag("Bed");//Change this to something else that doesnt use tags
-            */
+            
             technician = GameObject.FindGameObjectWithTag("Player"); //Keep this here otherwise cant place stuffs
             defaultName = this.GetComponent<Text>();
-        }
-
-        private void AddToObjList()
-        {
-            int i = 0;
-            for (i = 0; i < chairObj.Length; ++i)
-            {
-                InteractableObjs.Add(chairObj[i]);
-            }
-            for (i = 0; i < plantObj.Length; ++i)
-            {
-                InteractableObjs.Add(plantObj[i]);
-            }
-            for (i = 0; i < bedObj.Length; ++i)
-            {
-                InteractableObjs.Add(bedObj[i]);
-            }
         }
 
         public void SpawnButtons(Interactable obj)
@@ -100,7 +73,7 @@ namespace Assets.Scripts
                     GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
                     Location = mouseLocation
                 }));
-
+                
                 taskChain.Push(new PathfindToLocationTask(new PathfindData
                 {
                     GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
@@ -181,29 +154,6 @@ namespace Assets.Scripts
         private void RadialMenuText()
         {
 			InitialiseInteractableList();
-            /*
-			for (int i = 0; i < chairObj.Length; i++)
-            {
-                if (Vector2.Distance(mouseLocation, chairObj[i].transform.position) < 2.0f)
-                {
-                    defaultName.text = "Chair";
-                }
-            }
-            for (int i = 0; i < plantObj.Length; i++)
-            {
-                if (Vector2.Distance(mouseLocation, plantObj[i].transform.position) < 2.0f)
-                {
-                    defaultName.text = "Plant";
-                }
-            }
-            for (int i = 0; i < bedObj.Length; i++)
-            {
-                if (Vector2.Distance(mouseLocation, bedObj[i].transform.position) < 2.0f)
-                {
-                    defaultName.text = "Bed";
-                }
-			}
-            */
 			for (int i = 0; i < Buggable.Count; i++) 
 			{
 				if (Vector2.Distance (mouseLocation, Buggable[i].transform.position) < 2.0f) 

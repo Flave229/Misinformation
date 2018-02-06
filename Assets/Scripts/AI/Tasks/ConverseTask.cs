@@ -5,11 +5,14 @@ using Debug = UnityEngine.Debug;
 using UnityEngine.UI;
 using Assets.Scripts.EventSystem;
 using Assets.Scripts.EventSystem.EventPackets;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.AI.Tasks
 {
     public class ConverseTask : ITask, IEventListener
     {
+        static private List<char> _randomCharacters = new List<char> { '#', '@', '!', '?', '/', '%', '$', '£' };
+
         private readonly ConverseData _converseData;
         private bool _completed;
         private readonly ConversationManager _conversationManager;
@@ -108,12 +111,44 @@ namespace Assets.Scripts.AI.Tasks
                     //if (listeningDevicePacket.ListeningRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
                     //    return;
 
-                    _speechBubble.transform.Find("Dialogue").GetComponent<Text>().text = _converseData.Speech;
+                    string scrambledText = ScrambleText();
+                    
+                    _speechBubble.transform.Find("Dialogue").GetComponent<Text>().text = scrambledText;
                     _speechBubble.transform.Find("TextName").GetComponent<Text>().text = _converseData.General.Name.FullName();
                     _speechBubble.transform.Find("TextName").gameObject.SetActive(true);
                     _speechBubble.transform.Find("Dialogue").gameObject.SetActive(true);
                     break;
             }
+        }
+
+        private string ScrambleText()
+        {
+            System.Random randomGenerator = new System.Random();
+
+            // TODO: These are hard coded until the listening device logic is in
+            float deviceQuality = 0.5f;
+            float deviceDurability = 0.25f;
+            float percentageTextRendered = (0.6f * deviceQuality) + (deviceQuality * deviceDurability * 0.4f);
+            
+            List<string> words = new List<string>(_converseData.Speech.Split(' '));
+
+            for(int i = 0; i < words.Count; ++i)
+            {
+                if (randomGenerator.NextDouble() > percentageTextRendered)
+                    continue;
+
+                string scrambledString = "";
+
+                foreach(char character in words[i])
+                {
+                    int index = randomGenerator.Next(0, _randomCharacters.Count);
+                    scrambledString += _randomCharacters[index];
+                }
+
+                words[i] = scrambledString;
+            }
+
+            return string.Join(" ", words.ToArray());
         }
 
         public void SubscribeToEvents()

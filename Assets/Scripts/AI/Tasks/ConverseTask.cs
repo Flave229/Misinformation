@@ -104,12 +104,11 @@ namespace Assets.Scripts.AI.Tasks
             // Consume Event for ListeningDevice
             switch(subscribeEvent)
             {
-                //case EventSystem.Event.LISTENING_DEVICE_LISTENING:
-                case EventSystem.Event.LISTENING_DEVICE_PLACED:
-                    //ListeningDeviceListeningPacket listeningDevicePacket = (ListeningDeviceListeningPacket)eventPacket;
+                case EventSystem.Event.LISTENING_DEVICE_LISTENING:
+                    ListeningDevice listeningDevice = (ListeningDevice)eventPacket;
 
-                    //if (listeningDevicePacket.ListeningRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
-                    //    return;
+                    if (listeningDevice.CurrentRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
+                        return;
 
                     string scrambledText = ScrambleText();
                     
@@ -154,7 +153,6 @@ namespace Assets.Scripts.AI.Tasks
         public void SubscribeToEvents()
         {
             EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_LISTENING);
-            EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_PLACED);
         }
     }
 }

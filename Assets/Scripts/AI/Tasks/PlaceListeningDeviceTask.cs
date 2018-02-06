@@ -56,6 +56,7 @@ namespace Assets.Scripts.AI.Tasks
             GameObject listeningDevice = Resources.Load<GameObject>("ListeningDevice");
             Vector3 placementPosition = new Vector3(position.x, position.y - 0.83f, position.z);
             listeningDevice = Object.Instantiate(listeningDevice, placementPosition, Quaternion.identity);
+            listeningDevice.GetComponent<ListeningDevice>().CurrentRoom = room;
 
             GameManager gameManager = GameManager.Instance();
             gameManager.ListeningDevList.Add(listeningDevice);

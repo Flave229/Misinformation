@@ -113,8 +113,8 @@ namespace Assets.Scripts.AI.Tasks
 
         public void SetCompleted()
         {
-            if(_speechBubble != null)
-                Object.Destroy(_speechBubble);
+            //if(_speechBubble != null)
+               // Object.Destroy(_speechBubble);
 
             _completed = true;
         }

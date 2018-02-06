@@ -22,6 +22,7 @@ namespace Assets.Scripts.AI.Tasks
         private float _timeWaiting;
         private GameObject _speechBubble;
 
+
         public ConverseTask(ConverseData converseData)
         {
             _defaultTimeTalking = 5.0f;
@@ -111,11 +112,9 @@ namespace Assets.Scripts.AI.Tasks
                         return;
 
                     string scrambledText = ScrambleText();
-                    
-                    _speechBubble.transform.Find("Dialogue").GetComponent<Text>().text = scrambledText;
-                    _speechBubble.transform.Find("TextName").GetComponent<Text>().text = _converseData.General.Name.FullName();
-                    _speechBubble.transform.Find("TextName").gameObject.SetActive(true);
-                    _speechBubble.transform.Find("Dialogue").gameObject.SetActive(true);
+
+                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + _converseData.Speech + "</color> \n";
+                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
                     break;
             }
         }

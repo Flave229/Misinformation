@@ -120,7 +120,7 @@ namespace Assets.Scripts
         private void TimeUpdate()
         {
             int hour =  randomNumber.Next(24);
-            int monthIndex = randomNumber.Next(0, 12);
+            int monthIndex = randomNumber.Next(1, 13);
             int year = (randomNumber.Next(6)) + 1940;
             int daysOnMonth = DateTime.DaysInMonth(year, monthIndex);
 

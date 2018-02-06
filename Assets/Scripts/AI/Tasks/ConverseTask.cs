@@ -17,6 +17,7 @@ namespace Assets.Scripts.AI.Tasks
         private float _timeWaiting;
         private GameObject _speechBubble;
 
+
         public ConverseTask(ConverseData converseData)
         {
             _defaultTimeTalking = 5.0f;
@@ -57,11 +58,17 @@ namespace Assets.Scripts.AI.Tasks
 				SoundManager.Instance ().PlaySingleDistance (_converseData.General.gameObject, "generalConversation1", 1.0f, 10.0f);
 				SoundManager.Instance ().PlaySingleDistance (_converseData.ConversationPartnerTaskData.General.gameObject, "generalConversation2", 1.0f, 10.0f);
                 _converseData.Speech = conversation[_converseData.General];
-                _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];                
-                _speechBubble.transform.Find("Dialogue").GetComponent<Text>().text = _converseData.Speech;
-                _speechBubble.transform.Find("TextName").GetComponent<Text>().text = _converseData.General.Name.FullName();
-                _speechBubble.transform.Find("TextName").gameObject.SetActive(true);
-                _speechBubble.transform.Find("Dialogue").gameObject.SetActive(true);
+                _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
+                //_speechBubble.transform.Find("DialogueField").GetComponent<InputField>().ActivateInputField();
+                //_speechBubble.transform.Find("DialogueField").GetComponent<InputField>().textComponent.text += _converseData.General.Name.FullName() + ":" + _converseData.Speech + "\n";
+                // _speechBubble.transform.Find("DialogueField").GetComponent<InputField>().text += _converseData.General.Name.FullName() + ":" + _converseData.Speech + "\n";
+                //_speechBubble.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() +   ": " + "<color=#585858ff>" + _converseData.Speech +  "</color> \n";
+                _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + _converseData.Speech + "</color> \n";
+                // _speechBubble.transform.Find("TextName").GetComponent<Text>().text = _converseData.General.Name.FullName();
+                // _speechBubble.transform.Find("TextName").gameObject.SetActive(true);
+                //_speechBubble.transform.Find("DialogueField").gameObject.SetActive(true);
+                _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
+                //_speechBubble.transform.Find("Viewport").gameObject.SetActive(true);
             }
 
 

@@ -41,7 +41,7 @@ namespace Assets.Scripts.AI
         {
             if (generalCount >= 2)
             {
-                float chanceToConverse = (float)(30 * generalCount) / _startingTimeInSeconds * Time.deltaTime;
+                float chanceToConverse = (float)(300 * generalCount) / _startingTimeInSeconds * Time.deltaTime;
 
                 Random randomGenerator = new Random();
                 if (randomGenerator.NextDouble() <= chanceToConverse)

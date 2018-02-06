@@ -134,6 +134,8 @@ namespace Assets.Scripts
                                 DoAIStuff(1.0f);
 
                                 Debug.Log(selected.title + " was selected");
+
+                                i += Buggable.Count;
                             }
                         }
                     }

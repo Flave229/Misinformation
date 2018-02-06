@@ -147,11 +147,10 @@ namespace Assets.Scripts
                     Vector3 mousePlacement = (Vector3)eventPacket;
                     MovementAi.CreatePathTo(mousePlacement);
                     break;
-			case Event.LEFT_MOUSE_CLICK:
-				Vector2 mouseClickPosition = (Vector2)eventPacket;
-				if (this.gameObject.GetComponent<Technician> ().IsActive) {
-					MovementAi.CreatePathTo (mouseClickPosition);
-				}
+			    case Event.LEFT_MOUSE_CLICK:
+				    Vector2 mouseClickPosition = (Vector2)eventPacket;
+				    if (this.gameObject.GetComponent<Technician> ().IsActive) 
+					    MovementAi.CreatePathTo (mouseClickPosition);
                     break;
             }
         }

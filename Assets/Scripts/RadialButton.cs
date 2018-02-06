@@ -7,7 +7,6 @@ namespace Assets.Scripts
 {
     public class RadialButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-
         public Image circle;
         public Image icon;
         public string title;
@@ -20,6 +19,7 @@ namespace Assets.Scripts
             StartCoroutine(AnimateButtonIn());
 
         }
+
         IEnumerator AnimateButtonIn()
         {
             transform.localScale = Vector3.zero;
@@ -37,6 +37,7 @@ namespace Assets.Scripts
         {
             StartCoroutine(AnimateButtonOut());
         }
+
         IEnumerator AnimateButtonOut()
         {
             transform.localScale = Vector3.one;

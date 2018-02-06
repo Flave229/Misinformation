@@ -16,6 +16,7 @@ namespace Assets.Scripts
         private double _quality;
         private GameObject _player;
         private Technician _technician;
+		public bool activeDevice = false;
 
         public void Start ()
         {
@@ -69,6 +70,7 @@ namespace Assets.Scripts
         public void DestroyDevice()
         {
 			toolTip.GetComponent<FollowMouse> ().UpdateText ("");
+			GameManager.Instance ().ListeningDevList.Remove (this.gameObject);
             Destroy(transform.gameObject);
         }
 

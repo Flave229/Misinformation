@@ -24,10 +24,12 @@ namespace Assets.Scripts
                 rectTransform.gameObject.SetActive(false);
                 DailyReportComponents.Add(rectTransform.gameObject);
             }
+			player = GameManager.Instance ().ActiveTech;
         }
 
         private void Update()
         {
+			player = GameManager.Instance ().ActiveTech;
             float distance = Vector3.Distance(player.transform.position, Typewriter.transform.position);
             if (distance < 1)
             {
@@ -39,6 +41,7 @@ namespace Assets.Scripts
                     }
                     else
                     {
+                        SoundManager.Instance().PlaySingle("Typewriter And Bell-tamskp");
                         Show();
                     }
                 }
@@ -62,6 +65,7 @@ namespace Assets.Scripts
             reportScreenVisible = false;
             foreach (GameObject component in DailyReportComponents)
                 component.SetActive(false);
+            SoundManager.Instance().PlaySingle("Page_Turn-Mark DiAngelo");
         }
 
         public bool CheckValueParity()

@@ -23,6 +23,7 @@ namespace Assets.Scripts
 
         void Start()
         {
+
         }
 
         // Use this for initialization

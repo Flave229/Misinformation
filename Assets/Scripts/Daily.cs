@@ -31,6 +31,7 @@ namespace Assets.Scripts
 
         public void StartDay()
         {
+            SoundManager.Instance().PlayBGM();
             GameManager.Instance().Days++;
             GameManager.Instance().UpdateCurrentDate();
             Timer.Instance().ResetRemainingTime();

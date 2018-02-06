@@ -62,7 +62,7 @@ namespace Assets.Scripts
 
         private void AwakeSingletonManagers()
         {
-            SoundManager.Instance();            
+            //SoundManager.Instance();            
             InputManager.Instance();
             AITaskManager.Instance();
         }

@@ -41,6 +41,7 @@ namespace Assets.Scripts
                     }
                     else
                     {
+                        SoundManager.Instance().PlaySingle("Typewriter And Bell-tamskp");
                         Show();
                     }
                 }
@@ -64,6 +65,7 @@ namespace Assets.Scripts
             reportScreenVisible = false;
             foreach (GameObject component in DailyReportComponents)
                 component.SetActive(false);
+            SoundManager.Instance().PlaySingle("Page_Turn-Mark DiAngelo");
         }
 
         public bool CheckValueParity()

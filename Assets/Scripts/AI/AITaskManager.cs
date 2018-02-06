@@ -220,6 +220,9 @@ namespace Assets.Scripts.AI
 
                 GameObject targetedFurniture = FindPotentialListeningDeviceObject();
 
+                if (targetedFurniture == null)
+                    return;
+
                 generalOne.Tasks.AddToStack(new FindListeningDeviceTask(new FindListeningDeviceData
                 {
                     General = generalList[generalIndex].GetComponent<General.General>(),

@@ -41,7 +41,7 @@ namespace Assets.Scripts.AI
         {
             if (generalCount >= 2)
             {
-                float chanceToConverse = (float)(300 * generalCount) / _startingTimeInSeconds * Time.deltaTime;
+                float chanceToConverse = (float)(30 * generalCount) / _startingTimeInSeconds * Time.deltaTime;
 
                 Random randomGenerator = new Random();
                 if (randomGenerator.NextDouble() <= chanceToConverse)
@@ -219,6 +219,9 @@ namespace Assets.Scripts.AI
                 Character2D generalOne = generalList[generalIndex].GetComponent<Character2D>();
 
                 GameObject targetedFurniture = FindPotentialListeningDeviceObject();
+
+                if (targetedFurniture == null)
+                    return;
 
                 generalOne.Tasks.AddToStack(new FindListeningDeviceTask(new FindListeningDeviceData
                 {

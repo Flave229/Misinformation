@@ -119,8 +119,8 @@ namespace Assets.Scripts
 
         private void TimeUpdate()
         {
-            int hour =  randomNumber.Next(25);
-            int monthIndex = randomNumber.Next(0, 12);
+            int hour =  randomNumber.Next(24);
+            int monthIndex = randomNumber.Next(1, 13);
             int year = (randomNumber.Next(6)) + 1940;
             int daysOnMonth = DateTime.DaysInMonth(year, monthIndex);
 
@@ -128,7 +128,7 @@ namespace Assets.Scripts
             for (int i = 0; i < daysOnMonth; i++)
                 Days.Add(i);
 
-            Time = hour + ":00" + " on " + Day + " of " + Months[monthIndex] + " " + year;
+            Time = hour + ":00" + " on " + Day + " of " + Months[monthIndex - 1] + " " + year;
             Month = Months[monthIndex];
             Hour = hour.ToString("00") + ":00";
         }

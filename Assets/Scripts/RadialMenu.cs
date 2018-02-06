@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.AI.TaskData;
 using Assets.Scripts.AI.Tasks;
+using Assets.Scripts.HouseholdItems;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace Assets.Scripts
 {
@@ -25,6 +27,7 @@ namespace Assets.Scripts
         private GameObject[] bedObj;
         List<GameObject> InteractableObjs = new List<GameObject>();
         List<RadialButton> Buttons = new List<RadialButton>();
+        List<GameObject> Buggable;
         private GameObject _Camera;
 
         private void Start()
@@ -37,10 +40,14 @@ namespace Assets.Scripts
 
         private void InitialiseInteractableList()
         {
+            Buggable = UnityEngine.GameObject.FindObjectsOfType<BuggableFurniture>().Select(x => x.gameObject).ToList();
+
             //ADD NEW TAGGED ITEMS HERE
+            /*
             chairObj = GameObject.FindGameObjectsWithTag("Chair");
             plantObj = GameObject.FindGameObjectsWithTag("Plant");
             bedObj = GameObject.FindGameObjectsWithTag("Bed");//Change this to something else that doesnt use tags
+            */
             technician = GameObject.FindGameObjectWithTag("Player"); //Keep this here otherwise cant place stuffs
             defaultName = this.GetComponent<Text>();
         }
@@ -90,13 +97,13 @@ namespace Assets.Scripts
             {
                 taskChain.Push(new PlaceListeningDeviceTask(new PathfindData
                 {
-                    GeneralMovementAI = character.MovementAi,
+                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
                     Location = mouseLocation
                 }));
 
                 taskChain.Push(new PathfindToLocationTask(new PathfindData
                 {
-                    GeneralMovementAI = character.MovementAi,
+                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
                     Location = mouseLocation
                 }));
                 character.Tasks.AddToStack(new AITaskChain(taskChain));
@@ -105,7 +112,7 @@ namespace Assets.Scripts
             {
                 taskChain.Push(new PathfindToLocationTask(new PathfindData
                 {
-                    GeneralMovementAI = character.MovementAi,
+                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
                     Location = mouseLocation
                 }));
                 character.Tasks.AddToStack(new AITaskChain(taskChain));
@@ -115,20 +122,22 @@ namespace Assets.Scripts
         private void PlayerFarFromMenu()
         {
             Vector3 cameraPosition = _Camera.transform.position;
-           // Camera camera = _Camera.transform.GetComponent<Camera>();
-            //Rect cameraRect = m_Camera.rect;
-            float top = cameraPosition.y - 5.0f;
-            float bottom = cameraPosition.y + 5.0f;
-            float left = cameraPosition.x - 10.0f;
-            float right = cameraPosition.x + 10.0f;
+            Camera camera = _Camera.transform.GetComponent<Camera>();
+            Rect cameraRect = camera.pixelRect;
+            float top = cameraRect.yMin;
+            float bottom = cameraRect.yMax;
+            float left = cameraRect.xMin;
+            float right = cameraRect.xMax;
 
-            if (mouseLocation.x < left)
+            Vector2 screenBounds = camera.WorldToScreenPoint(new Vector2(mouseLocation.x, mouseLocation.y));
+
+            if (screenBounds.x < left)
                 Destroy(gameObject);
-            if (mouseLocation.x > right)
+            if (screenBounds.x > right)
                 Destroy(gameObject);
-            if (mouseLocation.y < top)
+            if (screenBounds.y < top)
                 Destroy(gameObject);
-            if (mouseLocation.y > bottom)
+            if (screenBounds.y > bottom)
                 Destroy(gameObject);
 
         }
@@ -145,9 +154,9 @@ namespace Assets.Scripts
                 {
                     if (GameManager.Instance().FundingAmount > 0) //May need to change depending what direction listening devices taken.
                     {
-                        for (int i = 0; i < InteractableObjs.Count; i++)
+                        for (int i = 0; i < Buggable.Count; i++)
                         {
-                            if (Vector2.Distance(mouseLocation, InteractableObjs[i].transform.position) < 2.0f)
+                            if (Vector2.Distance(mouseLocation, Buggable[i].transform.position) < 2.0f)
                             {
                                 DoAIStuff(1.0f);
 
@@ -171,8 +180,9 @@ namespace Assets.Scripts
 
         private void RadialMenuText()
         {
-            InitialiseInteractableList();
-            for (int i = 0; i < chairObj.Length; i++)
+			InitialiseInteractableList();
+            /*
+			for (int i = 0; i < chairObj.Length; i++)
             {
                 if (Vector2.Distance(mouseLocation, chairObj[i].transform.position) < 2.0f)
                 {
@@ -192,7 +202,15 @@ namespace Assets.Scripts
                 {
                     defaultName.text = "Bed";
                 }
-            }
+			}
+            */
+			for (int i = 0; i < Buggable.Count; i++) 
+			{
+				if (Vector2.Distance (mouseLocation, Buggable[i].transform.position) < 2.0f) 
+				{
+					defaultName.text = "buggable";
+				}
+			}
             //defaultName.text = "Help, I'm trapped in a menu";
         }
 
@@ -203,7 +221,7 @@ namespace Assets.Scripts
                 ShowRadialMenu();
                 PlayerFarFromMenu();
             }
-            PlayerFarFromMenu();
+            PlayerFarFromMenu();  //THIS REMOVES RADIAL MENU WHEN OUT OF CAMERA SPACE
         }
     }
 }

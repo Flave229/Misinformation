@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: bb6fb81be13050a479a7425afa69ed8d
+timeCreated: 1517322983
+licenseType: Pro
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Kingthings Trypewriter 2
+  fontNames:
+  - Kingthings Trypewriter 2
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

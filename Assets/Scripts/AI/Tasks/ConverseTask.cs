@@ -65,17 +65,16 @@ namespace Assets.Scripts.AI.Tasks
 
             if (_converseData.Talking)
             {
+                Debug.Log(_converseData.Speech);
                 _timeTalking -= Time.deltaTime;
 
                 if (_timeTalking <= 0.0f)
                 {
                     _converseData.Talking = false;
                     _converseData.Done = true;
-                    _speechBubble.transform.Find("TextName").gameObject.SetActive(false);
-                    _speechBubble.transform.Find("Dialogue").gameObject.SetActive(false);
+                    //_speechBubble.transform.Find("TextName").gameObject.SetActive(false);
+                    //_speechBubble.transform.Find("Dialogue").gameObject.SetActive(false);
                 }
-
-                Debug.Log(_converseData.Speech);
             }
         }
 
@@ -96,15 +95,18 @@ namespace Assets.Scripts.AI.Tasks
 
         public void ConsumeEvent(EventSystem.Event subscribeEvent, object eventPacket)
         {
+            if (_converseData.Talking == false)
+                return;
+
             // Consume Event for ListeningDevice
             switch(subscribeEvent)
             {
                 //case EventSystem.Event.LISTENING_DEVICE_LISTENING:
                 case EventSystem.Event.LISTENING_DEVICE_PLACED:
-                    ListeningDeviceListeningPacket listeningDevicePacket = (ListeningDeviceListeningPacket)eventPacket;
+                    //ListeningDeviceListeningPacket listeningDevicePacket = (ListeningDeviceListeningPacket)eventPacket;
 
-                    if (listeningDevicePacket.ListeningRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
-                        return;
+                    //if (listeningDevicePacket.ListeningRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
+                    //    return;
 
                     _speechBubble.transform.Find("Dialogue").GetComponent<Text>().text = _converseData.Speech;
                     _speechBubble.transform.Find("TextName").GetComponent<Text>().text = _converseData.General.Name.FullName();
@@ -117,6 +119,7 @@ namespace Assets.Scripts.AI.Tasks
         public void SubscribeToEvents()
         {
             EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_LISTENING);
+            EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_PLACED);
         }
     }
 }

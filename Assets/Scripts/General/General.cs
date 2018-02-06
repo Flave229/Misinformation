@@ -17,6 +17,7 @@ namespace Assets.Scripts.General
         List<GameObject> SeenListeningDevices = new List<GameObject>();
         List<GameObject> GeneralsList = new List<GameObject> ();
 
+        public string FullName;
         public Name Name;
 
         public General()
@@ -34,6 +35,7 @@ namespace Assets.Scripts.General
         public void Start ()
         {
             Name = NameGenerator.GenerateName();
+            FullName = Name.FullName();
             GeneralsList = GameManager.Instance().GetGenList();
             //GeneralsList.Add(this);
             SubscribeToEvents();

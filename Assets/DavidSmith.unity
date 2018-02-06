@@ -195,7 +195,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2354759}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e9f6cae420072b40aa049d4d55cbc77, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8834489
@@ -1183,10 +1183,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 63665107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc87b434727241b48a85b07e427d203e, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FacingRight: 1
 --- !u!1 &68672593
 GameObject:
   m_ObjectHideFlags: 0
@@ -4732,7 +4731,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 351933030}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e9f6cae420072b40aa049d4d55cbc77, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &352058770
@@ -5683,6 +5682,7 @@ GameObject:
   m_Component:
   - component: {fileID: 403220246}
   - component: {fileID: 403220245}
+  - component: {fileID: 403220247}
   m_Layer: 0
   m_Name: tree
   m_TagString: Interactable
@@ -5747,6 +5747,17 @@ Transform:
   m_Father: {fileID: 1017858158}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &403220247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 403220244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &406506115
 GameObject:
   m_ObjectHideFlags: 0
@@ -5831,6 +5842,7 @@ GameObject:
   - component: {fileID: 423419296}
   - component: {fileID: 423419297}
   - component: {fileID: 423419298}
+  - component: {fileID: 423419299}
   m_Layer: 0
   m_Name: Chair (1)
   m_TagString: Untagged
@@ -5907,6 +5919,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FacingRight: 0
+--- !u!114 &423419299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 423419295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &426227686
 GameObject:
   m_ObjectHideFlags: 0
@@ -7245,6 +7268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 498070539}
   - component: {fileID: 498070540}
+  - component: {fileID: 498070541}
   m_Layer: 0
   m_Name: plant
   m_TagString: Untagged
@@ -7309,6 +7333,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &498070541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 498070538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &498734729
 GameObject:
   m_ObjectHideFlags: 0
@@ -8440,6 +8475,7 @@ GameObject:
   m_Component:
   - component: {fileID: 565260827}
   - component: {fileID: 565260828}
+  - component: {fileID: 565260829}
   m_Layer: 0
   m_Name: Table (1)
   m_TagString: Untagged
@@ -8504,6 +8540,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &565260829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 565260826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &567843885
 GameObject:
   m_ObjectHideFlags: 0
@@ -9489,6 +9536,7 @@ GameObject:
   m_Component:
   - component: {fileID: 614911344}
   - component: {fileID: 614911345}
+  - component: {fileID: 614911346}
   m_Layer: 0
   m_Name: Drawers
   m_TagString: Untagged
@@ -9553,6 +9601,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &614911346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 614911343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &635012013
 GameObject:
   m_ObjectHideFlags: 0
@@ -10081,6 +10140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 656729831}
   - component: {fileID: 656729832}
+  - component: {fileID: 656729833}
   m_Layer: 0
   m_Name: plant
   m_TagString: Interactable
@@ -10145,6 +10205,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &656729833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 656729830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &657803879
 GameObject:
   m_ObjectHideFlags: 0
@@ -13665,6 +13736,7 @@ GameObject:
   m_Component:
   - component: {fileID: 926967478}
   - component: {fileID: 926967479}
+  - component: {fileID: 926967480}
   m_Layer: 0
   m_Name: plant
   m_TagString: Untagged
@@ -13729,6 +13801,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &926967480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 926967477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &930018574
 GameObject:
   m_ObjectHideFlags: 0
@@ -14516,6 +14599,7 @@ GameObject:
   m_Component:
   - component: {fileID: 970486397}
   - component: {fileID: 970486398}
+  - component: {fileID: 970486399}
   m_Layer: 0
   m_Name: plant (1)
   m_TagString: Interactable
@@ -14580,6 +14664,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &970486399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 970486396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &982226874
 GameObject:
   m_ObjectHideFlags: 0
@@ -14869,10 +14964,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 996695443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc87b434727241b48a85b07e427d203e, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FacingRight: 1
 --- !u!1 &1004443962
 GameObject:
   m_ObjectHideFlags: 0
@@ -15318,6 +15412,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1020449980}
   - component: {fileID: 1020449981}
+  - component: {fileID: 1020449982}
   m_Layer: 0
   m_Name: plant (1)
   m_TagString: Untagged
@@ -15382,6 +15477,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &1020449982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1020449979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1032267232
 GameObject:
   m_ObjectHideFlags: 0
@@ -16343,10 +16449,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1079161643}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2b9d49858f1bed4889d09d6e6ac0b0c, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FacingRight: 1
 --- !u!1 &1083080238
 GameObject:
   m_ObjectHideFlags: 0
@@ -18336,10 +18441,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1217647676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2b9d49858f1bed4889d09d6e6ac0b0c, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FacingRight: 1
 --- !u!1 &1226245914
 GameObject:
   m_ObjectHideFlags: 0
@@ -19449,6 +19553,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1298440722}
   - component: {fileID: 1298440723}
+  - component: {fileID: 1298440724}
   m_Layer: 0
   m_Name: plant
   m_TagString: Interactable
@@ -19513,6 +19618,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &1298440724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1298440721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1306586725
 GameObject:
   m_ObjectHideFlags: 0
@@ -20512,10 +20628,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1385025952}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2b9d49858f1bed4889d09d6e6ac0b0c, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FacingRight: 0
 --- !u!1 &1399744751
 GameObject:
   m_ObjectHideFlags: 0
@@ -21844,6 +21959,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1541714777}
   - component: {fileID: 1541714778}
+  - component: {fileID: 1541714779}
   m_Layer: 0
   m_Name: Table
   m_TagString: Untagged
@@ -21908,6 +22024,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &1541714779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1541714776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1544860161
 GameObject:
   m_ObjectHideFlags: 0
@@ -23452,6 +23579,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1660077914}
   - component: {fileID: 1660077915}
+  - component: {fileID: 1660077916}
   m_Layer: 0
   m_Name: plant (1)
   m_TagString: Interactable
@@ -23516,6 +23644,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &1660077916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1660077913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1670420877
 GameObject:
   m_ObjectHideFlags: 0
@@ -24098,7 +24237,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1700583158}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e9f6cae420072b40aa049d4d55cbc77, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1721044197
@@ -24404,7 +24543,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1734365582}
   - component: {fileID: 1734365583}
-  - component: {fileID: 1734365584}
   - component: {fileID: 1734365585}
   m_Layer: 0
   m_Name: Chair (1)
@@ -24470,18 +24608,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!114 &1734365584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1734365581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2b9d49858f1bed4889d09d6e6ac0b0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FacingRight: 0
 --- !u!114 &1734365585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25452,7 +25578,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1802694669}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e9f6cae420072b40aa049d4d55cbc77, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1807781277
@@ -29127,6 +29253,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2084729282}
   - component: {fileID: 2084729283}
+  - component: {fileID: 2084729284}
   m_Layer: 0
   m_Name: plant
   m_TagString: Interactable
@@ -29191,6 +29318,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &2084729284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2084729281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2085177442
 GameObject:
   m_ObjectHideFlags: 0
@@ -30085,10 +30223,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2134612443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2b9d49858f1bed4889d09d6e6ac0b0c, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FacingRight: 1
 --- !u!1 &2135230783
 GameObject:
   m_ObjectHideFlags: 0
@@ -30171,10 +30308,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2135230783}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc87b434727241b48a85b07e427d203e, type: 3}
+  m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FacingRight: 1
 --- !u!1 &2135860631
 GameObject:
   m_ObjectHideFlags: 0

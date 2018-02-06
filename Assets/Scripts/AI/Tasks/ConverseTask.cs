@@ -3,10 +3,12 @@ using Assets.Scripts.Conversation;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using UnityEngine.UI;
+using Assets.Scripts.EventSystem;
+using Assets.Scripts.EventSystem.EventPackets;
 
 namespace Assets.Scripts.AI.Tasks
 {
-    public class ConverseTask : ITask
+    public class ConverseTask : ITask, IEventListener
     {
         private readonly ConverseData _converseData;
         private bool _completed;
@@ -27,9 +29,7 @@ namespace Assets.Scripts.AI.Tasks
             _converseData = converseData;
             _conversationManager = ConversationManager.Instance();
             _speechBubble = GameObject.FindGameObjectWithTag("ConversationPanel");
-            // _speechBubble = null; // will be changed since using tags is inefficient but it will be used like this for now to make it work - R.Walters
-            // _speechText = null;
-            //_speechBubble.SetActive(false);
+            SubscribeToEvents();
         }
 
         public void Execute()
@@ -70,8 +70,8 @@ namespace Assets.Scripts.AI.Tasks
                 _converseData.Talking = true;
                 var conversation =  _conversationManager.ConversationGenerator(_converseData.General, _converseData.ConversationPartnerTaskData.General);
                 Debug.Log("A conversation started!");
-				SoundManager.Instance ().PlaySingleDistance (_converseData.General.gameObject, "generalConversation1", 1.0f, 10.0f);
-				SoundManager.Instance ().PlaySingleDistance (_converseData.ConversationPartnerTaskData.General.gameObject, "generalConversation2", 1.0f, 10.0f);
+				SoundManager.Instance().PlaySingleDistance(_converseData.General.gameObject, "generalConversation1", 1.0f, 10.0f);
+				SoundManager.Instance().PlaySingleDistance(_converseData.ConversationPartnerTaskData.General.gameObject, "generalConversation2", 1.0f, 10.0f);
                 _converseData.Speech = conversation[_converseData.General];
                 _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
                 //_speechBubble = GameObject.Instantiate(Resources.Load<GameObject>("SpeechBubble"));
@@ -81,20 +81,13 @@ namespace Assets.Scripts.AI.Tasks
                // _speechBubble.AddComponent<TextMesh>();
               //  _speechBubble.transform.parent = GameObject.Find("CanvasConversation").transform;
                 //_speechBubble.
-                _speechBubble.transform.Find("Dialogue").GetComponent<Text>().text = _converseData.Speech;
-                _speechBubble.transform.Find("TextName").GetComponent<Text>().text = _converseData.General.Name.FullName();
                 //    _speechText.transform.parent = GameObject.Find(_speechBubble.name).transform;
                 //  _speechBubble.transform.position = new Vector3(_converseData.General.transform.position.x - 0.4f, _converseData.General.transform.position.y + 1.0f, 0.0f);
                 //  // _speechText.transform.position = _speechBubble.transform.position;
                 // _speechBubble.SetActive(true);
                 //   _speechText.SetActive(true);
-                _speechBubble.transform.Find("TextName").gameObject.SetActive(true);
-                _speechBubble.transform.Find("Dialogue").gameObject.SetActive(true);
-            }
-
-
-                
-
+            }       
+            
             if (_converseData.Talking)
             {
                 _timeTalking -= Time.deltaTime;
@@ -113,9 +106,6 @@ namespace Assets.Scripts.AI.Tasks
 
         public void SetCompleted()
         {
-            //if(_speechBubble != null)
-               // Object.Destroy(_speechBubble);
-
             _completed = true;
         }
 
@@ -127,6 +117,31 @@ namespace Assets.Scripts.AI.Tasks
         public bool GetCeilingLock()
         {
             return false;
+        }
+
+        public void ConsumeEvent(EventSystem.Event subscribeEvent, object eventPacket)
+        {
+            // Consume Event for ListeningDevice
+            switch(subscribeEvent)
+            {
+                //case EventSystem.Event.LISTENING_DEVICE_LISTENING:
+                case EventSystem.Event.LISTENING_DEVICE_PLACED:
+                    ListeningDeviceListeningPacket listeningDevicePacket = (ListeningDeviceListeningPacket)eventPacket;
+
+                    if (listeningDevicePacket.ListeningRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
+                        return;
+
+                    _speechBubble.transform.Find("Dialogue").GetComponent<Text>().text = _converseData.Speech;
+                    _speechBubble.transform.Find("TextName").GetComponent<Text>().text = _converseData.General.Name.FullName();
+                    _speechBubble.transform.Find("TextName").gameObject.SetActive(true);
+                    _speechBubble.transform.Find("Dialogue").gameObject.SetActive(true);
+                    break;
+            }
+        }
+
+        public void SubscribeToEvents()
+        {
+            EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_LISTENING);
         }
     }
 }

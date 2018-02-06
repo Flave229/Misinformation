@@ -126,7 +126,7 @@ namespace Assets.Scripts.AI.Tasks
             System.Random randomGenerator = new System.Random();
 
             // TODO: These are hard coded until the listening device logic is in
-            float deviceQuality = 0.5f;
+            float deviceQuality = 0.15f;
             float deviceDurability = 0.25f;
             float percentageTextRendered = (0.6f * deviceQuality) + (deviceQuality * deviceDurability * 0.4f);
             
@@ -134,7 +134,7 @@ namespace Assets.Scripts.AI.Tasks
 
             for(int i = 0; i < words.Count; ++i)
             {
-                if (randomGenerator.NextDouble() > percentageTextRendered)
+                if (randomGenerator.NextDouble() < percentageTextRendered)
                     continue;
 
                 string scrambledString = "";

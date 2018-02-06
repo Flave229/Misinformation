@@ -69,7 +69,7 @@ namespace Assets.Scripts
 
         public void DestroyDevice()
         {
-			toolTip.GetComponent<FollowMouse> ().UpdateText ("");
+			//toolTip.GetComponent<FollowMouse> ().UpdateText ("");
 			GameManager.Instance ().ListeningDevList.Remove (this.gameObject);
             Destroy(transform.gameObject);
         }

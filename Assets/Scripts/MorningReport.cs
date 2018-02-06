@@ -128,6 +128,7 @@ namespace Assets.Scripts
             Timer.Instance().Play();
             foreach (GameObject component in _morningReportComponents)
                 component.SetActive(false);
+            SoundManager.Instance().PlaySingle("Page_Turn-Mark DiAngelo");
         }
     }
 }

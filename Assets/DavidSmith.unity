@@ -7139,9 +7139,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EfxSource: {fileID: 0}
   MusicSource: {fileID: 0}
-  Camera: {fileID: 0}
+  Camera: {fileID: 199994924}
   setEfxVolume: 1
   setMusicVolume: 1
+  volumeChange: 1
+  soundEnabled: 1
 --- !u!1 &498070538
 GameObject:
   m_ObjectHideFlags: 0

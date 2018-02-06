@@ -81,7 +81,7 @@ namespace Assets.Scripts.AI.Tasks
                // _speechBubble.AddComponent<TextMesh>();
               //  _speechBubble.transform.parent = GameObject.Find("CanvasConversation").transform;
                 //_speechBubble.
-                _speechBubble.transform.Find("Dialogue").GetComponent<Text>().text = "This is some Text";
+                _speechBubble.transform.Find("Dialogue").GetComponent<Text>().text = _converseData.Speech;
                 _speechBubble.transform.Find("TextName").GetComponent<Text>().text = _converseData.General.Name.FullName();
                 //    _speechText.transform.parent = GameObject.Find(_speechBubble.name).transform;
                 //  _speechBubble.transform.position = new Vector3(_converseData.General.transform.position.x - 0.4f, _converseData.General.transform.position.y + 1.0f, 0.0f);

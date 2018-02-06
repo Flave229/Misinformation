@@ -62,7 +62,7 @@ namespace Assets.Scripts
 
         private void AwakeSingletonManagers()
         {
-            SoundManager.Instance();            
+            //SoundManager.Instance();            
             InputManager.Instance();
             AITaskManager.Instance();
         }
@@ -117,6 +117,7 @@ namespace Assets.Scripts
 
 			ActiveTech = TechList [ActiveTechNum];
 			ActiveTech.gameObject.GetComponent<Technician>().IsActive = true;
+			Camera.main.GetComponent<Camera2DFollow> ().target = ActiveTech.transform;
 		}
 
 		public void Salary()

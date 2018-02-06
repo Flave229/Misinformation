@@ -35,6 +35,7 @@ namespace Assets.Scripts.AI.Tasks
                 _sleepData.Bed.Occupied = true;
                 System.Random random = new System.Random();
                 _secondsSleeping = random.Next(45, 75);
+                SoundManager.Instance().PlaySingleDistance(_sleepData.Bed.gameObject, "Snoring-Popup_Pixels");
             }
 
             if (_startingTime.AddSeconds(_secondsSleeping) >= DateTime.Now)

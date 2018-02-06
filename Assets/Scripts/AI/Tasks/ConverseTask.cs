@@ -3,11 +3,16 @@ using Assets.Scripts.Conversation;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using UnityEngine.UI;
+using Assets.Scripts.EventSystem;
+using Assets.Scripts.EventSystem.EventPackets;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.AI.Tasks
 {
-    public class ConverseTask : ITask
+    public class ConverseTask : ITask, IEventListener
     {
+        static private List<char> _randomCharacters = new List<char> { '#', '@', '!', '?', '/', '%', '$', '£' };
+
         private readonly ConverseData _converseData;
         private bool _completed;
         private readonly ConversationManager _conversationManager;
@@ -27,6 +32,7 @@ namespace Assets.Scripts.AI.Tasks
             _converseData = converseData;
             _conversationManager = ConversationManager.Instance();
             _speechBubble = GameObject.FindGameObjectWithTag("ConversationPanel");
+            SubscribeToEvents();
         }
 
         public void Execute()
@@ -55,38 +61,24 @@ namespace Assets.Scripts.AI.Tasks
                 _converseData.Talking = true;
                 var conversation =  _conversationManager.ConversationGenerator(_converseData.General, _converseData.ConversationPartnerTaskData.General);
                 Debug.Log("A conversation started!");
-				SoundManager.Instance ().PlaySingleDistance (_converseData.General.gameObject, "generalConversation1", 1.0f, 10.0f);
-				SoundManager.Instance ().PlaySingleDistance (_converseData.ConversationPartnerTaskData.General.gameObject, "generalConversation2", 1.0f, 10.0f);
+				SoundManager.Instance().PlaySingleDistance(_converseData.General.gameObject, "generalConversation1", 1.0f, 10.0f);
+				SoundManager.Instance().PlaySingleDistance(_converseData.ConversationPartnerTaskData.General.gameObject, "generalConversation2", 1.0f, 10.0f);
                 _converseData.Speech = conversation[_converseData.General];
                 _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
-                //_speechBubble.transform.Find("DialogueField").GetComponent<InputField>().ActivateInputField();
-                //_speechBubble.transform.Find("DialogueField").GetComponent<InputField>().textComponent.text += _converseData.General.Name.FullName() + ":" + _converseData.Speech + "\n";
-                // _speechBubble.transform.Find("DialogueField").GetComponent<InputField>().text += _converseData.General.Name.FullName() + ":" + _converseData.Speech + "\n";
-                //_speechBubble.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() +   ": " + "<color=#585858ff>" + _converseData.Speech +  "</color> \n";
-                _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + _converseData.Speech + "</color> \n";
-                // _speechBubble.transform.Find("TextName").GetComponent<Text>().text = _converseData.General.Name.FullName();
-                // _speechBubble.transform.Find("TextName").gameObject.SetActive(true);
-                //_speechBubble.transform.Find("DialogueField").gameObject.SetActive(true);
-                _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
-                //_speechBubble.transform.Find("Viewport").gameObject.SetActive(true);
             }
-
-
-                
 
             if (_converseData.Talking)
             {
+                Debug.Log(_converseData.Speech);
                 _timeTalking -= Time.deltaTime;
 
                 if (_timeTalking <= 0.0f)
                 {
                     _converseData.Talking = false;
                     _converseData.Done = true;
-                    _speechBubble.transform.Find("TextName").gameObject.SetActive(false);
-                    _speechBubble.transform.Find("Dialogue").gameObject.SetActive(false);
+                    //_speechBubble.transform.Find("TextName").gameObject.SetActive(false);
+                    //_speechBubble.transform.Find("Dialogue").gameObject.SetActive(false);
                 }
-
-                Debug.Log(_converseData.Speech);
             }
         }
 
@@ -103,6 +95,65 @@ namespace Assets.Scripts.AI.Tasks
         public bool GetCeilingLock()
         {
             return false;
+        }
+
+        public void ConsumeEvent(EventSystem.Event subscribeEvent, object eventPacket)
+        {
+            if (_converseData.Talking == false)
+                return;
+
+            // Consume Event for ListeningDevice
+            switch(subscribeEvent)
+            {
+                //case EventSystem.Event.LISTENING_DEVICE_LISTENING:
+                case EventSystem.Event.LISTENING_DEVICE_PLACED:
+                    //ListeningDeviceListeningPacket listeningDevicePacket = (ListeningDeviceListeningPacket)eventPacket;
+
+                    //if (listeningDevicePacket.ListeningRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
+                    //    return;
+
+                    string scrambledText = ScrambleText();
+
+                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + _converseData.Speech + "</color> \n";
+                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
+                    break;
+            }
+        }
+
+        private string ScrambleText()
+        {
+            System.Random randomGenerator = new System.Random();
+
+            // TODO: These are hard coded until the listening device logic is in
+            float deviceQuality = 0.15f;
+            float deviceDurability = 0.25f;
+            float percentageTextRendered = (0.6f * deviceQuality) + (deviceQuality * deviceDurability * 0.4f);
+            
+            List<string> words = new List<string>(_converseData.Speech.Split(' '));
+
+            for(int i = 0; i < words.Count; ++i)
+            {
+                if (randomGenerator.NextDouble() < percentageTextRendered)
+                    continue;
+
+                string scrambledString = "";
+
+                foreach(char character in words[i])
+                {
+                    int index = randomGenerator.Next(0, _randomCharacters.Count);
+                    scrambledString += _randomCharacters[index];
+                }
+
+                words[i] = scrambledString;
+            }
+
+            return string.Join(" ", words.ToArray());
+        }
+
+        public void SubscribeToEvents()
+        {
+            EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_LISTENING);
+            EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_PLACED);
         }
     }
 }

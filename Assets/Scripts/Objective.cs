@@ -128,7 +128,7 @@ namespace Assets.Scripts
             for (int i = 0; i < daysOnMonth; i++)
                 Days.Add(i);
 
-            Time = hour + ":00" + " on " + Day + " of " + Months[monthIndex] + " " + year;
+            Time = hour + ":00" + " on " + Day + " of " + Months[monthIndex - 1] + " " + year;
             Month = Months[monthIndex];
             Hour = hour.ToString("00") + ":00";
         }

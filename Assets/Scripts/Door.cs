@@ -151,6 +151,7 @@ namespace Assets.Scripts
             m_ConnectingDoor.animator.SetBool("OpenClose", true);
             m_ConnectingDoor.transform.localScale = new Vector3(1, 1, 1);
             m_ConnectingDoor.gameObject.GetComponent<Renderer>().sortingOrder = 2;
+            SoundManager.Instance().PlaySingle("InsideDoorOriginal");
             yield return new WaitForSeconds(1);
             CloseDoor();
         }

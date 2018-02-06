@@ -16,6 +16,7 @@ TagManager:
   - Bed
   - Plant
   - Canvas
+  - ConversationPanel
   - TestText
   layers:
   - Default

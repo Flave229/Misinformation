@@ -86,5 +86,6 @@ namespace Assets.Scripts
 		{
 			return durability;
 		}
+
     }
 }

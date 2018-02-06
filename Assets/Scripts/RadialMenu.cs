@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.AI.TaskData;
 using Assets.Scripts.AI.Tasks;
+using Assets.Scripts.HouseholdItems;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace Assets.Scripts
 {
@@ -25,6 +27,7 @@ namespace Assets.Scripts
         private GameObject[] bedObj;
         List<GameObject> InteractableObjs = new List<GameObject>();
         List<RadialButton> Buttons = new List<RadialButton>();
+        List<GameObject> Buggable;
         private GameObject _Camera;
 
         private void Start()
@@ -37,10 +40,14 @@ namespace Assets.Scripts
 
         private void InitialiseInteractableList()
         {
+            Buggable = UnityEngine.GameObject.FindObjectsOfType<BuggableFurniture>().Select(x => x.gameObject).ToList();
+
             //ADD NEW TAGGED ITEMS HERE
+            /*
             chairObj = GameObject.FindGameObjectsWithTag("Chair");
             plantObj = GameObject.FindGameObjectsWithTag("Plant");
             bedObj = GameObject.FindGameObjectsWithTag("Bed");//Change this to something else that doesnt use tags
+            */
             technician = GameObject.FindGameObjectWithTag("Player"); //Keep this here otherwise cant place stuffs
             defaultName = this.GetComponent<Text>();
         }
@@ -145,9 +152,9 @@ namespace Assets.Scripts
                 {
                     if (GameManager.Instance().FundingAmount > 0) //May need to change depending what direction listening devices taken.
                     {
-                        for (int i = 0; i < InteractableObjs.Count; i++)
+                        for (int i = 0; i < Buggable.Count; i++)
                         {
-                            if (Vector2.Distance(mouseLocation, InteractableObjs[i].transform.position) < 2.0f)
+                            if (Vector2.Distance(mouseLocation, Buggable[i].transform.position) < 2.0f)
                             {
                                 DoAIStuff(1.0f);
 
@@ -171,8 +178,9 @@ namespace Assets.Scripts
 
         private void RadialMenuText()
         {
-            InitialiseInteractableList();
-            for (int i = 0; i < chairObj.Length; i++)
+			InitialiseInteractableList();
+            /*
+			for (int i = 0; i < chairObj.Length; i++)
             {
                 if (Vector2.Distance(mouseLocation, chairObj[i].transform.position) < 2.0f)
                 {
@@ -192,7 +200,15 @@ namespace Assets.Scripts
                 {
                     defaultName.text = "Bed";
                 }
-            }
+			}
+            */
+			for (int i = 0; i < Buggable.Count; i++) 
+			{
+				if (Vector2.Distance (mouseLocation, Buggable[i].transform.position) < 2.0f) 
+				{
+					defaultName.text = "buggable";
+				}
+			}
             //defaultName.text = "Help, I'm trapped in a menu";
         }
 

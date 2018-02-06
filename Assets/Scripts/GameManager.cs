@@ -117,6 +117,7 @@ namespace Assets.Scripts
 
 			ActiveTech = TechList [ActiveTechNum];
 			ActiveTech.gameObject.GetComponent<Technician>().IsActive = true;
+			Camera.main.GetComponent<Camera2DFollow> ().target = ActiveTech.transform;
 		}
 
 		public void Salary()

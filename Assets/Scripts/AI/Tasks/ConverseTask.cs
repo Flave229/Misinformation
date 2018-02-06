@@ -58,26 +58,26 @@ namespace Assets.Scripts.AI.Tasks
 
             if (_converseData.Talking == false && _converseData.Done == false && _converseData.ConversationPartnerTaskData.Talking == false)
             {
-                _converseData.Talking = true;
                 var conversation =  _conversationManager.ConversationGenerator(_converseData.General, _converseData.ConversationPartnerTaskData.General);
-                Debug.Log("A conversation started!");
+
 				SoundManager.Instance().PlaySingleDistance(_converseData.General.gameObject, "generalConversation1", 1.0f, 10.0f);
 				SoundManager.Instance().PlaySingleDistance(_converseData.ConversationPartnerTaskData.General.gameObject, "generalConversation2", 1.0f, 10.0f);
+
                 _converseData.Speech = conversation[_converseData.General];
                 _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
+                
+                _converseData.Talking = true;
+                EventMessenger.Instance().FireEvent(EventSystem.Event.SPEECH_START, null);
             }
 
             if (_converseData.Talking)
             {
-                Debug.Log(_converseData.Speech);
                 _timeTalking -= Time.deltaTime;
 
                 if (_timeTalking <= 0.0f)
                 {
                     _converseData.Talking = false;
                     _converseData.Done = true;
-                    //_speechBubble.transform.Find("TextName").gameObject.SetActive(false);
-                    //_speechBubble.transform.Find("Dialogue").gameObject.SetActive(false);
                 }
             }
         }
@@ -113,7 +113,7 @@ namespace Assets.Scripts.AI.Tasks
 
                     string scrambledText = ScrambleText();
 
-                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + _converseData.Speech + "</color> \n";
+                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color> \n";
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
                     break;
             }

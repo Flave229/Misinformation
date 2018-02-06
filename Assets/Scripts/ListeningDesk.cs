@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class ListeningDesk : MonoBehaviour
+    public class ListeningDesk : MonoBehaviour, IEventListener
     {
 		public int numOfListeningDevices;
 		int activeDeviceNum;
@@ -13,7 +13,7 @@ namespace Assets.Scripts
         
 		void Start () 
 		{
-			
+            SubscribeToEvents();
 		}
 		
 		void Update () 
@@ -91,5 +91,23 @@ namespace Assets.Scripts
 			usingDesk = false;
 			Camera.main.GetComponent<Camera2DFollow>().target = GameManager.Instance().ActiveTech.transform;
 		}
-	}
+
+        public void ConsumeEvent(EventSystem.Event subscribeEvent, object eventPacket)
+        {
+            if (activeDevice == null)
+                return;
+
+            switch (subscribeEvent)
+            {
+                case EventSystem.Event.SPEECH_START:
+                    EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_LISTENING, activeDevice.GetComponent<ListeningDevice>());
+                    break;
+            }
+        }
+
+        public void SubscribeToEvents()
+        {
+            EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.SPEECH_START);
+        }
+    }
 }

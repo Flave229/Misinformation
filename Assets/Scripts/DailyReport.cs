@@ -24,10 +24,12 @@ namespace Assets.Scripts
                 rectTransform.gameObject.SetActive(false);
                 DailyReportComponents.Add(rectTransform.gameObject);
             }
+			player = GameManager.Instance ().ActiveTech;
         }
 
         private void Update()
         {
+			player = GameManager.Instance ().ActiveTech;
             float distance = Vector3.Distance(player.transform.position, Typewriter.transform.position);
             if (distance < 1)
             {

@@ -45,7 +45,7 @@ namespace Assets.Scripts
         // Update is called once per frame
         private void Update()
         {
-			target = GameManager.Instance ().ActiveTech.transform;
+			
 			if (Input.GetKeyDown(KeyCode.O))
 			{
 				m_Active = !m_Active;

@@ -62,8 +62,10 @@ namespace Assets.Scripts.AI
                     if (directionModifier == 1)
                         padding = padding * -1;
 
-                    Room[] rooms = (Room[])UnityEngine.Object.FindObjectsOfType(typeof(Room));
-                    int r = UnityEngine.Random.Range(0, rooms.Length);
+                    List<Room> rooms = UnityEngine.Object.FindObjectsOfType(typeof(Room)).OfType<Room>().ToList();
+                    rooms = rooms.Where(room => room.m_Accessible == true).ToList(); //Like a for loop -- Linq
+                    
+                    int r = UnityEngine.Random.Range(0, rooms.Count);
                     Vector3 roomPosition = rooms[r].transform.position;
                     Vector3 colliderOffset = rooms[r].GetComponent<BoxCollider2D>().offset;
                     Vector3 targetLocation = new Vector3(roomPosition.x + colliderOffset.x, roomPosition.y + colliderOffset.y, 0);

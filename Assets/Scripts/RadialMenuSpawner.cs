@@ -19,6 +19,7 @@ namespace Assets.Scripts
             newMenu.transform.SetParent(transform, false);
             newMenu.transform.position = Input.mousePosition;
             newMenu.mouseLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            newMenu.DrawingLine = true;
             newMenu.SpawnButtons(obj);
         }
     }

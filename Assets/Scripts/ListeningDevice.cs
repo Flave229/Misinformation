@@ -12,10 +12,11 @@ namespace Assets.Scripts
     {
 		public GameObject toolTip;
         private int durability;
-        private float dPeriod = 10;
+        private float dPeriod = 100;
         private double _quality;
         private GameObject _player;
         private Technician _technician;
+        public Room CurrentRoom;
 		public bool activeDevice = false;
 
         public void Start ()
@@ -25,8 +26,6 @@ namespace Assets.Scripts
             durability = 2;
 			      toolTip = GameObject.Find ("HoverText");
             _quality = (double)((_technician.GetEquipmentSkill() + 1)) / 10;
-            Debug.Log("Quality = " + _quality);
-
         }
 	
         public void Update ()
@@ -69,7 +68,7 @@ namespace Assets.Scripts
 
         public void DestroyDevice()
         {
-			toolTip.GetComponent<FollowMouse> ().UpdateText ("");
+			//toolTip.GetComponent<FollowMouse> ().UpdateText ("");
 			GameManager.Instance ().ListeningDevList.Remove (this.gameObject);
             Destroy(transform.gameObject);
         }

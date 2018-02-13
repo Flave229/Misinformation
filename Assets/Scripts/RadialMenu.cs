@@ -16,6 +16,7 @@ namespace Assets.Scripts
         public RadialButton selected;
         public Vector3 mouseLocation;
         //Private
+        private LineRenderer lineRenderer;
         private InputManager inputManager;
         private GameObject technician;
         private Character2D character;
@@ -25,13 +26,20 @@ namespace Assets.Scripts
         List<RadialButton> Buttons = new List<RadialButton>();
         List<GameObject> Buggable;
         private GameObject _Camera;
+        public bool DrawingLine;
 
         private void Start()
         {
             inputManager = InputManager.Instance();
             character = technician.GetComponent<Character2D>();
             _Camera = GameObject.FindGameObjectWithTag("MainCamera");
-            //AddToObjList();
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
+            /* line is purple, i don't know why, i think it is lacking a materia?
+            lineRenderer.startColor = Color.blue;
+            lineRenderer.endColor = Color.green;
+            */
+            lineRenderer.widthMultiplier = 0.05f;
+            lineRenderer.positionCount = 2;
         }
 
         private void InitialiseInteractableList()
@@ -112,14 +120,11 @@ namespace Assets.Scripts
                 Destroy(gameObject);
             if (screenBounds.y > bottom)
                 Destroy(gameObject);
-
         }
 
         private void ShowRadialMenu()
         {
-            //this.GetComponent<Text>() = nameObj;
             mouseLocation.z = 0f;
-            //RadialMenuText();
 
             if (selected)
             {
@@ -150,6 +155,7 @@ namespace Assets.Scripts
                     Debug.Log(selected.title + " was selected");
                 }
             }
+            
             Destroy(gameObject);
         }
 
@@ -171,10 +177,34 @@ namespace Assets.Scripts
             if (Input.GetMouseButtonUp(1))
             {
                 ShowRadialMenu();
+                DrawingLine = false;
                 PlayerFarFromMenu();
             }
-            PlayerFarFromMenu();  //THIS REMOVES RADIAL MENU WHEN OUT OF CAMERA SPACE
+            else
+            {
+                drawline();
+                PlayerFarFromMenu();  //THIS REMOVES RADIAL MENU WHEN OUT OF CAMERA SPACE
+            }
         }
+
+        private void drawline()
+        {
+            LineRenderer lineRenderer = GetComponent<LineRenderer>();
+            if (DrawingLine)
+            {
+                Vector3 temp;
+                temp = mouseLocation;
+                temp.z = -0.2f;
+                lineRenderer.SetPosition(0, temp);
+
+                temp = GameManager.Instance().ActiveTech.GetComponent<Character2D>().transform.localPosition;
+                temp.y += 0.2f;
+                temp.z = -0.2f;
+                lineRenderer.SetPosition(1, temp);
+
+            }
+        }
+
     }
 }
 

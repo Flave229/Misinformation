@@ -59,6 +59,15 @@ public static class Extensions
 		return Mathf.Round(value * mult) / mult;
 	}
 
+    public static float Clamp(this float value, float min, float max)
+    {
+        if (value < min)
+            return min;
+        if (value > max)
+            return max;
+        return value;
+    }
+
 	#endregion
 
 	#region Time Extensions

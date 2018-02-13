@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.AI;
 using Assets.Scripts.EventSystem;
 using Assets.Scripts.EventSystem.EventPackets;
 using Assets.Scripts.FileIO;
@@ -14,10 +15,13 @@ namespace Assets.Scripts.General
         private int _knowledge;
         private int _perception;
 
-        List<GameObject> SeenListeningDevices = new List<GameObject>();
-        List<GameObject> GeneralsList = new List<GameObject> ();
+        private float _needsCooldown;
+        private NeedStatus _bladder;
+        private NeedStatus _rest;
+        private NeedStatus _social;
 
-        public string FullName;
+        List<GameObject> SeenListeningDevices = new List<GameObject>();
+        
         public Name Name;
 
         public General()
@@ -30,19 +34,47 @@ namespace Assets.Scripts.General
             _perception = random.Next(0, 10);
             _trust = random.Next(0, 5);
             _knowledge = random.Next(0, 5);
+            _bladder = new NeedStatus(1, 0.1f);
+            _rest = new NeedStatus(1, 0.05f);
+            _social = new NeedStatus(1, 0.25f);
         }
 
         public void Start ()
         {
             Name = NameGenerator.GenerateName();
-            FullName = Name.FullName();
-            GeneralsList = GameManager.Instance().GetGenList();
-            //GeneralsList.Add(this);
             SubscribeToEvents();
         }
 	
-        void Update ()
+        void Update()
         {
+            _needsCooldown -= Time.deltaTime;
+
+            if (_needsCooldown < 0)
+            {
+                _needsCooldown = 1;
+
+                _bladder.Degrade();
+                _rest.Degrade();
+                _social.Degrade();
+
+                System.Random randomGenerator = new System.Random();
+                if (randomGenerator.NextDouble() > Math.Pow(_bladder.Status, 0.1))
+                {
+                    AITaskManager.GoToToilet(this.gameObject);
+                    _bladder.Replenish();
+                }
+                if (randomGenerator.NextDouble() > Math.Pow(_rest.Status, 0.1))
+                {
+                    // TODO: chance to sit down or sleep
+                    AITaskManager.GoToBed(this.gameObject);
+                    _rest.Replenish();
+                }
+                if (randomGenerator.NextDouble() > Math.Pow(_social.Status, 0.1))
+                {
+                    AITaskManager.AwaitConversation(this.gameObject);
+                    _social.Replenish();
+                }
+            }
         }
 
         public void UpdateTrustValue(int trustDifference)

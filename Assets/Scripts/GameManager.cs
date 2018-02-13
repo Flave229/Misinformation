@@ -100,6 +100,9 @@ namespace Assets.Scripts
 			{
 				CycleTech ();
 			}
+
+            if (FundingAmount < 0)
+                FundingAmount = 0;
         }
 
         public static GameManager Instance()

@@ -7,6 +7,7 @@ namespace Assets.Scripts
         public int  m_Depth;
         public Door m_DoorDown;
         public Door m_DoorUp;
+        public string m_RoomName;
 
         // Use this for initialization
         void Start ()

@@ -53,14 +53,18 @@ namespace Assets.Scripts.AI.Tasks
 
         public static void PlaceInRoom(Room room, Vector3 position)
         {
+            GameManager gameManager = GameManager.Instance();
+            if (gameManager.FundingAmount >= 400)
+                gameManager.FundingAmount -= 400;
+            else
+                return;
             GameObject listeningDevice = Resources.Load<GameObject>("ListeningDevice");
             Vector3 placementPosition = new Vector3(position.x, position.y - 0.83f, position.z);
             listeningDevice = Object.Instantiate(listeningDevice, placementPosition, Quaternion.identity);
             listeningDevice.GetComponent<ListeningDevice>().CurrentRoom = room;
 
-            GameManager gameManager = GameManager.Instance();
             gameManager.ListeningDevList.Add(listeningDevice);
-            gameManager.FundingAmount -= 400;
+
             ListeningDevicePlacedPacket eventPacket = new ListeningDevicePlacedPacket
             {
                 Device = listeningDevice,

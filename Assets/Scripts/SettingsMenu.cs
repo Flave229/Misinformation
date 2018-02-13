@@ -3,28 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using System.IO;
 
 public class SettingsMenu : MonoBehaviour
 {
+    public GameSettings gameSettings;
     public AudioMixer audioMixer;
-
     public Dropdown resolutionDropdown;
+    public Resolution[] resolutions;
 
-    Resolution[] resolutions;
-
-    void Start()
+    void OnEnable()
     {
+        gameSettings = new GameSettings();
         SetUpResolutions();
+        if (File.Exists(Application.persistentDataPath + "/gamesettings.json") == true)
+        {
+            LoadSettings();
+        }
+        else
+            SaveSettings();
     }
 
     public void SetVolume(float volume)
     {
         audioMixer.SetFloat("volume", volume);
+        gameSettings.volume = volume;
     }
 
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+        gameSettings.fullscreen = isFullscreen;
     }
 
     public void SetUpResolutions()
@@ -49,17 +58,29 @@ public class SettingsMenu : MonoBehaviour
 
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = currentResolutionIndex;
+        gameSettings.resolutionIndex = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
     }
 
     public void SetResolution(int resolutionIndex)
     {
+        gameSettings.resolutionIndex = resolutionIndex;
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
+    public void SaveSettings()
+    {
+        string jsonData = JsonUtility.ToJson(gameSettings);
+        File.WriteAllText(Application.persistentDataPath + "/gamesettings.json", jsonData);
+    }
+
     public void LoadSettings()
     {
-
+        gameSettings = JsonUtility.FromJson<GameSettings>(File.ReadAllText(Application.persistentDataPath + "/gamesettings.json"));
+        Screen.fullScreen = gameSettings.fullscreen;
+        Resolution resolution = resolutions[gameSettings.resolutionIndex];
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        audioMixer.SetFloat("volume", gameSettings.volume);
     }
 }

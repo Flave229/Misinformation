@@ -62,8 +62,10 @@ namespace Assets.Scripts.AI
                     if (directionModifier == 1)
                         padding = padding * -1;
 
-                    Room[] rooms = (Room[])UnityEngine.Object.FindObjectsOfType(typeof(Room));
-                    int r = UnityEngine.Random.Range(0, rooms.Length);
+                    List<Room> rooms = UnityEngine.Object.FindObjectsOfType(typeof(Room)).OfType<Room>().ToList();
+                    rooms = rooms.Where(room => room.m_Accessible == true).ToList(); //Like a for loop -- Linq
+                    
+                    int r = UnityEngine.Random.Range(0, rooms.Count);
                     Vector3 roomPosition = rooms[r].transform.position;
                     Vector3 colliderOffset = rooms[r].GetComponent<BoxCollider2D>().offset;
                     Vector3 targetLocation = new Vector3(roomPosition.x + colliderOffset.x, roomPosition.y + colliderOffset.y, 0);
@@ -89,12 +91,12 @@ namespace Assets.Scripts.AI
                     general1TaskChain.Push(new PathfindToLocationTask(new PathfindData
                     {
                         Location = targetLocation,
-                        GeneralMovementAI = generalOne.GetComponent<Character2D>().MovementAi
+                        MovementAi = generalOne.GetComponent<Character2D>().MovementAi
                     }));                    
                     general2TaskChain.Push(new PathfindToLocationTask(new PathfindData
                     {
                         Location = new Vector3(targetLocation.x + padding, targetLocation.y),
-                        GeneralMovementAI = generalTwo.GetComponent<Character2D>().MovementAi
+                        MovementAi = generalTwo.GetComponent<Character2D>().MovementAi
                     }));
 
                     AITaskChain general1TaskChainTask = new AITaskChain(general1TaskChain);
@@ -132,7 +134,7 @@ namespace Assets.Scripts.AI
                 }));
                 taskChain.Push(new PathfindToLocationTask(new PathfindData
                 {
-                    GeneralMovementAI = generalOne.MovementAi,
+                    MovementAi = generalOne.MovementAi,
                     Location = toiletPosition
                 }));
 
@@ -165,7 +167,7 @@ namespace Assets.Scripts.AI
                 }));
                 taskChain.Push(new PathfindToLocationTask(new PathfindData
                 {
-                    GeneralMovementAI = generalOne.MovementAi,
+                    MovementAi = generalOne.MovementAi,
                     Location = bedPosition
                 }));
 
@@ -198,7 +200,7 @@ namespace Assets.Scripts.AI
                 }));
                 taskChain.Push(new PathfindToLocationTask(new PathfindData
                 {
-                    GeneralMovementAI = generalOne.MovementAi,
+                    MovementAi = generalOne.MovementAi,
                     Location = chairPosition
                 }));
 
@@ -230,7 +232,7 @@ namespace Assets.Scripts.AI
                 }));
                 generalOne.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
                 {
-                    GeneralMovementAI = generalOne.MovementAi,
+                    MovementAi = generalOne.MovementAi,
                     Location = targetedFurniture.transform.position
                 }));
 

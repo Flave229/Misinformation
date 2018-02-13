@@ -30,7 +30,7 @@ namespace Assets.Scripts.AI.Tasks
             _character.Tasks.AddToStack(new LookAtArtTask());
             _character.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
             {
-                GeneralMovementAI = _character.MovementAi,
+                MovementAi = _character.MovementAi,
                 Location = bedPosition
             }));
 

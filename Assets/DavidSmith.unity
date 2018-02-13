@@ -1261,6 +1261,7 @@ MonoBehaviour:
   m_Depth: 1
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &82452394
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1388,6 +1389,7 @@ MonoBehaviour:
   m_Depth: 1
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &103646653
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3936,7 +3938,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 17e914ea957174a4a96411505b4e7568, type: 3}
+    m_Font: {fileID: 12800000, guid: bb6fb81be13050a479a7425afa69ed8d, type: 3}
     m_FontSize: 8
     m_FontStyle: 0
     m_BestFit: 0
@@ -8125,6 +8127,7 @@ MonoBehaviour:
   m_Depth: 1
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &551299932
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11016,6 +11019,7 @@ MonoBehaviour:
   m_Depth: 1
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &736109502
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11355,6 +11359,7 @@ MonoBehaviour:
   m_Depth: 2
   m_DoorDown: {fileID: 1154114657}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!61 &745693370
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -13334,6 +13339,7 @@ MonoBehaviour:
   m_Depth: 1
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &912878336
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -14489,6 +14495,7 @@ MonoBehaviour:
   m_Depth: 1
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &962480579
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -15272,6 +15279,7 @@ MonoBehaviour:
   m_Depth: 100
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!4 &1017858158
 Transform:
   m_ObjectHideFlags: 0
@@ -15977,6 +15985,7 @@ MonoBehaviour:
   m_Depth: 1
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &1061369951
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -16681,7 +16690,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &1085736261
 RectTransform:
@@ -19235,6 +19244,7 @@ MonoBehaviour:
   m_Depth: 3
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &1282474698
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -19727,6 +19737,7 @@ MonoBehaviour:
   m_Depth: 1
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &1306586727
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -21387,7 +21398,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1489427246
 RectTransform:
@@ -23745,6 +23756,7 @@ MonoBehaviour:
   m_Depth: 1
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &1678013480
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -25566,6 +25578,7 @@ MonoBehaviour:
   m_Depth: 0
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!4 &1807781279
 Transform:
   m_ObjectHideFlags: 0
@@ -27300,6 +27313,7 @@ MonoBehaviour:
   m_Depth: 0
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 1380751910}
+  m_Accessible: 0
 --- !u!4 &2005409957
 Transform:
   m_ObjectHideFlags: 0
@@ -27946,6 +27960,7 @@ MonoBehaviour:
   m_Depth: 1
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 0}
+  m_Accessible: 1
 --- !u!212 &2033061306
 SpriteRenderer:
   m_ObjectHideFlags: 0

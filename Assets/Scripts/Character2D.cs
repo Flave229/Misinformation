@@ -63,7 +63,6 @@ namespace Assets.Scripts
             if (Timer.Instance().Paused || Pause)
                 return;
 
-            MovementAi.CheckAndMoveToNextPathNode();
             Tasks.Update();
 
             if (_collision.CheckCollisions(GetComponent<SpriteRenderer>().sprite, GetComponent<Transform>()))

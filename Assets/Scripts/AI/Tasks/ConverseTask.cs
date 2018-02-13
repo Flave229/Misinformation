@@ -111,7 +111,7 @@ namespace Assets.Scripts.AI.Tasks
                     if (listeningDevice.CurrentRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
                         return;
 
-                    string scrambledText = ScrambleText();
+                    string scrambledText = ScrambleText(listeningDevice);
 
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color> \n";
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
@@ -119,14 +119,13 @@ namespace Assets.Scripts.AI.Tasks
             }
         }
 
-        private string ScrambleText()
+        private string ScrambleText(ListeningDevice listeningDevice)
         {
             System.Random randomGenerator = new System.Random();
-
-            // TODO: These are hard coded until the listening device logic is in
-            float deviceQuality = 0.15f;
-            float deviceDurability = 0.25f;
-            float percentageTextRendered = (0.6f * deviceQuality) + (deviceQuality * deviceDurability * 0.4f);
+            
+            double deviceQuality = listeningDevice.GetQuality();
+            double deviceDurability = listeningDevice.GetDurability();
+            double percentageTextRendered = (0.6f * deviceQuality) + (deviceQuality * deviceDurability * 0.4f);
             
             List<string> words = new List<string>(_converseData.Speech.Split(' '));
 

@@ -51,7 +51,7 @@ namespace Assets.Scripts.AI.Movement_AI
             {
                 var doorComponent = childTransform.GetComponent<Door>();
                 if (doorComponent != null)
-                    source.ConnectingNodes.Add(doorComponent.m_Node);
+                    source.ConnectingNodes.Add(doorComponent.Node);
             }
 
             return source;
@@ -93,7 +93,7 @@ namespace Assets.Scripts.AI.Movement_AI
             {
                 var doorComponent = doorTransform.GetComponent<Door>();
                 if (doorComponent != null)
-                    target.ConnectingNodes.Add(doorComponent.m_Node);
+                    target.ConnectingNodes.Add(doorComponent.Node);
             }
 
             target.Position = new Vector2(target.Position.x, target.ConnectingNodes[0].Position.y);
@@ -122,7 +122,7 @@ namespace Assets.Scripts.AI.Movement_AI
                 {
                     Door currentDoor = (Door)_currentPath[_currentPath.Count - 1].Owner;
                     Door nextDoor = (Door)_currentPath[_currentPath.Count - 2].Owner;
-                    if (currentDoor != null && nextDoor != null && nextDoor.m_Node.Id == currentDoor.m_ConnectingDoor.m_Node.Id)
+                    if (currentDoor != null && nextDoor != null && nextDoor.Node.Id == currentDoor.ConnectingDoor.Node.Id)
                         currentDoor.ActivateEvent(_player);
                 }
 

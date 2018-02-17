@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Assets.Scripts.AI.Movement_AI;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts
 {
@@ -16,40 +17,30 @@ namespace Assets.Scripts
 
     public class Door : MonoBehaviour, ICollisionEvent
     {
-        Animator animator;
-
+        private Animator _animator;
         private Dictionary<Character2D, float> _delay = new Dictionary<Character2D, float>();
-
-        float _defaultCooldown  = 1.0f;
-
-
-        private static Character2D m_Player;
-
+        private float _defaultCooldown  = 1.0f;
         private static float m_Transparency = 0.35f;
+        private IEnumerator _coroutine;
+        private Vector3 _defaultSize;
 
-        private IEnumerator coroutine;
-        private Vector3 defaultSize;
-
-        public DoorType m_DoorType;
-
-        public Room m_ParentRoom;
-        public Door m_ConnectingDoor;
-
-        public bool m_OpenClose;
-
-        public Node m_Node;
+        public DoorType DoorType;
+        public Room ParentRoom;
+        public Door ConnectingDoor;
+        public bool OpenClose;
+        public Node Node;
 
         // Use this for initialization
         void Awake()
         {
-            m_ParentRoom = transform.parent.GetComponent<Room>();
-            m_Node = new Node
+            ParentRoom = transform.parent.GetComponent<Room>();
+            Node = new Node
             {
                 Position = transform.position,
                 Owner = this
             };
 
-            if (m_DoorType == DoorType.Door_Down)
+            if (DoorType == DoorType.Door_Down)
             {
                 // Set this door type to be transparent.
                 SpriteRenderer sr = transform.GetComponent<SpriteRenderer>();
@@ -61,31 +52,28 @@ namespace Assets.Scripts
 
         void Start()
         {
-            var playerGameObject = GameObject.FindGameObjectWithTag("Player");
-            m_Player = playerGameObject.GetComponent<Character2D>();
-            if (m_ConnectingDoor != null)
+            if (ConnectingDoor != null)
             {
-                m_Node.ConnectingNodes = new List<Node>
+                Node.ConnectingNodes = new List<Node>
                 {
-                    m_ConnectingDoor.m_Node
+                    ConnectingDoor.Node
                 };
             }
 
             // Get all doors in the room and make it a connecting node
-            foreach (Transform childTransform in m_ParentRoom.transform)
+            foreach (Transform childTransform in ParentRoom.transform)
             {
                 var doorComponent = childTransform.GetComponent<Door>();
                 if (doorComponent != null && childTransform != transform)
-                    m_Node.ConnectingNodes.Add(doorComponent.m_Node);
+                    Node.ConnectingNodes.Add(doorComponent.Node);
             }
-            animator = this.GetComponent<Animator>();
-            defaultSize = transform.localScale;
+            _animator = this.GetComponent<Animator>();
+            _defaultSize = transform.localScale;
         }
-
-        // Update is called once per frame
+        
         void Update()
         {
-            m_OpenClose = animator.GetBool("OpenClose");
+            OpenClose = _animator.GetBool("OpenClose");
 
             _delay = _delay.ToDictionary(element => element.Key, element => (element.Value - Time.deltaTime));
 
@@ -94,8 +82,8 @@ namespace Assets.Scripts
             {
                 if(a.Value <= 0.0f)
                 {
-                    a.Key.transform.position = m_ConnectingDoor.transform.position;
-                    a.Key.CurrentRoom = m_ConnectingDoor.m_ParentRoom;
+                    a.Key.transform.position = ConnectingDoor.transform.position;
+                    a.Key.CurrentRoom = ConnectingDoor.ParentRoom;
                     a.Key.Pause = false;
                     a.Key.gameObject.SetActive(true);
                     charactersToRemove.Add(a.Key);
@@ -109,12 +97,12 @@ namespace Assets.Scripts
 
         public void ActivateEvent(Character2D character)
         {
-            if (m_ConnectingDoor != null)
+            if (ConnectingDoor != null)
             {
-                coroutine = OpenDoor();
-                StartCoroutine(coroutine);
+                _coroutine = OpenDoor();
+                StartCoroutine(_coroutine);
 
-                if (m_ConnectingDoor.m_DoorType == DoorType.Door_Down || m_ConnectingDoor.m_DoorType == DoorType.Door_Up)
+                if (ConnectingDoor.DoorType == DoorType.Door_Down || ConnectingDoor.DoorType == DoorType.Door_Up)
                 {
                     _delay.Add(character, _defaultCooldown);
                     character.Pause = true;
@@ -122,8 +110,8 @@ namespace Assets.Scripts
                 }
                 else
                 {
-                    character.transform.position = m_ConnectingDoor.transform.position;
-                    character.CurrentRoom = m_ConnectingDoor.m_ParentRoom;
+                    character.transform.position = ConnectingDoor.transform.position;
+                    character.CurrentRoom = ConnectingDoor.ParentRoom;
                 }
             }
         }
@@ -135,22 +123,22 @@ namespace Assets.Scripts
 
         void CloseDoor()
         {
-            animator.SetBool("OpenClose", false);
-            transform.localScale = defaultSize;
+            _animator.SetBool("OpenClose", false);
+            transform.localScale = _defaultSize;
             gameObject.GetComponent<Renderer>().sortingOrder = 1;
-            m_ConnectingDoor.animator.SetBool("OpenClose", false);
-            m_ConnectingDoor.transform.localScale = defaultSize;
-            m_ConnectingDoor.GetComponent<Renderer>().sortingOrder = 1;
+            ConnectingDoor._animator.SetBool("OpenClose", false);
+            ConnectingDoor.transform.localScale = _defaultSize;
+            ConnectingDoor.GetComponent<Renderer>().sortingOrder = 1;
         }
 
         IEnumerator OpenDoor()
         {
-            animator.SetBool("OpenClose", true);
+            _animator.SetBool("OpenClose", true);
             this.transform.localScale = new Vector3(1, 1, 1);
             this.gameObject.GetComponent<Renderer>().sortingOrder = 2;
-            m_ConnectingDoor.animator.SetBool("OpenClose", true);
-            m_ConnectingDoor.transform.localScale = new Vector3(1, 1, 1);
-            m_ConnectingDoor.gameObject.GetComponent<Renderer>().sortingOrder = 2;
+            ConnectingDoor._animator.SetBool("OpenClose", true);
+            ConnectingDoor.transform.localScale = new Vector3(1, 1, 1);
+            ConnectingDoor.gameObject.GetComponent<Renderer>().sortingOrder = 2;
             SoundManager.Instance().PlaySingle("InsideDoorOriginal");
             yield return new WaitForSeconds(1);
             CloseDoor();

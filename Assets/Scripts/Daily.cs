@@ -68,6 +68,7 @@ namespace Assets.Scripts
                 generalsToAdd = Random.Range(1, _maxGeneralsPerDay);
             }
 
+            arrivingGenerals.Clear();
             for (int i = 0; i < generalsToAdd; ++i)
             {
                 Vector2 generalPos = new Vector2(Random.Range(-24.45f, -41.91f) * paddingSpawn, -9.5f);
@@ -77,7 +78,6 @@ namespace Assets.Scripts
                 GameManager.Instance().GeneralList.Add(general);
                 var generalComponent = general.GetComponent<General.General>();
                 generalComponent.Start();
-                arrivingGenerals.Clear();
                 arrivingGenerals.Add(generalComponent.Name);
             }
         }

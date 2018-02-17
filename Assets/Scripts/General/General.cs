@@ -34,8 +34,8 @@ namespace Assets.Scripts.General
             _perception = random.Next(0, 10);
             _trust = random.Next(0, 5);
             _knowledge = random.Next(0, 5);
-            _bladder = new NeedStatus(1, 0.1f);
-            _rest = new NeedStatus(1, 0.05f);
+            _bladder = new NeedStatus(1, 0.06f);
+            _rest = new NeedStatus(1, 0.03f);
             _social = new NeedStatus(1, 0.25f);
         }
 

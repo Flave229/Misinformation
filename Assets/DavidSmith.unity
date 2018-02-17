@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 2354760}
   - component: {fileID: 2354761}
   - component: {fileID: 2354762}
+  - component: {fileID: 2354763}
   m_Layer: 0
   m_Name: toilet
   m_TagString: Untagged
@@ -196,6 +197,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2354763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2354759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e9f6cae420072b40aa049d4d55cbc77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8834489
@@ -1111,6 +1123,7 @@ GameObject:
   - component: {fileID: 63665108}
   - component: {fileID: 63665109}
   - component: {fileID: 63665110}
+  - component: {fileID: 63665111}
   m_Layer: 0
   m_Name: bed (2)
   m_TagString: Untagged
@@ -1186,6 +1199,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &63665111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 63665107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc87b434727241b48a85b07e427d203e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FacingRight: 0
 --- !u!1 &68672593
 GameObject:
   m_ObjectHideFlags: 0
@@ -4567,6 +4592,7 @@ GameObject:
   - component: {fileID: 351933031}
   - component: {fileID: 351933032}
   - component: {fileID: 351933033}
+  - component: {fileID: 351933034}
   m_Layer: 0
   m_Name: toilet (1)
   m_TagString: Untagged
@@ -4640,6 +4666,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &351933034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 351933030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e9f6cae420072b40aa049d4d55cbc77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &352058770
@@ -14894,6 +14931,7 @@ GameObject:
   - component: {fileID: 996695444}
   - component: {fileID: 996695445}
   - component: {fileID: 996695446}
+  - component: {fileID: 996695447}
   m_Layer: 0
   m_Name: bed
   m_TagString: Untagged
@@ -14969,6 +15007,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &996695447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 996695443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc87b434727241b48a85b07e427d203e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FacingRight: 0
 --- !u!1 &1004443962
 GameObject:
   m_ObjectHideFlags: 0
@@ -18696,7 +18746,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60dce7f57f7c80b47a8b97e7023ce0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FullName: 
 --- !u!95 &1234366201
 Animator:
   serializedVersion: 3
@@ -24201,6 +24250,7 @@ GameObject:
   - component: {fileID: 1700583159}
   - component: {fileID: 1700583160}
   - component: {fileID: 1700583161}
+  - component: {fileID: 1700583162}
   m_Layer: 0
   m_Name: toilet (3)
   m_TagString: Untagged
@@ -24274,6 +24324,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1700583162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1700583158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e9f6cae420072b40aa049d4d55cbc77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1721044197
@@ -25472,6 +25533,7 @@ GameObject:
   - component: {fileID: 1802694670}
   - component: {fileID: 1802694671}
   - component: {fileID: 1802694672}
+  - component: {fileID: 1802694673}
   m_Layer: 0
   m_Name: toilet (2)
   m_TagString: Untagged
@@ -25545,6 +25607,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1802694673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1802694669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e9f6cae420072b40aa049d4d55cbc77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1807781277
@@ -26433,7 +26506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60dce7f57f7c80b47a8b97e7023ce0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FullName: 
 --- !u!95 &1911981187
 Animator:
   serializedVersion: 3
@@ -27313,7 +27385,7 @@ MonoBehaviour:
   m_Depth: 0
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 1380751910}
-  m_Accessible: 0
+  m_Accessible: 1
 --- !u!4 &2005409957
 Transform:
   m_ObjectHideFlags: 0
@@ -30091,7 +30163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60dce7f57f7c80b47a8b97e7023ce0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FullName: 
 --- !u!95 &2132249345
 Animator:
   serializedVersion: 3
@@ -30281,6 +30352,7 @@ GameObject:
   - component: {fileID: 2135230784}
   - component: {fileID: 2135230785}
   - component: {fileID: 2135230786}
+  - component: {fileID: 2135230787}
   m_Layer: 0
   m_Name: bed (1)
   m_TagString: Untagged
@@ -30356,6 +30428,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da4786fa3fb506a41a6071f51397f89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2135230787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2135230783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc87b434727241b48a85b07e427d203e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FacingRight: 0
 --- !u!1 &2135860631
 GameObject:
   m_ObjectHideFlags: 0

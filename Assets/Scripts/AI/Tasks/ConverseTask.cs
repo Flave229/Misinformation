@@ -52,13 +52,15 @@ namespace Assets.Scripts.AI.Tasks
 
             if (_converseData.Talking == false && _converseData.Done == false && _converseData.ConversationPartnerTaskData.Talking == false)
             {
-                var conversation =  _conversationManager.ConversationGenerator(_converseData.General, _converseData.ConversationPartnerTaskData.General);
+                if (_converseData.ConversationPartnerTaskData.Done == false)
+                {
+                    var conversation = _conversationManager.ConversationGenerator(_converseData.General, _converseData.ConversationPartnerTaskData.General);
+                    _converseData.Speech = conversation[_converseData.General];
+                    _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
+                }
 
 				SoundManager.Instance().PlaySingleDistance(_converseData.General.gameObject, "generalConversation1", 1.0f, 10.0f);
 				SoundManager.Instance().PlaySingleDistance(_converseData.ConversationPartnerTaskData.General.gameObject, "generalConversation2", 1.0f, 10.0f);
-
-                _converseData.Speech = conversation[_converseData.General];
-                _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
                 
                 _converseData.Talking = true;
                 EventMessenger.Instance().FireEvent(EventSystem.Event.SPEECH_START, null);

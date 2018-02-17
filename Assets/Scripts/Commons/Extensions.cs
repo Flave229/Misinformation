@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using UnityEngine.UI;
 using System.Linq;
-using System.Collections.Generic;
 
 public static class Extensions
 {

@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Assets.Scripts.AI
+﻿namespace Assets.Scripts.AI
 {
     public class NeedStatus
     {

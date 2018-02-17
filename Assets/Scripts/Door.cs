@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Assets.Scripts.AI.Movement_AI;
 using UnityEngine;
 using System.Linq;
-using UnityEngine.Serialization;
 
 namespace Assets.Scripts
 {

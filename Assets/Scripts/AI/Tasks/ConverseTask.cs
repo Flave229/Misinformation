@@ -1,10 +1,8 @@
 ﻿using Assets.Scripts.AI.TaskData;
 using Assets.Scripts.Conversation;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 using UnityEngine.UI;
 using Assets.Scripts.EventSystem;
-using Assets.Scripts.EventSystem.EventPackets;
 using System.Collections.Generic;
 
 namespace Assets.Scripts.AI.Tasks

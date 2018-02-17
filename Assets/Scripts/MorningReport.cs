@@ -22,7 +22,6 @@ namespace Assets.Scripts
         private List<GameObject> _newGeneralList;
 
         private bool _reportsScreenVisible = true;
-       // public Text _fundingFeedback;
 
         private string _addedGen = "";
         private string _leavingGen = "";
@@ -33,9 +32,6 @@ namespace Assets.Scripts
         {
             _dailyManager = Object.FindObjectOfType<Daily>();
             _addedGen = "A general is added";
-
-            //_dailyManager.leavingGenerals = new List<General.Name>();
-            //_dailyManager.arrivingGenerals = new List<General.Name>();
 
             //Get all child elements
             foreach (RectTransform rectTransform in GetComponentInChildren<RectTransform>())
@@ -54,10 +50,7 @@ namespace Assets.Scripts
                 _morningReportComponents.Add(rectTransform.gameObject);
             }
 
-         
-
-
-                    Show();
+            Show();
         }
     
         void Update()

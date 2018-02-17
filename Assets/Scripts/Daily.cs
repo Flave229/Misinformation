@@ -73,8 +73,6 @@ namespace Assets.Scripts
                 Vector2 generalPos = new Vector2(Random.Range(-24.45f, -41.91f) * paddingSpawn, -9.5f);
                 GameObject general = Instantiate(GeneralGameObject, generalPos, Quaternion.identity);
                 var characterComponent = general.GetComponent<Character2D>();
-                characterComponent.Awake();
-                characterComponent.Start();
                 characterComponent.CurrentRoom = SpawnRoom;
                 GameManager.Instance().GeneralList.Add(general);
                 var generalComponent = general.GetComponent<General.General>();

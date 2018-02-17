@@ -12,10 +12,8 @@ namespace Assets.Scripts
     public class Character2D : MonoBehaviour, IEventListener
     {
         [SerializeField]
-        private LayerMask _doorMask;
         private InputManager _inputManager;
         private CollisionBox _collision;
-        private Door _collidingDoor;
 
         public AIStack Tasks;
         public Animator Animator;
@@ -30,7 +28,8 @@ namespace Assets.Scripts
         {
             Animator = GetComponent<Animator>();
             _inputManager = InputManager.Instance();
-            _collision = new CollisionBox();
+            _collision = gameObject.AddComponent<CollisionBox>();
+            _collision.CollisionBoxType = CollisionBoxType.RECTANGLE;
             Tasks = new AIStack();
         }
 

@@ -11,24 +11,20 @@ namespace Assets.Scripts.AI.Tasks
 {
     public class ConverseTask : ITask, IEventListener
     {
-        static private List<char> _randomCharacters = new List<char> { '#', '@', '!', '?', '/', '%', '$', '£' };
+        private static readonly List<char> _randomCharacters = new List<char> { '#', '@', '!', '?', '/', '%', '$', '£' };
 
         private readonly ConverseData _converseData;
         private bool _completed;
         private readonly ConversationManager _conversationManager;
-        private readonly float _defaultTimeTalking;
-        private float _timeTalking;
-        private readonly float _defaultTimeWaiting;
-        private float _timeWaiting;
-        private GameObject _speechBubble;
+        private float _timeToTalk;
+        private float _timeToWait;
+        private readonly GameObject _speechBubble;
 
 
         public ConverseTask(ConverseData converseData)
         {
-            _defaultTimeTalking = 5.0f;
-            _timeTalking = _defaultTimeTalking;
-            _defaultTimeWaiting = 30.0f;
-            _timeWaiting = _defaultTimeWaiting;
+            _timeToTalk = 5.0f;
+            _timeToWait = 30.0f;
             _converseData = converseData;
             _conversationManager = ConversationManager.Instance();
             _speechBubble = GameObject.FindGameObjectWithTag("ConversationPanel");
@@ -45,9 +41,9 @@ namespace Assets.Scripts.AI.Tasks
 
             if (_converseData.ConversationPartnerTaskData.ReadyToTalk == false)
             {
-                _timeWaiting -= Time.deltaTime;
+                _timeToWait -= Time.deltaTime;
 
-                if (_timeWaiting <= 0.0f)
+                if (_timeToWait <= 0.0f)
                 {
                     _converseData.Done = true;
                     _converseData.ConversationPartnerTaskData.Done = true;
@@ -72,9 +68,9 @@ namespace Assets.Scripts.AI.Tasks
 
             if (_converseData.Talking)
             {
-                _timeTalking -= Time.deltaTime;
+                _timeToTalk -= Time.deltaTime;
 
-                if (_timeTalking <= 0.0f)
+                if (_timeToTalk <= 0.0f)
                 {
                     _converseData.Talking = false;
                     _converseData.Done = true;

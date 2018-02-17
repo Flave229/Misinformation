@@ -6,11 +6,6 @@ namespace Assets.Scripts.Physics
     {
         public CollisionBoxType CollisionBoxType;
 
-        public CollisionBox()
-        {
-
-        }
-
         public bool CheckCollisions(Sprite thisSprite, Transform thisTransform)
         {
             var collisionObjects = (CollisionBox[])UnityEngine.Object.FindObjectsOfType(typeof(CollisionBox));

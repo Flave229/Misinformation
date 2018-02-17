@@ -13,7 +13,6 @@ namespace Assets.Scripts
     {
         [SerializeField]
         private InputManager _inputManager;
-        private CollisionBox _collision;
 
         public AIStack Tasks;
         public Animator Animator;
@@ -28,8 +27,6 @@ namespace Assets.Scripts
         {
             Animator = GetComponent<Animator>();
             _inputManager = InputManager.Instance();
-            _collision = gameObject.AddComponent<CollisionBox>();
-            _collision.CollisionBoxType = CollisionBoxType.RECTANGLE;
             Tasks = new AIStack();
         }
 
@@ -63,10 +60,7 @@ namespace Assets.Scripts
                 return;
 
             Tasks.Update();
-
-            if (_collision.CheckCollisions(GetComponent<SpriteRenderer>().sprite, GetComponent<Transform>()))
-                MovementAi.ClearAndReturnToLastNode();
-
+            
             Move();
         }
 

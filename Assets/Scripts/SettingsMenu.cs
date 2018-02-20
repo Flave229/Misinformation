@@ -32,6 +32,7 @@ public class SettingsMenu : MonoBehaviour
     public void SetVolume(float volume)
     {
         gameSettings.volume = volume;
+        volumeSlider.value = gameSettings.volume;
         audioMixer.SetFloat("volume", gameSettings.volume);
     } 
 

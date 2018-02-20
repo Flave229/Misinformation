@@ -8,8 +8,10 @@ using System.IO;
 public class SettingsMenu : MonoBehaviour
 {
     public GameSettings gameSettings;
-    public AudioMixer audioMixer;
-    public Dropdown resolutionDropdown;
+    public AudioMixer   audioMixer;
+    public Toggle       fullscreenToogle;
+    public Dropdown     resolutionDropdown;
+    public Slider       volumeSlider;
     public Resolution[] resolutions;
 
     void OnEnable()
@@ -30,13 +32,15 @@ public class SettingsMenu : MonoBehaviour
     public void SetVolume(float volume)
     {
         gameSettings.volume = volume;
+        volumeSlider.value = gameSettings.volume;
         audioMixer.SetFloat("volume", gameSettings.volume);
-    }
+    } 
 
     public void SetFullscreen(bool isFullscreen)
     {
         gameSettings.fullscreen = isFullscreen;
         Screen.fullScreen = gameSettings.fullscreen;
+        fullscreenToogle.isOn = gameSettings.fullscreen;
     }
 
     public void SetUpResolutions()
@@ -86,9 +90,5 @@ public class SettingsMenu : MonoBehaviour
     public void LoadSettings()
     {
         gameSettings = JsonUtility.FromJson<GameSettings>(File.ReadAllText(Application.persistentDataPath + "/gamesettings.json"));
-        /*Screen.fullScreen = gameSettings.fullscreen;
-        Resolution resolution = resolutions[gameSettings.resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, gameSettings.fullscreen);
-        audioMixer.SetFloat("volume", gameSettings.volume);*/
     }
 }

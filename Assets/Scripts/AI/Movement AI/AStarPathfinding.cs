@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.AI.Movement_AI
@@ -79,7 +80,7 @@ namespace Assets.Scripts.AI.Movement_AI
 
             for(int i = 0; i < closedList.Count; i++)
             {
-                if (closedList[i].Id == travelNode.ConnectingNodes[0].Id)
+                if (travelNode.ConnectingNodes.Where(x => x.Id == closedList[i].Id).ToList().Count > 0)
                 {
                     if (travelNode.Parent == null || travelNode.Parent.TotalCost > closedList[i].TotalCost)
                         travelNode.Parent = closedList[i];

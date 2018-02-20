@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.AI.TaskData;
+using System;
 
 namespace Assets.Scripts.AI.Tasks
 {
@@ -15,19 +16,27 @@ namespace Assets.Scripts.AI.Tasks
 
         public void Execute()
         {
-            //Debug.Log("Pathfind to Location began execution!");
-            //Debug.Log("Pathfinding to location: " + _pathfindData.Location);
-            if (_movementNodeGenerated == false)
+            try
             {
-                _pathfindData.MovementAi.ClearPath();
-                _pathfindData.MovementAi.CreatePathTo(_pathfindData.Location);
-                _movementNodeGenerated = true;
+                if (_movementNodeGenerated == false)
+                {
+                    _pathfindData.MovementAi.ClearPath();
+                    _pathfindData.MovementAi.CreatePathTo(_pathfindData.Location);
+                    _movementNodeGenerated = true;
+                }
+
+                if (_pathfindData.MovementAi.GetCurrentPath().Count == 0)
+                    SetCompleted();
+                else
+                    _pathfindData.MovementAi.CheckAndMoveToNextPathNode();
+            }
+            catch (Exception e)
+            {
+                SetCompleted();
             }
 
-            if (_pathfindData.MovementAi.GetCurrentPath().Count == 0)
-                SetCompleted();
-            else
-                _pathfindData.MovementAi.CheckAndMoveToNextPathNode();
+            //Debug.Log("Pathfind to Location began execution!");
+            //Debug.Log("Pathfinding to location: " + _pathfindData.Location);
         }
 
         public bool IsComplete()

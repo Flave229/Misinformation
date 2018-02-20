@@ -11,6 +11,8 @@ namespace Assets.Scripts.General
 {
     public class General : MonoBehaviour, IEventListener
     {
+        private System.Random _randomGenerator;
+
         private int _trust;
         private int _knowledge;
         private int _perception;
@@ -30,13 +32,13 @@ namespace Assets.Scripts.General
 
         void Awake()
         {
-            System.Random random = new System.Random();
-            _perception = random.Next(0, 10);
-            _trust = random.Next(0, 5);
-            _knowledge = random.Next(0, 5);
-            _bladder = new NeedStatus((float)random.NextDouble() * 0.8f + 0.2f, 0.06f);
-            _rest = new NeedStatus((float)random.NextDouble() * 0.2f + 0.8f, 0.03f);
-            _social = new NeedStatus((float)random.NextDouble(), 0.25f);
+            _randomGenerator = new System.Random();
+            _perception = _randomGenerator.Next(0, 10);
+            _trust = _randomGenerator.Next(0, 5);
+            _knowledge = _randomGenerator.Next(0, 5);
+            _bladder = new NeedStatus((float)_randomGenerator.NextDouble() * 0.8f + 0.2f, 0.06f);
+            _rest = new NeedStatus((float)_randomGenerator.NextDouble() * 0.2f + 0.8f, 0.03f);
+            _social = new NeedStatus((float)_randomGenerator.NextDouble(), 0.25f);
         }
 
         public void Start ()
@@ -65,9 +67,19 @@ namespace Assets.Scripts.General
                 }
                 if (randomGenerator.NextDouble() > Math.Pow(_rest.Status, 0.1))
                 {
-                    // TODO: chance to sit down or sleep
-                    AITaskManager.GoToBed(this.gameObject);
-                    _rest.Replenish();
+                    // Chance to sleep increases as rest gets low
+                    float chanceToSleep = (float)_randomGenerator.NextDouble();
+
+                    if (chanceToSleep > _rest.Status)
+                    {
+                        AITaskManager.GoToBed(this.gameObject);
+                        _rest.Replenish();
+                    }
+                    else
+                    {
+                        AITaskManager.SitDown(this.gameObject);
+                        _rest.Replenish(0.1f);
+                    }
                 }
                 if (randomGenerator.NextDouble() > Math.Pow(_social.Status, 0.1))
                 {

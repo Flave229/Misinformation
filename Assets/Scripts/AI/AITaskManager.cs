@@ -35,7 +35,6 @@ namespace Assets.Scripts.AI
             int generalCount = generalList.Count;
 
             PairConversations();
-            ChanceToSit(generalList, generalCount);
             ChanceToSearchForListeningDevices(generalList);
         }
 
@@ -150,37 +149,30 @@ namespace Assets.Scripts.AI
             generalOne.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
-        private void ChanceToSit(List<GameObject> generalList, int generalCount)
+        public static void SitDown(GameObject generalGameObject)
         {
-            float taskChance = (float)(generalCount * 15) / (_startingTimeInSeconds) * Time.deltaTime;
+            Character2D character = generalGameObject.GetComponent<Character2D>();
 
-            Random randomGenerator = new Random();
-            if (randomGenerator.NextDouble() <= taskChance)
+            List<Chair> chairs = new List<Chair>(GameObject.FindObjectsOfType<Chair>()).Where(x => x.Occupied == false).ToList();
+            if (chairs.Count <= 0)
+                return;
+            Chair chosenChair = chairs[_randomGenerator.Next(0, chairs.Count - 1)];
+            chosenChair.Occupied = true;
+            Vector2 chairPosition = chosenChair.transform.position;
+
+            Stack<ITask> taskChain = new Stack<ITask>();
+            taskChain.Push(new SitTask(new SitData
             {
-                int generalIndex = randomGenerator.Next(0, generalCount);
-                Character2D generalOne = generalList[generalIndex].GetComponent<Character2D>();
+                General = character,
+                Chair = chosenChair
+            }));
+            taskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                MovementAi = character.MovementAi,
+                Location = chairPosition
+            }));
 
-                List<Chair> chairs = new List<Chair>(GameObject.FindObjectsOfType<Chair>()).Where(x => x.Occupied == false).ToList();
-                if (chairs.Count <= 0)
-                    return;
-                Chair chosenChair = chairs[randomGenerator.Next(0, chairs.Count - 1)];
-                chosenChair.Occupied = true;
-                Vector2 chairPosition = chosenChair.transform.position;
-                
-                Stack<ITask> taskChain = new Stack<ITask>();
-                taskChain.Push(new SitTask(new SitData
-                {
-                    General = generalOne,
-                    Chair = chosenChair
-                }));
-                taskChain.Push(new PathfindToLocationTask(new PathfindData
-                {
-                    MovementAi = generalOne.MovementAi,
-                    Location = chairPosition
-                }));
-
-                generalOne.Tasks.AddToStack(new AITaskChain(taskChain));
-            }
+            character.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
         private void ChanceToSearchForListeningDevices(List<GameObject> generalList)

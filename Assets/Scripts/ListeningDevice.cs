@@ -1,10 +1,4 @@
-﻿using Assets.Scripts.EventSystem;
-using Assets.Scripts.EventSystem.EventPackets;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using Event = Assets.Scripts.EventSystem.Event;
-
+﻿using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -87,6 +81,5 @@ namespace Assets.Scripts
 		{
 			return durability;
 		}
-
     }
 }

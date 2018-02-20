@@ -3,7 +3,6 @@ using Assets.Scripts.AI.TaskData;
 using Assets.Scripts.AI.Tasks;
 using Assets.Scripts.HouseholdItems;
 using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using System.Linq;
 
@@ -70,36 +69,6 @@ namespace Assets.Scripts
             RadialMenuText();
         }
 
-        private void DoAIStuff(float num)
-        {
-            Stack<ITask> taskChain = new Stack<ITask>();
-
-            if (num == 1.0f)
-            {
-                taskChain.Push(new PlaceListeningDeviceTask(new PathfindData
-                {
-                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
-                    Location = mouseLocation
-                }));
-                
-                taskChain.Push(new PathfindToLocationTask(new PathfindData
-                {
-                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
-                    Location = mouseLocation
-                }));
-                character.Tasks.AddToStack(new AITaskChain(taskChain));
-            }
-            if (num == 0.0f)
-            {
-                taskChain.Push(new PathfindToLocationTask(new PathfindData
-                {
-                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
-                    Location = mouseLocation
-                }));
-                character.Tasks.AddToStack(new AITaskChain(taskChain));
-            }
-        }
-
         private void PlayerFarFromMenu()
         {
             Vector3 cameraPosition = _Camera.transform.position;
@@ -122,7 +91,7 @@ namespace Assets.Scripts
                 Destroy(gameObject);
         }
 
-        private void ShowRadialMenu()
+        private void MenuRelease()
         {
             mouseLocation.z = 0f;
 
@@ -136,10 +105,7 @@ namespace Assets.Scripts
                         {
                             if (Vector2.Distance(mouseLocation, Buggable[i].transform.position) < 2.0f)
                             {
-                                DoAIStuff(1.0f);
-
-                                Debug.Log(selected.title + " was selected");
-
+                                PlaceListeningDevice();
                                 i += Buggable.Count;
                             }
                         }
@@ -151,12 +117,37 @@ namespace Assets.Scripts
                 }
                 if (selected.title == "MoveObject")
                 {
-                    DoAIStuff(0.0f);
-                    Debug.Log(selected.title + " was selected");
+                    MoveToLocation();
                 }
             }
             
             Destroy(gameObject);
+        }
+
+        private void PlaceListeningDevice()
+        {
+            Stack<ITask> taskChain = new Stack<ITask>();
+            taskChain.Push(new PlaceListeningDeviceTask(new PlaceListeningDeviceData
+            {
+                PlacedBy = GameManager.Instance().ActiveTech.GetComponent<Technician>(),
+                Location = mouseLocation
+            }));
+
+            taskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
+                Location = mouseLocation
+            }));
+            character.Tasks.AddToStack(new AITaskChain(taskChain));
+        }
+
+        private void MoveToLocation()
+        {
+            character.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
+            {
+                MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
+                Location = mouseLocation
+            }));
         }
 
         private void RadialMenuText()
@@ -176,7 +167,7 @@ namespace Assets.Scripts
         {
             if (Input.GetMouseButtonUp(1))
             {
-                ShowRadialMenu();
+                MenuRelease();
                 DrawingLine = false;
                 PlayerFarFromMenu();
             }

@@ -19,13 +19,15 @@ namespace Assets.Scripts.AI.Tasks
             //Debug.Log("Pathfinding to location: " + _pathfindData.Location);
             if (_movementNodeGenerated == false)
             {
-                _pathfindData.GeneralMovementAI.ClearPath();
-                _pathfindData.GeneralMovementAI.CreatePathTo(_pathfindData.Location);
+                _pathfindData.MovementAi.ClearPath();
+                _pathfindData.MovementAi.CreatePathTo(_pathfindData.Location);
                 _movementNodeGenerated = true;
             }
 
-            if (_pathfindData.GeneralMovementAI.GetCurrentPath().Count == 0)
+            if (_pathfindData.MovementAi.GetCurrentPath().Count == 0)
                 SetCompleted();
+            else
+                _pathfindData.MovementAi.CheckAndMoveToNextPathNode();
         }
 
         public bool IsComplete()

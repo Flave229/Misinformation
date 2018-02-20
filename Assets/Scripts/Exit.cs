@@ -10,7 +10,7 @@ namespace Assets.Scripts
             if (m_ExitPosition != null)
             {
                 character.transform.position = m_ExitPosition.transform.position;
-                //character.CurrentRoom = m_ConnectingDoor.m_ParentRoom;
+                //character.CurrentRoom = ConnectingDoor.ParentRoom;
             }
         }
     }

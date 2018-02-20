@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.General;
-using Assets.Scripts.HouseholdItems;
+﻿using Assets.Scripts.HouseholdItems;
 
 namespace Assets.Scripts.AI.Tasks
 {

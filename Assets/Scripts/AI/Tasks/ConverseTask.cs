@@ -112,6 +112,10 @@ namespace Assets.Scripts.AI.Tasks
                     if (listeningDevice.CurrentRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
                         return;
 
+                    if (_converseData.Listened)
+                        return;
+
+                    _converseData.Listened = true;
                     string scrambledText = ScrambleText(listeningDevice);
 
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color> \n";
@@ -119,7 +123,6 @@ namespace Assets.Scripts.AI.Tasks
                     _conversationPanel.panelIsHidden = false;
                     _conversationPanel.HidePanel();
                     break;
-                    
             }
         }
 

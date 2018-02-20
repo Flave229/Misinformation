@@ -28113,7 +28113,7 @@ MonoBehaviour:
   m_Depth: 0
   m_DoorDown: {fileID: 0}
   m_DoorUp: {fileID: 1380751910}
-  m_Accessible: 1
+  m_Accessible: 0
 --- !u!4 &2005409957
 Transform:
   m_ObjectHideFlags: 0

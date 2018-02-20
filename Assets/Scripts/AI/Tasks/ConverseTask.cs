@@ -1,34 +1,29 @@
 ﻿using Assets.Scripts.AI.TaskData;
 using Assets.Scripts.Conversation;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 using UnityEngine.UI;
 using Assets.Scripts.EventSystem;
-using Assets.Scripts.EventSystem.EventPackets;
 using System.Collections.Generic;
 
 namespace Assets.Scripts.AI.Tasks
 {
     public class ConverseTask : ITask, IEventListener
     {
-        static private List<char> _randomCharacters = new List<char> { '#', '@', '!', '?', '/', '%', '$', '£' };
+        private static readonly List<char> _randomCharacters = new List<char> { '#', '@', '!', '?', '/', '%', '$', '£' };
 
         private readonly ConverseData _converseData;
         private bool _completed;
         private readonly ConversationManager _conversationManager;
-        private readonly float _defaultTimeTalking;
-        private float _timeTalking;
-        private readonly float _defaultTimeWaiting;
-        private float _timeWaiting;
-        private GameObject _speechBubble;
+
+        private float _timeToTalk;
+        private float _timeToWait;
+        private readonly GameObject _speechBubble;
         private ConversationPanel _conversationPanel;
 
         public ConverseTask(ConverseData converseData)
         {
-            _defaultTimeTalking = 5.0f;
-            _timeTalking = _defaultTimeTalking;
-            _defaultTimeWaiting = 30.0f;
-            _timeWaiting = _defaultTimeWaiting;
+            _timeToTalk = 5.0f;
+            _timeToWait = 30.0f;
             _converseData = converseData;
             _conversationManager = ConversationManager.Instance();
             _speechBubble = GameObject.FindGameObjectWithTag("ConversationPanel");
@@ -45,9 +40,9 @@ namespace Assets.Scripts.AI.Tasks
 
             if (_converseData.ConversationPartnerTaskData.ReadyToTalk == false)
             {
-                _timeWaiting -= Time.deltaTime;
+                _timeToWait -= Time.deltaTime;
 
-                if (_timeWaiting <= 0.0f)
+                if (_timeToWait <= 0.0f)
                 {
                     _converseData.Done = true;
                     _converseData.ConversationPartnerTaskData.Done = true;
@@ -58,13 +53,15 @@ namespace Assets.Scripts.AI.Tasks
 
             if (_converseData.Talking == false && _converseData.Done == false && _converseData.ConversationPartnerTaskData.Talking == false)
             {
-                var conversation =  _conversationManager.ConversationGenerator(_converseData.General, _converseData.ConversationPartnerTaskData.General);
+                if (_converseData.ConversationPartnerTaskData.Done == false)
+                {
+                    var conversation = _conversationManager.ConversationGenerator(_converseData.General, _converseData.ConversationPartnerTaskData.General);
+                    _converseData.Speech = conversation[_converseData.General];
+                    _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
+                }
 
 				SoundManager.Instance().PlaySingleDistance(_converseData.General.gameObject, "generalConversation1", 1.0f, 10.0f);
 				SoundManager.Instance().PlaySingleDistance(_converseData.ConversationPartnerTaskData.General.gameObject, "generalConversation2", 1.0f, 10.0f);
-
-                _converseData.Speech = conversation[_converseData.General];
-                _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
                 
                 _converseData.Talking = true;
                 EventMessenger.Instance().FireEvent(EventSystem.Event.SPEECH_START, null);
@@ -72,9 +69,9 @@ namespace Assets.Scripts.AI.Tasks
 
             if (_converseData.Talking)
             {
-                _timeTalking -= Time.deltaTime;
+                _timeToTalk -= Time.deltaTime;
 
-                if (_timeTalking <= 0.0f)
+                if (_timeToTalk <= 0.0f)
                 {
                     _converseData.Talking = false;
                     _converseData.Done = true;
@@ -115,7 +112,7 @@ namespace Assets.Scripts.AI.Tasks
                     if (listeningDevice.CurrentRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
                         return;
 
-                    string scrambledText = ScrambleText();
+                    string scrambledText = ScrambleText(listeningDevice);
 
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color> \n";
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
@@ -126,14 +123,13 @@ namespace Assets.Scripts.AI.Tasks
             }
         }
 
-        private string ScrambleText()
+        private string ScrambleText(ListeningDevice listeningDevice)
         {
             System.Random randomGenerator = new System.Random();
-
-            // TODO: These are hard coded until the listening device logic is in
-            float deviceQuality = 0.15f;
-            float deviceDurability = 0.25f;
-            float percentageTextRendered = (0.6f * deviceQuality) + (deviceQuality * deviceDurability * 0.4f);
+            
+            double deviceQuality = listeningDevice.GetQuality();
+            double deviceDurability = listeningDevice.GetDurability();
+            double percentageTextRendered = (0.6f * deviceQuality) + (deviceQuality * deviceDurability * 0.4f);
             
             List<string> words = new List<string>(_converseData.Speech.Split(' '));
 

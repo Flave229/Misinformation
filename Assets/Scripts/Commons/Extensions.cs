@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using UnityEngine.UI;
 using System.Linq;
-using System.Collections.Generic;
 
 public static class Extensions
 {
@@ -58,6 +57,15 @@ public static class Extensions
 		float mult = Mathf.Pow(10.0f, (float)digits);
 		return Mathf.Round(value * mult) / mult;
 	}
+
+    public static float Clamp(this float value, float min, float max)
+    {
+        if (value < min)
+            return min;
+        if (value > max)
+            return max;
+        return value;
+    }
 
 	#endregion
 

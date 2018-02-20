@@ -1,7 +1,9 @@
-﻿namespace Assets.Scripts.AI.TaskData
+﻿using UnityEngine;
+
+namespace Assets.Scripts.AI.TaskData
 {
     public class IdleData
     {
-        public Character2D General { get; set; }
+        public GameObject General { get; set; }
     }
 }

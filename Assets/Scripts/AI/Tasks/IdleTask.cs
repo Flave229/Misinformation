@@ -5,35 +5,24 @@ namespace Assets.Scripts.AI.Tasks
 {
     public class IdleTask : ITask
     {
-        private Character2D _character;
+        private GameObject _general;
         private bool _complete;
 
         public IdleTask(IdleData dataPacket)
         {
-            _character = dataPacket.General;
+            _general = dataPacket.General;
         }
 
         public void Execute()
         {
-            _character.Tasks.AddToStack(new IdleTask(new IdleData
+            Character2D character = _general.GetComponent<Character2D>();
+            character.Tasks.AddToStack(new IdleTask(new IdleData
             {
-                General = _character
+                General = _general
             }));
 
-            System.Random randomGenerator = new System.Random();
-            GameObject[] interestingObjects = GameObject.FindGameObjectsWithTag("Art");
-            if (interestingObjects.Length <= 0)
-                return;
-            GameObject chosenObject = interestingObjects[randomGenerator.Next(0, interestingObjects.Length - 1)];
-            Vector2 bedPosition = chosenObject.transform.position;
-
-            _character.Tasks.AddToStack(new LookAtArtTask());
-            _character.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
-            {
-                GeneralMovementAI = _character.MovementAi,
-                Location = bedPosition
-            }));
-
+            General.General general = _general.GetComponent<General.General>();
+            general.SatisfyBiggestNeed();
             SetCompleted();
         }
 

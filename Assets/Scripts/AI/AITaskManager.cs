@@ -10,15 +10,19 @@ namespace Assets.Scripts.AI
 {
     public class AITaskManager
     {
-        static private AITaskManager _instance;
+        private static AITaskManager _instance;
         private int _startingTimeInSeconds;
+        private static Random _randomGenerator;
+        private static List<GameObject> _generalsAwaitingConversation;
 
         private AITaskManager()
         {
             _startingTimeInSeconds = Timer.Instance().GetStartingTimeInSeconds();
+            _randomGenerator = new Random();
+            _generalsAwaitingConversation = new List<GameObject>();
         }
 
-        static public AITaskManager Instance()
+        public static AITaskManager Instance()
         {
             if (_instance == null)
                 _instance = new AITaskManager();
@@ -30,180 +34,164 @@ namespace Assets.Scripts.AI
         {
             int generalCount = generalList.Count;
 
-            ChanceToConverse(generalList, generalCount);
-            ChanceToGoToToilet(generalList, generalCount);
-            ChanceToGoToBed(generalList, generalCount);
-            ChanceToSit(generalList, generalCount);
+            PairConversations();
             ChanceToSearchForListeningDevices(generalList);
         }
 
-        private void ChanceToConverse(List<GameObject> generalList, int generalCount)
+        private void PairConversations()
         {
-            if (generalCount >= 2)
+            if (_generalsAwaitingConversation.Count < 2)
+                return;
+
+            GameObject generalOne = _generalsAwaitingConversation[0];
+            GameObject generalTwo = _generalsAwaitingConversation[1];
+            _generalsAwaitingConversation.RemoveRange(0, 2);
+
+            int padding = 1;
+            int directionModifier = UnityEngine.Random.Range(0, 1);
+            if (directionModifier == 1)
+                padding = padding * -1;
+
+            List<Room> rooms = Object.FindObjectsOfType(typeof(Room)).OfType<Room>().ToList();
+            rooms = rooms.Where(room => room.m_Accessible).ToList();
+
+            int randomIndex = _randomGenerator.Next(0, rooms.Count);
+            Vector3 roomPosition = rooms[randomIndex].transform.position;
+            Vector3 colliderOffset = rooms[randomIndex].GetComponent<BoxCollider2D>().offset;
+            Vector3 targetLocation = new Vector3(roomPosition.x + colliderOffset.x, roomPosition.y + colliderOffset.y, 0);
+
+            var general1ConverseData = new ConverseData
             {
-                float chanceToConverse = (float)(300 * generalCount) / _startingTimeInSeconds * Time.deltaTime;
+                ReadyToTalk = false,
+                General = generalOne.GetComponent<General.General>()
+            };
+            var general2ConverseData = new ConverseData
+            {
+                ReadyToTalk = false,
+                General = generalTwo.GetComponent<General.General>()
+            };
+            general1ConverseData.ConversationPartnerTaskData = general2ConverseData;
+            general2ConverseData.ConversationPartnerTaskData = general1ConverseData;
 
-                Random randomGenerator = new Random();
-                if (randomGenerator.NextDouble() <= chanceToConverse)
-                {
-                    int generalIndex = randomGenerator.Next(0, generalCount);
-                    int generalIndex2 = generalIndex;
+            Stack<ITask> general1TaskChain = new Stack<ITask>();
+            Stack<ITask> general2TaskChain = new Stack<ITask>();
+            general1TaskChain.Push(new ConverseTask(general1ConverseData));
+            general2TaskChain.Push(new ConverseTask(general2ConverseData));
 
-                    while (generalIndex == generalIndex2)
-                    {
-                        generalIndex2 = randomGenerator.Next(0, generalCount);
-                    }
+            general1TaskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                Location = targetLocation,
+                MovementAi = generalOne.GetComponent<Character2D>().MovementAi
+            }));
+            general2TaskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                Location = new Vector3(targetLocation.x + padding, targetLocation.y),
+                MovementAi = generalTwo.GetComponent<Character2D>().MovementAi
+            }));
 
-                    GameObject generalOne = generalList[generalIndex];
-                    GameObject generalTwo = generalList[generalIndex2];
-                    
-                    int padding = 1;
-                    int directionModifier = UnityEngine.Random.Range(0, 1);
-                    if (directionModifier == 1)
-                        padding = padding * -1;
-
-                    Room[] rooms = (Room[])UnityEngine.Object.FindObjectsOfType(typeof(Room));
-                    int r = UnityEngine.Random.Range(0, rooms.Length);
-                    Vector3 roomPosition = rooms[r].transform.position;
-                    Vector3 colliderOffset = rooms[r].GetComponent<BoxCollider2D>().offset;
-                    Vector3 targetLocation = new Vector3(roomPosition.x + colliderOffset.x, roomPosition.y + colliderOffset.y, 0);
-
-                    var general1ConverseData = new ConverseData
-                    {
-                        ReadyToTalk = false,
-                        General = generalOne.GetComponent<General.General>()
-                    };
-                    var general2ConverseData = new ConverseData
-                    {
-                        ReadyToTalk = false,
-                        General = generalTwo.GetComponent<General.General>()
-                    };
-                    general1ConverseData.ConversationPartnerTaskData = general2ConverseData;
-                    general2ConverseData.ConversationPartnerTaskData = general1ConverseData;
-
-                    Stack<ITask> general1TaskChain = new Stack<ITask>();
-                    Stack<ITask> general2TaskChain = new Stack<ITask>();
-                    general1TaskChain.Push(new ConverseTask(general1ConverseData));
-                    general2TaskChain.Push(new ConverseTask(general2ConverseData));
-
-                    general1TaskChain.Push(new PathfindToLocationTask(new PathfindData
-                    {
-                        Location = targetLocation,
-                        GeneralMovementAI = generalOne.GetComponent<Character2D>().MovementAi
-                    }));                    
-                    general2TaskChain.Push(new PathfindToLocationTask(new PathfindData
-                    {
-                        Location = new Vector3(targetLocation.x + padding, targetLocation.y),
-                        GeneralMovementAI = generalTwo.GetComponent<Character2D>().MovementAi
-                    }));
-
-                    AITaskChain general1TaskChainTask = new AITaskChain(general1TaskChain);
-                    general1TaskChainTask.SetCeilingLock(true);
-                    AITaskChain general2TaskChainTask = new AITaskChain(general2TaskChain);
-                    general2TaskChainTask.SetCeilingLock(true);
-                    generalOne.GetComponent<Character2D>().Tasks.AddToStack(general1TaskChainTask);
-                    generalTwo.GetComponent<Character2D>().Tasks.AddToStack(general2TaskChainTask);
-                }
-            }
+            AITaskChain general1TaskChainTask = new AITaskChain(general1TaskChain);
+            general1TaskChainTask.SetCeilingLock(true);
+            AITaskChain general2TaskChainTask = new AITaskChain(general2TaskChain);
+            general2TaskChainTask.SetCeilingLock(true);
+            generalOne.GetComponent<Character2D>().Tasks.AddToStack(general1TaskChainTask);
+            generalTwo.GetComponent<Character2D>().Tasks.AddToStack(general2TaskChainTask);
         }
 
-        private void ChanceToGoToToilet(List<GameObject> generalList, int generalCount)
+        public static void GoToToilet(GameObject generalGameObject)
         {
-            float taskChance = (float)(generalCount * 3) / _startingTimeInSeconds * Time.deltaTime;
+            Character2D character = generalGameObject.GetComponent<Character2D>();
 
-            Random randomGenerator = new Random();
-            if (randomGenerator.NextDouble() <= taskChance)
+            List<Toilet> toilets = new List<Toilet>(Object.FindObjectsOfType<Toilet>()).Where(x => x.Occupied == false).ToList();
+            if (toilets.Count <= 0)
+                return;
+            Toilet chosenToilet = toilets[_randomGenerator.Next(0, toilets.Count - 1)];
+            chosenToilet.Occupied = true;
+            Vector2 toiletPosition = chosenToilet.transform.position;
+
+            Stack<ITask> taskChain = new Stack<ITask>();
+            taskChain.Push(new UseToiletTask(new ToiletData
             {
-                int generalIndex = randomGenerator.Next(0, generalCount);
-                Character2D generalOne = generalList[generalIndex].GetComponent<Character2D>();
+                General = character,
+                Toilet = chosenToilet
+            }));
+            taskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                MovementAi = character.MovementAi,
+                Location = toiletPosition
+            }));
 
-                List<Toilet> toilets = new List<Toilet>(GameObject.FindObjectsOfType<Toilet>()).Where(x => x.Occupied == false).ToList();
-                if (toilets.Count <= 0)
-                    return;
-                Toilet chosenToilet = toilets[randomGenerator.Next(0, toilets.Count - 1)];
-                chosenToilet.Occupied = true;
-                Vector2 toiletPosition = chosenToilet.transform.position;
-                
-                Stack<ITask> taskChain = new Stack<ITask>();
-                taskChain.Push(new UseToiletTask(new ToiletData
-                {
-                    General = generalOne,
-                    Toilet = chosenToilet
-                }));
-                taskChain.Push(new PathfindToLocationTask(new PathfindData
-                {
-                    GeneralMovementAI = generalOne.MovementAi,
-                    Location = toiletPosition
-                }));
-
-                generalOne.Tasks.AddToStack(new AITaskChain(taskChain));
-            }
+            character.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
-        private void ChanceToGoToBed(List<GameObject> generalList, int generalCount)
+        public static void GoToBed(GameObject generalGameObject)
         {
-            float taskChance = (float)(generalCount) / (3 * _startingTimeInSeconds) * Time.deltaTime;
+            Character2D generalOne = generalGameObject.GetComponent<Character2D>();
 
-            Random randomGenerator = new Random();
-            if (randomGenerator.NextDouble() <= taskChance)
+            List<Bed> beds = new List<Bed>(Object.FindObjectsOfType<Bed>()).Where(x => x.Occupied == false).ToList();
+            if (beds.Count <= 0)
+                return;
+            Bed chosenBed = beds[_randomGenerator.Next(0, beds.Count - 1)];
+            chosenBed.Occupied = true;
+            Vector2 bedPosition = chosenBed.transform.position;
+
+            Stack<ITask> taskChain = new Stack<ITask>();
+            taskChain.Push(new SleepTask(new SleepData
             {
-                int generalIndex = randomGenerator.Next(0, generalCount);
-                Character2D generalOne = generalList[generalIndex].GetComponent<Character2D>();
+                General = generalOne,
+                Bed = chosenBed
+            }));
+            taskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                MovementAi = generalOne.MovementAi,
+                Location = bedPosition
+            }));
 
-                List<Bed> beds = new List<Bed>(GameObject.FindObjectsOfType<Bed>()).Where(x => x.Occupied == false).ToList();
-                if (beds.Count <= 0)
-                    return;
-                Bed chosenBed = beds[randomGenerator.Next(0, beds.Count - 1)];
-                chosenBed.Occupied = true;
-                Vector2 bedPosition = chosenBed.transform.position;
-
-                Stack<ITask> taskChain = new Stack<ITask>();
-                taskChain.Push(new SleepTask(new SleepData
-                {
-                    General = generalOne,
-                    Bed = chosenBed
-                }));
-                taskChain.Push(new PathfindToLocationTask(new PathfindData
-                {
-                    GeneralMovementAI = generalOne.MovementAi,
-                    Location = bedPosition
-                }));
-
-                generalOne.Tasks.AddToStack(new AITaskChain(taskChain));
-            }
+            generalOne.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
-        private void ChanceToSit(List<GameObject> generalList, int generalCount)
+        public static void SitDown(GameObject generalGameObject)
         {
-            float taskChance = (float)(generalCount * 15) / (_startingTimeInSeconds) * Time.deltaTime;
+            Character2D character = generalGameObject.GetComponent<Character2D>();
 
-            Random randomGenerator = new Random();
-            if (randomGenerator.NextDouble() <= taskChance)
+            List<Chair> chairs = new List<Chair>(GameObject.FindObjectsOfType<Chair>()).Where(x => x.Occupied == false).ToList();
+            if (chairs.Count <= 0)
+                return;
+            Chair chosenChair = chairs[_randomGenerator.Next(0, chairs.Count - 1)];
+            chosenChair.Occupied = true;
+            Vector2 chairPosition = chosenChair.transform.position;
+
+            Stack<ITask> taskChain = new Stack<ITask>();
+            taskChain.Push(new SitTask(new SitData
             {
-                int generalIndex = randomGenerator.Next(0, generalCount);
-                Character2D generalOne = generalList[generalIndex].GetComponent<Character2D>();
+                General = character,
+                Chair = chosenChair
+            }));
+            taskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                MovementAi = character.MovementAi,
+                Location = chairPosition
+            }));
 
-                List<Chair> chairs = new List<Chair>(GameObject.FindObjectsOfType<Chair>()).Where(x => x.Occupied == false).ToList();
-                if (chairs.Count <= 0)
-                    return;
-                Chair chosenChair = chairs[randomGenerator.Next(0, chairs.Count - 1)];
-                chosenChair.Occupied = true;
-                Vector2 chairPosition = chosenChair.transform.position;
-                
-                Stack<ITask> taskChain = new Stack<ITask>();
-                taskChain.Push(new SitTask(new SitData
-                {
-                    General = generalOne,
-                    Chair = chosenChair
-                }));
-                taskChain.Push(new PathfindToLocationTask(new PathfindData
-                {
-                    GeneralMovementAI = generalOne.MovementAi,
-                    Location = chairPosition
-                }));
+            character.Tasks.AddToStack(new AITaskChain(taskChain));
+        }
 
-                generalOne.Tasks.AddToStack(new AITaskChain(taskChain));
-            }
+        public static void LookAtArt(GameObject generalGameObject)
+        {
+            GameObject[] interestingObjects = GameObject.FindGameObjectsWithTag("Art");
+            if (interestingObjects.Length <= 0)
+                return;
+            GameObject chosenObject = interestingObjects[_randomGenerator.Next(0, interestingObjects.Length - 1)];
+            Vector2 objectPosition = chosenObject.transform.position;
+
+            Character2D character = generalGameObject.GetComponent<Character2D>();
+            Stack<ITask> taskChain = new Stack<ITask>();
+            taskChain.Push(new LookAtArtTask());
+            taskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                MovementAi = character.MovementAi,
+                Location = objectPosition
+            }));
+            character.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
         private void ChanceToSearchForListeningDevices(List<GameObject> generalList)
@@ -230,7 +218,7 @@ namespace Assets.Scripts.AI
                 }));
                 generalOne.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
                 {
-                    GeneralMovementAI = generalOne.MovementAi,
+                    MovementAi = generalOne.MovementAi,
                     Location = targetedFurniture.transform.position
                 }));
 
@@ -247,6 +235,11 @@ namespace Assets.Scripts.AI
             System.Random random = new System.Random();
             int randomIndex = random.Next(0, potentialListeningDevices.Count);
             return potentialListeningDevices.ElementAt(randomIndex);
+        }
+
+        public static void AwaitConversation(GameObject gameObject)
+        {
+            _generalsAwaitingConversation.Add(gameObject);
         }
     }
 }

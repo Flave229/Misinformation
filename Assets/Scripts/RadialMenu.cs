@@ -3,7 +3,6 @@ using Assets.Scripts.AI.TaskData;
 using Assets.Scripts.AI.Tasks;
 using Assets.Scripts.HouseholdItems;
 using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using System.Linq;
 
@@ -16,6 +15,7 @@ namespace Assets.Scripts
         public RadialButton selected;
         public Vector3 mouseLocation;
         //Private
+        private LineRenderer lineRenderer;
         private InputManager inputManager;
         private GameObject technician;
         private Character2D character;
@@ -25,13 +25,20 @@ namespace Assets.Scripts
         List<RadialButton> Buttons = new List<RadialButton>();
         List<GameObject> Buggable;
         private GameObject _Camera;
+        public bool DrawingLine;
 
         private void Start()
         {
             inputManager = InputManager.Instance();
             character = technician.GetComponent<Character2D>();
             _Camera = GameObject.FindGameObjectWithTag("MainCamera");
-            //AddToObjList();
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
+            /* line is purple, i don't know why, i think it is lacking a materia?
+            lineRenderer.startColor = Color.blue;
+            lineRenderer.endColor = Color.green;
+            */
+            lineRenderer.widthMultiplier = 0.05f;
+            lineRenderer.positionCount = 2;
         }
 
         private void InitialiseInteractableList()
@@ -62,36 +69,6 @@ namespace Assets.Scripts
             RadialMenuText();
         }
 
-        private void DoAIStuff(float num)
-        {
-            Stack<ITask> taskChain = new Stack<ITask>();
-
-            if (num == 1.0f)
-            {
-                taskChain.Push(new PlaceListeningDeviceTask(new PathfindData
-                {
-                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
-                    Location = mouseLocation
-                }));
-                
-                taskChain.Push(new PathfindToLocationTask(new PathfindData
-                {
-                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
-                    Location = mouseLocation
-                }));
-                character.Tasks.AddToStack(new AITaskChain(taskChain));
-            }
-            if (num == 0.0f)
-            {
-                taskChain.Push(new PathfindToLocationTask(new PathfindData
-                {
-                    GeneralMovementAI = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
-                    Location = mouseLocation
-                }));
-                character.Tasks.AddToStack(new AITaskChain(taskChain));
-            }
-        }
-
         private void PlayerFarFromMenu()
         {
             Vector3 cameraPosition = _Camera.transform.position;
@@ -112,14 +89,11 @@ namespace Assets.Scripts
                 Destroy(gameObject);
             if (screenBounds.y > bottom)
                 Destroy(gameObject);
-
         }
 
-        private void ShowRadialMenu()
+        private void MenuRelease()
         {
-            //this.GetComponent<Text>() = nameObj;
             mouseLocation.z = 0f;
-            //RadialMenuText();
 
             if (selected)
             {
@@ -131,10 +105,7 @@ namespace Assets.Scripts
                         {
                             if (Vector2.Distance(mouseLocation, Buggable[i].transform.position) < 2.0f)
                             {
-                                DoAIStuff(1.0f);
-
-                                Debug.Log(selected.title + " was selected");
-
+                                PlaceListeningDevice();
                                 i += Buggable.Count;
                             }
                         }
@@ -146,11 +117,37 @@ namespace Assets.Scripts
                 }
                 if (selected.title == "MoveObject")
                 {
-                    DoAIStuff(0.0f);
-                    Debug.Log(selected.title + " was selected");
+                    MoveToLocation();
                 }
             }
+            
             Destroy(gameObject);
+        }
+
+        private void PlaceListeningDevice()
+        {
+            Stack<ITask> taskChain = new Stack<ITask>();
+            taskChain.Push(new PlaceListeningDeviceTask(new PlaceListeningDeviceData
+            {
+                PlacedBy = GameManager.Instance().ActiveTech.GetComponent<Technician>(),
+                Location = mouseLocation
+            }));
+
+            taskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
+                Location = mouseLocation
+            }));
+            character.Tasks.AddToStack(new AITaskChain(taskChain));
+        }
+
+        private void MoveToLocation()
+        {
+            character.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
+            {
+                MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
+                Location = mouseLocation
+            }));
         }
 
         private void RadialMenuText()
@@ -170,11 +167,35 @@ namespace Assets.Scripts
         {
             if (Input.GetMouseButtonUp(1))
             {
-                ShowRadialMenu();
+                MenuRelease();
+                DrawingLine = false;
                 PlayerFarFromMenu();
             }
-            PlayerFarFromMenu();  //THIS REMOVES RADIAL MENU WHEN OUT OF CAMERA SPACE
+            else
+            {
+                drawline();
+                PlayerFarFromMenu();  //THIS REMOVES RADIAL MENU WHEN OUT OF CAMERA SPACE
+            }
         }
+
+        private void drawline()
+        {
+            LineRenderer lineRenderer = GetComponent<LineRenderer>();
+            if (DrawingLine)
+            {
+                Vector3 temp;
+                temp = mouseLocation;
+                temp.z = -0.2f;
+                lineRenderer.SetPosition(0, temp);
+
+                temp = GameManager.Instance().ActiveTech.GetComponent<Character2D>().transform.localPosition;
+                temp.y += 0.2f;
+                temp.z = -0.2f;
+                lineRenderer.SetPosition(1, temp);
+
+            }
+        }
+
     }
 }
 

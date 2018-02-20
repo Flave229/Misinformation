@@ -129,7 +129,7 @@ namespace Assets.Scripts
                 Days.Add(i);
 
             Time = hour + ":00" + " on " + Day + " of " + Months[monthIndex - 1] + " " + year;
-            Month = Months[monthIndex];
+            Month = Months[monthIndex - 1];
             Hour = hour.ToString("00") + ":00";
         }
     }

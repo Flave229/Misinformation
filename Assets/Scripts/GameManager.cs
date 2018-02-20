@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.AI;
-using Assets.Scripts.FileIO;
 using Assets.Scripts.General;
 using UnityEngine;
 using UnityEngine.UI;
@@ -100,6 +99,9 @@ namespace Assets.Scripts
 			{
 				CycleTech ();
 			}
+
+            if (FundingAmount < 0)
+                FundingAmount = 0;
         }
 
         public static GameManager Instance()

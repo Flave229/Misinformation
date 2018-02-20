@@ -3,7 +3,6 @@ using Assets.Scripts.AI.Movement_AI;
 using Assets.Scripts.AI.TaskData;
 using Assets.Scripts.AI.Tasks;
 using Assets.Scripts.EventSystem;
-using Assets.Scripts.Physics;
 using UnityEngine;
 using Event = Assets.Scripts.EventSystem.Event;
 
@@ -12,10 +11,7 @@ namespace Assets.Scripts
     public class Character2D : MonoBehaviour, IEventListener
     {
         [SerializeField]
-        private LayerMask _doorMask;
         private InputManager _inputManager;
-        private CollisionBox _collision;
-        private Door _collidingDoor;
 
         public AIStack Tasks;
         public Animator Animator;
@@ -30,7 +26,6 @@ namespace Assets.Scripts
         {
             Animator = GetComponent<Animator>();
             _inputManager = InputManager.Instance();
-            _collision = new CollisionBox();
             Tasks = new AIStack();
         }
 
@@ -43,7 +38,7 @@ namespace Assets.Scripts
                 MovementAi = new NPCMovementAI(this, new AStarPathfinding());
                 Tasks.AddToStack(new IdleTask(new IdleData
                 {
-                    General = this
+                    General = this.gameObject
                 }));
             }
 
@@ -63,12 +58,8 @@ namespace Assets.Scripts
             if (Timer.Instance().Paused || Pause)
                 return;
 
-            MovementAi.CheckAndMoveToNextPathNode();
             Tasks.Update();
-
-            if (_collision.CheckCollisions(GetComponent<SpriteRenderer>().sprite, GetComponent<Transform>()))
-                MovementAi.ClearAndReturnToLastNode();
-
+            
             Move();
         }
 

@@ -1,12 +1,10 @@
 ﻿using System;
-using UnityEngine;
 
 namespace Assets.Scripts.AI.Tasks
 {
     class FindListeningDeviceTask : ITask
     {
-        private FindListeningDeviceData _dataPacket;
-        private GameObject _targetedFurniture;
+        private readonly FindListeningDeviceData _dataPacket;
 
         private DateTime _startingTime;
         private bool _searching;
@@ -16,8 +14,7 @@ namespace Assets.Scripts.AI.Tasks
         public FindListeningDeviceTask(FindListeningDeviceData dataPacket)
         {
             _dataPacket = dataPacket;
-            _targetedFurniture = null;
-            System.Random random = new System.Random();
+            var random = new Random();
             _secondsSearching = random.Next(6, 15);
         }
 
@@ -31,11 +28,14 @@ namespace Assets.Scripts.AI.Tasks
             double generalPerception = (double)(_dataPacket.General.GetPerception()) / 10;
 
             if (_dataPacket.Furniture.HasListeningDevice() == false)
+            { 
                 SetCompleted();
+                return;
+            }
 
             double deviceQuality = _dataPacket.Furniture.GetListeningDevice().GetQuality();
             double chanceToFind = 0.25 * (0.2 * deviceQuality) * (0.25 * generalPerception);
-            System.Random random = new System.Random();
+            Random random = new Random();
             if (random.NextDouble() <= chanceToFind)
                 _dataPacket.General.UpdateTrustValue(-2);
             SetCompleted();

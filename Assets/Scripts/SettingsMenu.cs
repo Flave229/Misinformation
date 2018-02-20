@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -18,6 +19,9 @@ public class SettingsMenu : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/gamesettings.json") == true)
         {
             LoadSettings();
+            SetFullscreen(gameSettings.fullscreen);
+            SetResolution(gameSettings.resolutionIndex);
+            SetVolume(gameSettings.volume);
         }
         else
             SaveSettings();
@@ -25,14 +29,14 @@ public class SettingsMenu : MonoBehaviour
 
     public void SetVolume(float volume)
     {
-        audioMixer.SetFloat("volume", volume);
         gameSettings.volume = volume;
+        audioMixer.SetFloat("volume", gameSettings.volume);
     }
 
     public void SetFullscreen(bool isFullscreen)
     {
-        Screen.fullScreen = isFullscreen;
         gameSettings.fullscreen = isFullscreen;
+        Screen.fullScreen = gameSettings.fullscreen;
     }
 
     public void SetUpResolutions()
@@ -56,9 +60,8 @@ public class SettingsMenu : MonoBehaviour
         }
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex;
         gameSettings.resolutionIndex = currentResolutionIndex;
-        resolutionDropdown.RefreshShownValue();
+        RefreshResolutionDropdown();
     }
 
     public void SetResolution(int resolutionIndex)
@@ -66,6 +69,12 @@ public class SettingsMenu : MonoBehaviour
         gameSettings.resolutionIndex = resolutionIndex;
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        RefreshResolutionDropdown();
+    }
+    private void RefreshResolutionDropdown()
+    {
+        resolutionDropdown.value = gameSettings.resolutionIndex;
+        resolutionDropdown.RefreshShownValue();
     }
 
     public void SaveSettings()
@@ -77,9 +86,9 @@ public class SettingsMenu : MonoBehaviour
     public void LoadSettings()
     {
         gameSettings = JsonUtility.FromJson<GameSettings>(File.ReadAllText(Application.persistentDataPath + "/gamesettings.json"));
-        Screen.fullScreen = gameSettings.fullscreen;
+        /*Screen.fullScreen = gameSettings.fullscreen;
         Resolution resolution = resolutions[gameSettings.resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
-        audioMixer.SetFloat("volume", gameSettings.volume);
+        Screen.SetResolution(resolution.width, resolution.height, gameSettings.fullscreen);
+        audioMixer.SetFloat("volume", gameSettings.volume);*/
     }
 }

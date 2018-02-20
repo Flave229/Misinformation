@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Assets.Scripts.Physics;
+using System;
 using System.Collections.Generic;
-using Assets.Scripts.Physics;
 using UnityEngine;
 
 namespace Assets.Scripts.AI.Movement_AI
 {
-    class NPCMovementAI : IMovementAI
+    public class MovementAI
     {
-		List<General.General> GeneralsList = new List<General.General> ();
+        List<General.General> GeneralsList = new List<General.General>();
 
         private Character2D _character;
         private AStarPathfinding _aStarPathfinding;
@@ -15,7 +15,7 @@ namespace Assets.Scripts.AI.Movement_AI
         private List<Node> _currentPath;
         private Node _previousNode;
 
-        public NPCMovementAI(Character2D character, AStarPathfinding aStarPathfinding)
+        public MovementAI(Character2D character, AStarPathfinding aStarPathfinding)
         {
             _character = character;
             _aStarPathfinding = aStarPathfinding;
@@ -30,6 +30,56 @@ namespace Assets.Scripts.AI.Movement_AI
             Node sourceNode = CreateSourceNode(_character.transform.position, (Vector3)location);
             Node targetNode = CreateTargetNode(sourceNode, (Vector3)location);
             _currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
+        }
+
+        public List<Node> GetCurrentPath()
+        {
+            return _currentPath;
+        }
+
+        public bool CheckAndMoveToNextPathNode()
+        {
+            if (_currentPath.Count <= 0)
+                return false;
+
+            Room currentRoom = _character.CurrentRoom;
+            Node nextPathNode = _currentPath[_currentPath.Count - 1];
+            BoxCollider2D roomCollider = currentRoom.GetComponent<BoxCollider2D>();
+            Vector3 roomPosition = currentRoom.transform.position + new Vector3(roomCollider.offset.x, roomCollider.offset.y, 0.0f);
+            if (nextPathNode.Position.x - 0.2 < _character.transform.position.x
+                && nextPathNode.Position.x + 0.2 > _character.transform.position.x
+                && CollisionBox.PointInBoxCollision(roomPosition, roomCollider.size, _character.transform.position))
+            {
+                if (_currentPath.Count > 2)
+                {
+                    Door currentDoor = (Door)_currentPath[_currentPath.Count - 1].Owner;
+                    Door nextDoor = (Door)_currentPath[_currentPath.Count - 2].Owner;
+                    if (currentDoor != null && nextDoor != null && nextDoor.Node.Id == currentDoor.ConnectingDoor.Node.Id)
+                        currentDoor.ActivateEvent(_character);
+                }
+
+                ActivateNextPathNode();
+                return true;
+            }
+
+            return false;
+        }
+
+        public void ActivateNextPathNode()
+        {
+            _previousNode = _currentPath[_currentPath.Count - 1];
+            _currentPath.RemoveAt(_currentPath.Count - 1);
+        }
+
+        public void ClearPath()
+        {
+            _currentPath.Clear();
+        }
+
+        public void ClearAndReturnToLastNode()
+        {
+            ClearPath();
+            _currentPath.Add(_previousNode);
         }
 
         public Node CreateSourceNode(Vector2 position, Vector2 targetLocation)
@@ -83,7 +133,7 @@ namespace Assets.Scripts.AI.Movement_AI
                 target.ConnectingNodes.Add(sourceNode);
                 return target;
             }
-            
+
             foreach (Transform doorTransform in chosenRoom.transform)
             {
                 var doorComponent = doorTransform.GetComponent<Door>();
@@ -93,56 +143,6 @@ namespace Assets.Scripts.AI.Movement_AI
 
             target.Position = new Vector2(position.x, target.ConnectingNodes[0].Position.y);
             return target;
-        }
-
-        public bool CheckAndMoveToNextPathNode()
-        {
-            if (_currentPath.Count <= 0)
-                return false;
-
-            Room currentRoom = _character.CurrentRoom;
-            Node nextPathNode = _currentPath[_currentPath.Count - 1];
-            BoxCollider2D roomCollider = currentRoom.GetComponent<BoxCollider2D>();
-            Vector3 roomPosition = currentRoom.transform.position + new Vector3(roomCollider.offset.x, roomCollider.offset.y, 0.0f);
-            if (nextPathNode.Position.x - 0.2 < _character.transform.position.x
-                && nextPathNode.Position.x + 0.2 > _character.transform.position.x
-                && CollisionBox.PointInBoxCollision(roomPosition, roomCollider.size, _character.transform.position))
-            {
-                if (_currentPath.Count > 2)
-                {
-                    Door currentDoor = (Door)_currentPath[_currentPath.Count - 1].Owner;
-                    Door nextDoor = (Door)_currentPath[_currentPath.Count - 2].Owner;
-                    if (currentDoor != null && nextDoor != null && nextDoor.Node.Id == currentDoor.ConnectingDoor.Node.Id)
-                        currentDoor.ActivateEvent(_character);
-                }
-
-                ActivateNextPathNode();
-                return true;
-            }
-
-            return false;
-        }
-        
-        public List<Node> GetCurrentPath()
-        {
-            return _currentPath;
-        }
-
-        public void ClearPath()
-        {
-            _currentPath.Clear();
-        }
-
-        public void ActivateNextPathNode()
-        {
-            _previousNode = _currentPath[_currentPath.Count - 1];
-            _currentPath.RemoveAt(_currentPath.Count - 1);
-        }
-
-        public void ClearAndReturnToLastNode()
-        {
-            ClearPath();
-            _currentPath.Add(_previousNode);
         }
     }
 }

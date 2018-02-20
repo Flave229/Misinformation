@@ -5,7 +5,7 @@ namespace Assets.Scripts.AI.TaskData
 {
     public class PathfindData
     {
-        public IMovementAI MovementAi { get; set; }
+        public MovementAI MovementAi { get; set; }
         public Vector3 Location { get; set; }
     }
 }

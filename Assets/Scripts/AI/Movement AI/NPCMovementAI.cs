@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.Physics;
 using UnityEngine;
 
@@ -21,86 +22,14 @@ namespace Assets.Scripts.AI.Movement_AI
             _currentPath = new List<Node>();
         }
 
-        public bool CheckAndMoveToNextPathNode()
+        public void CreatePathTo(Vector3 location)
         {
-            if (_currentPath.Count <= 0)
-                return false;
+            if (_currentPath.Count > 0)
+                return;
 
-            Room currentRoom = _character.CurrentRoom;
-            Node nextPathNode = _currentPath[_currentPath.Count - 1];
-            BoxCollider2D roomCollider = currentRoom.GetComponent<BoxCollider2D>();
-            Vector3 roomPosition = currentRoom.transform.position + new Vector3(roomCollider.offset.x, roomCollider.offset.y, 0.0f);
-            if (nextPathNode.Position.x - 0.2 < _character.transform.position.x
-                && nextPathNode.Position.x + 0.2 > _character.transform.position.x
-                && CollisionBox.PointInBoxCollision(roomPosition, roomCollider.size, _character.transform.position))
-            {
-                if (_currentPath.Count > 2)
-                {
-                    Door currentDoor = (Door)_currentPath[_currentPath.Count - 1].Owner;
-                    Door nextDoor = (Door)_currentPath[_currentPath.Count - 2].Owner;
-                    if (currentDoor != null && nextDoor != null && nextDoor.Node.Id == currentDoor.ConnectingDoor.Node.Id)
-                        currentDoor.ActivateEvent(_character);
-                }
-
-                ActivateNextPathNode();
-                return true;
-            }
-
-            return false;
-        }
-
-		public void CreatePathTo(Vector3? location = null)
-		{
-			if (_currentPath.Count > 0)
-				return;
-            if (location != null)
-            {
-                Node sourceNode = CreateSourceNode(_character.transform.position, (Vector3)location);
-                Node targetNode = CreateTargetNode(sourceNode, (Vector3)location);
-                _currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
-            }
-            else
-            {
-                Door[] doors = (Door[])UnityEngine.Object.FindObjectsOfType(typeof(Door));
-                Vector3 randomDoorPosition = doors[new System.Random().Next(0, doors.Length)].transform.position;
-                Node sourceNode = CreateSourceNode(_character.transform.position, randomDoorPosition);
-                Node targetNode = CreateTargetNode(sourceNode, randomDoorPosition);
-                _currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
-            }
-		}
-
-		public void CreatePathToObj(Vector2 TargetPos)
-		{
-			if (_currentPath.Count > 0)
-				return;
-
-			Door[] doors = (Door[])UnityEngine.Object.FindObjectsOfType(typeof(Door));
-			Vector3 randomDoorPosition = doors[new System.Random().Next(0, doors.Length)].transform.position;
-			Node sourceNode = CreateSourceNode(_character.transform.position, TargetPos);
-			Node targetNode = CreateTargetNode(sourceNode, TargetPos);
-			_currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
-		}
-
-        public List<Node> GetCurrentPath()
-        {
-            return _currentPath;
-        }
-
-        public void ClearPath()
-        {
-            _currentPath.Clear();
-        }
-
-        public void ActivateNextPathNode()
-        {
-            _previousNode = _currentPath[_currentPath.Count - 1];
-            _currentPath.RemoveAt(_currentPath.Count - 1);
-        }
-
-        public void ClearAndReturnToLastNode()
-        {
-            ClearPath();
-            _currentPath.Add(_previousNode);
+            Node sourceNode = CreateSourceNode(_character.transform.position, (Vector3)location);
+            Node targetNode = CreateTargetNode(sourceNode, (Vector3)location);
+            _currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
         }
 
         public Node CreateSourceNode(Vector2 position, Vector2 targetLocation)
@@ -141,13 +70,20 @@ namespace Assets.Scripts.AI.Movement_AI
                 Vector2 boxColliderPosition = new Vector2(boxCollider.transform.position.x, boxCollider.transform.position.y);
                 if (CollisionBox.PointInBoxCollision(boxColliderPosition + boxCollider.offset, new Vector2(boxCollider.size.x, boxCollider.size.y), position) == false)
                     continue;
-                
+
                 chosenRoom = room;
                 break;
             }
 
-            target.Position = new Vector2(position.x, chosenRoom.gameObject.transform.position.y);
+            if (chosenRoom == null)
+                throw new Exception("No room could be located for the given location");
 
+            if (chosenRoom == _character.CurrentRoom)
+            {
+                target.ConnectingNodes.Add(sourceNode);
+                return target;
+            }
+            
             foreach (Transform doorTransform in chosenRoom.transform)
             {
                 var doorComponent = doorTransform.GetComponent<Door>();
@@ -155,22 +91,58 @@ namespace Assets.Scripts.AI.Movement_AI
                     target.ConnectingNodes.Add(doorComponent.Node);
             }
 
+            target.Position = new Vector2(position.x, target.ConnectingNodes[0].Position.y);
             return target;
         }
 
-		public void ChooseGeneral()
-		{
-			int r = UnityEngine.Random.Range(0, GameManager.Instance().GetGenList().Count);
+        public bool CheckAndMoveToNextPathNode()
+        {
+            if (_currentPath.Count <= 0)
+                return false;
 
-			if (GameManager.Instance().GetGenList()[r]) 
-			{
-				var genPos = GameManager.Instance().GetGenList()[r].gameObject.transform.position;
+            Room currentRoom = _character.CurrentRoom;
+            Node nextPathNode = _currentPath[_currentPath.Count - 1];
+            BoxCollider2D roomCollider = currentRoom.GetComponent<BoxCollider2D>();
+            Vector3 roomPosition = currentRoom.transform.position + new Vector3(roomCollider.offset.x, roomCollider.offset.y, 0.0f);
+            if (nextPathNode.Position.x - 0.2 < _character.transform.position.x
+                && nextPathNode.Position.x + 0.2 > _character.transform.position.x
+                && CollisionBox.PointInBoxCollision(roomPosition, roomCollider.size, _character.transform.position))
+            {
+                if (_currentPath.Count > 2)
+                {
+                    Door currentDoor = (Door)_currentPath[_currentPath.Count - 1].Owner;
+                    Door nextDoor = (Door)_currentPath[_currentPath.Count - 2].Owner;
+                    if (currentDoor != null && nextDoor != null && nextDoor.Node.Id == currentDoor.ConnectingDoor.Node.Id)
+                        currentDoor.ActivateEvent(_character);
+                }
 
-				Node sourceNode = CreateSourceNode (_character.transform.position, genPos);
-				Node targetNode = CreateTargetNode (sourceNode, genPos);
+                ActivateNextPathNode();
+                return true;
+            }
 
-				_currentPath = _aStarPathfinding.CreatePath (sourceNode, targetNode);
-			} 
-		}
+            return false;
+        }
+        
+        public List<Node> GetCurrentPath()
+        {
+            return _currentPath;
+        }
+
+        public void ClearPath()
+        {
+            _currentPath.Clear();
+        }
+
+        public void ActivateNextPathNode()
+        {
+            _previousNode = _currentPath[_currentPath.Count - 1];
+            _currentPath.RemoveAt(_currentPath.Count - 1);
+        }
+
+        public void ClearAndReturnToLastNode()
+        {
+            ClearPath();
+            _currentPath.Add(_previousNode);
+        }
     }
 }

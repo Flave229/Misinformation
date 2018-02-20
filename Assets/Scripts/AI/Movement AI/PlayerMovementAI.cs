@@ -8,8 +8,7 @@ namespace Assets.Scripts.AI.Movement_AI
     class PlayerMovementAI : IMovementAI
     {
         private AStarPathfinding _aStarPathfinding;
-        private Character2D _player;
-        private InputManager _inputManager;
+        private Character2D _character;
 
         private List<Node> _currentPath;
         private Node _previousNode;
@@ -17,24 +16,18 @@ namespace Assets.Scripts.AI.Movement_AI
         public PlayerMovementAI(Character2D player, AStarPathfinding movementAI)
         {
             _aStarPathfinding = movementAI;
-            _player = player;
-            _inputManager = InputManager.Instance();
+            _character = player;
             _currentPath = new List<Node>();
         }
 
-        public void CreatePathTo(Vector3? location = null)
+        public void CreatePathTo(Vector3 location)
         {
-            try
-            {
-                Node sourceNode = CreateSourceNode(_player.transform.position, (Vector3)location);
-                Node targetNode = CreateTargetNode(sourceNode, (Vector3)location);
+            if (_currentPath.Count > 0)
+                return;
 
-                _currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
-            }
-            catch (Exception e)
-            {
-                Debug.Log("An error occured while creating a path for the player: " + e.Message);
-            }
+            Node sourceNode = CreateSourceNode(_character.transform.position, location);
+            Node targetNode = CreateTargetNode(sourceNode, location);
+            _currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
         }
 
         public Node CreateSourceNode(Vector2 position, Vector2 targetLocation)
@@ -47,7 +40,7 @@ namespace Assets.Scripts.AI.Movement_AI
             source.Heuristic = Vector2.Distance(source.Position, targetLocation);
             source.TotalCost = source.Heuristic;
 
-            foreach (Transform childTransform in _player.CurrentRoom.transform)
+            foreach (Transform childTransform in _character.CurrentRoom.transform)
             {
                 var doorComponent = childTransform.GetComponent<Door>();
                 if (doorComponent != null)
@@ -68,7 +61,7 @@ namespace Assets.Scripts.AI.Movement_AI
             target.TotalCost = target.Heuristic;
 
             Room[] rooms = (Room[])UnityEngine.Object.FindObjectsOfType(typeof(Room));
-            Room clickedRoom = null;
+            Room chosenRoom = null;
             foreach (Room room in rooms)
             {
                 var boxCollider = room.GetComponent<BoxCollider2D>();
@@ -76,33 +69,28 @@ namespace Assets.Scripts.AI.Movement_AI
                 if (CollisionBox.PointInBoxCollision(boxColliderPosition + boxCollider.offset, new Vector2(boxCollider.size.x, boxCollider.size.y), position) == false)
                     continue;
                 
-                clickedRoom = room;
+                chosenRoom = room;
                 break;
             }
 
-            if (clickedRoom == null)
-                throw new Exception("No room could be located for the given click location");
+            if (chosenRoom == null)
+                throw new Exception("No room could be located for the given location");
 
-            if (clickedRoom == _player.CurrentRoom)
+            if (chosenRoom == _character.CurrentRoom)
             {
                 target.ConnectingNodes.Add(sourceNode);
                 return target;
             }
 
-            foreach (Transform doorTransform in clickedRoom.transform)
+            foreach (Transform doorTransform in chosenRoom.transform)
             {
                 var doorComponent = doorTransform.GetComponent<Door>();
                 if (doorComponent != null)
                     target.ConnectingNodes.Add(doorComponent.Node);
             }
 
-            target.Position = new Vector2(target.Position.x, target.ConnectingNodes[0].Position.y);
+            target.Position = new Vector2(position.x, target.ConnectingNodes[0].Position.y);
             return target;
-        }
-
-        public List<Node> GetCurrentPath()
-        {
-            return _currentPath;
         }
 
         public bool CheckAndMoveToNextPathNode()
@@ -110,20 +98,20 @@ namespace Assets.Scripts.AI.Movement_AI
             if (_currentPath.Count <= 0)
                 return false;
 
-            Room currentRoom = _player.CurrentRoom;
+            Room currentRoom = _character.CurrentRoom;
             Node nextPathNode = _currentPath[_currentPath.Count - 1];
             BoxCollider2D roomCollider = currentRoom.GetComponent<BoxCollider2D>();
             Vector3 roomPosition = currentRoom.transform.position + new Vector3(roomCollider.offset.x, roomCollider.offset.y, 0.0f);
-            if (nextPathNode.Position.x - 0.2 < _player.transform.position.x
-                && nextPathNode.Position.x + 0.2 > _player.transform.position.x
-                && CollisionBox.PointInBoxCollision(roomPosition, roomCollider.size, _player.transform.position))
+            if (nextPathNode.Position.x - 0.2 < _character.transform.position.x
+                && nextPathNode.Position.x + 0.2 > _character.transform.position.x
+                && CollisionBox.PointInBoxCollision(roomPosition, roomCollider.size, _character.transform.position))
             {
                 if (_currentPath.Count > 2)
                 {
                     Door currentDoor = (Door)_currentPath[_currentPath.Count - 1].Owner;
                     Door nextDoor = (Door)_currentPath[_currentPath.Count - 2].Owner;
                     if (currentDoor != null && nextDoor != null && nextDoor.Node.Id == currentDoor.ConnectingDoor.Node.Id)
-                        currentDoor.ActivateEvent(_player);
+                        currentDoor.ActivateEvent(_character);
                 }
 
                 ActivateNextPathNode();
@@ -131,6 +119,11 @@ namespace Assets.Scripts.AI.Movement_AI
             }
 
             return false;
+        }
+
+        public List<Node> GetCurrentPath()
+        {
+            return _currentPath;
         }
 
         public void ClearPath()
@@ -148,16 +141,6 @@ namespace Assets.Scripts.AI.Movement_AI
         {
             ClearPath();
             _currentPath.Add(_previousNode);
-        }
-
-        public void CreatePathToObj(Vector2 TargetPos)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ChooseGeneral()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -120,8 +120,8 @@ namespace Assets.Scripts.AI.Tasks
 
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color> \n";
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
-                    _conversationPanel.panelIsHidden = false;
-                    _conversationPanel.HidePanel();
+                    //_conversationPanel.panelIsHidden = false;
+                    //_conversationPanel.HidePanel();
                     break;
             }
         }

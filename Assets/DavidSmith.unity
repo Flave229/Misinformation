@@ -2279,7 +2279,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 243033625}
-        m_MethodName: LoadByIndex
+        m_MethodName: QuitToMenu
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

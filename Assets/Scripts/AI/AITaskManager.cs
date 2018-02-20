@@ -13,13 +13,13 @@ namespace Assets.Scripts.AI
         private static AITaskManager _instance;
         private int _startingTimeInSeconds;
         private static Random _randomGenerator;
-        private static List<GameObject> _generalsAwaitingConversation;
+        public static List<GameObject> GeneralsAwaitingConversation;
 
         private AITaskManager()
         {
             _startingTimeInSeconds = Timer.Instance().GetStartingTimeInSeconds();
             _randomGenerator = new Random();
-            _generalsAwaitingConversation = new List<GameObject>();
+            GeneralsAwaitingConversation = new List<GameObject>();
         }
 
         public static AITaskManager Instance()
@@ -40,12 +40,12 @@ namespace Assets.Scripts.AI
 
         private void PairConversations()
         {
-            if (_generalsAwaitingConversation.Count < 2)
+            if (GeneralsAwaitingConversation.Count < 2)
                 return;
 
-            GameObject generalOne = _generalsAwaitingConversation[0];
-            GameObject generalTwo = _generalsAwaitingConversation[1];
-            _generalsAwaitingConversation.RemoveRange(0, 2);
+            GameObject generalOne = GeneralsAwaitingConversation[0];
+            GameObject generalTwo = GeneralsAwaitingConversation[1];
+            GeneralsAwaitingConversation.RemoveRange(0, 2);
 
             int padding = 1;
             int directionModifier = UnityEngine.Random.Range(0, 1);
@@ -239,7 +239,7 @@ namespace Assets.Scripts.AI
 
         public static void AwaitConversation(GameObject gameObject)
         {
-            _generalsAwaitingConversation.Add(gameObject);
+            GeneralsAwaitingConversation.Add(gameObject);
         }
     }
 }

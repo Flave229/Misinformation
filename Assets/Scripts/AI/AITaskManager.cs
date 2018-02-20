@@ -175,6 +175,25 @@ namespace Assets.Scripts.AI
             character.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
+        public static void LookAtArt(GameObject generalGameObject)
+        {
+            GameObject[] interestingObjects = GameObject.FindGameObjectsWithTag("Art");
+            if (interestingObjects.Length <= 0)
+                return;
+            GameObject chosenObject = interestingObjects[_randomGenerator.Next(0, interestingObjects.Length - 1)];
+            Vector2 objectPosition = chosenObject.transform.position;
+
+            Character2D character = generalGameObject.GetComponent<Character2D>();
+            Stack<ITask> taskChain = new Stack<ITask>();
+            taskChain.Push(new LookAtArtTask());
+            taskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                MovementAi = character.MovementAi,
+                Location = objectPosition
+            }));
+            character.Tasks.AddToStack(new AITaskChain(taskChain));
+        }
+
         private void ChanceToSearchForListeningDevices(List<GameObject> generalList)
         {
             List<GameObject> untrustingGenerals = generalList.Where(x => x.GetComponent<General.General>().GetTrust() < 3).ToList();

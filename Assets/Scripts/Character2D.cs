@@ -38,7 +38,7 @@ namespace Assets.Scripts
                 MovementAi = new NPCMovementAI(this, new AStarPathfinding());
                 Tasks.AddToStack(new IdleTask(new IdleData
                 {
-                    General = this
+                    General = this.gameObject
                 }));
             }
 

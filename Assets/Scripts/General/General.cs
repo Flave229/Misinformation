@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.AI;
 using Assets.Scripts.EventSystem;
 using Assets.Scripts.EventSystem.EventPackets;
@@ -21,6 +22,7 @@ namespace Assets.Scripts.General
         private NeedStatus _bladder;
         private NeedStatus _rest;
         private NeedStatus _social;
+        private NeedStatus _entertainment;
 
         List<GameObject> SeenListeningDevices = new List<GameObject>();
         
@@ -36,9 +38,10 @@ namespace Assets.Scripts.General
             _perception = _randomGenerator.Next(0, 10);
             _trust = _randomGenerator.Next(0, 5);
             _knowledge = _randomGenerator.Next(0, 5);
-            _bladder = new NeedStatus((float)_randomGenerator.NextDouble() * 0.8f + 0.2f, 0.06f);
-            _rest = new NeedStatus((float)_randomGenerator.NextDouble() * 0.2f + 0.8f, 0.03f);
-            _social = new NeedStatus((float)_randomGenerator.NextDouble(), 0.25f);
+            _bladder = new NeedStatus("Bladder", (float)_randomGenerator.NextDouble() * 0.8f + 0.2f, 0.06f);
+            _rest = new NeedStatus("Rest", (float)_randomGenerator.NextDouble() * 0.2f + 0.8f, 0.03f);
+            _social = new NeedStatus("Social", (float)_randomGenerator.NextDouble(), 0.25f);
+            _entertainment = new NeedStatus("Entertainment", (float)_randomGenerator.NextDouble(), 0.2f);
         }
 
         public void Start ()
@@ -59,34 +62,51 @@ namespace Assets.Scripts.General
                 _rest.Degrade();
                 _social.Degrade();
 
-                System.Random randomGenerator = new System.Random();
-                if (randomGenerator.NextDouble() > Math.Pow(_bladder.Status, 0.1))
-                {
-                    AITaskManager.GoToToilet(this.gameObject);
-                    _bladder.Replenish();
-                }
-                if (randomGenerator.NextDouble() > Math.Pow(_rest.Status, 0.1))
-                {
-                    // Chance to sleep increases as rest gets low
-                    float chanceToSleep = (float)_randomGenerator.NextDouble();
-
-                    if (chanceToSleep > _rest.Status)
-                    {
-                        AITaskManager.GoToBed(this.gameObject);
-                        _rest.Replenish();
-                    }
-                    else
-                    {
-                        AITaskManager.SitDown(this.gameObject);
-                        _rest.Replenish(0.1f);
-                    }
-                }
-                if (randomGenerator.NextDouble() > Math.Pow(_social.Status, 0.1))
-                {
-                    AITaskManager.AwaitConversation(this.gameObject);
-                    _social.Replenish();
-                }
+                double randomNumber = _randomGenerator.NextDouble();
+                if (randomNumber > Math.Pow(_bladder.Status, 0.1))
+                    SatisfyBladder();
+                else if (randomNumber > Math.Pow(_rest.Status, 0.1))
+                    SatisfyRest();
+                else if (randomNumber > Math.Pow(_social.Status, 0.1))
+                    SatisfySocial();
+                else if (randomNumber > Math.Pow(_entertainment.Status, 0.1))
+                    SatisfyEntertainment();
             }
+        }
+
+        private void SatisfyBladder()
+        {
+            AITaskManager.GoToToilet(this.gameObject);
+            _bladder.Replenish();
+        }
+
+        private void SatisfyRest()
+        {
+            // Chance to sleep increases as rest gets low
+            float chanceToSleep = (float)_randomGenerator.NextDouble();
+
+            if (chanceToSleep > _rest.Status)
+            {
+                AITaskManager.GoToBed(this.gameObject);
+                _rest.Replenish();
+            }
+            else
+            {
+                AITaskManager.SitDown(this.gameObject);
+                _rest.Replenish(0.1f);
+            }
+        }
+
+        private void SatisfySocial()
+        {
+            AITaskManager.AwaitConversation(this.gameObject);
+            _social.Replenish();
+        }
+
+        private void SatisfyEntertainment()
+        {
+            AITaskManager.LookAtArt(this.gameObject);
+            _entertainment.Replenish();
         }
 
         public void UpdateTrustValue(int trustDifference)
@@ -125,7 +145,6 @@ namespace Assets.Scripts.General
                         SeenListeningDevices.Add(listeningDeviceData.Device);
                         Debug.Log(Name.FirstName + " " + Name.LastName + " spotted a listening device!");
                         UpdateTrustValue(((int)(UnityEngine.Random.value * -2)) - 1);
-
                     }
 
                     break;
@@ -150,6 +169,35 @@ namespace Assets.Scripts.General
         public int GetPerception()
         {
             return _perception;
+        }
+
+        public void SatisfyBiggestNeed()
+        {
+            List<NeedStatus> needs = new List<NeedStatus>
+            {
+                _rest,
+                _bladder,
+                _entertainment,
+                _social
+            };
+
+            string nameOfBiggestNeed = needs.Aggregate((status1, status2) => status1.Status > status2.Status ? status1 : status2).Name;
+
+            switch (nameOfBiggestNeed)
+            {
+                case "Rest":
+                    SatisfyRest();
+                    break;
+                case "Social":
+                    SatisfySocial();
+                    break;
+                case "Entertainment":
+                    SatisfyEntertainment();
+                    break;
+                case "Bladder":
+                    SatisfyBladder();
+                    break;
+            }
         }
     }
 }

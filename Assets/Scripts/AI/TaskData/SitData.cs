@@ -6,5 +6,6 @@ namespace Assets.Scripts.AI.TaskData
     {
         public Character2D General { get; set; }
         public Chair Chair { get; set; }
+        public NeedStatus RestNeed { get; set; }
     }
 }

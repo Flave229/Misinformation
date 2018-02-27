@@ -51,5 +51,10 @@ namespace Assets.Scripts.AI.Tasks
         {
             return false;
         }
+
+        public double GetPriority()
+        {
+            return _toiletData.BladderNeed.Status;
+        }
     }
 }

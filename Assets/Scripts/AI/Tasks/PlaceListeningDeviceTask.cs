@@ -66,5 +66,11 @@ namespace Assets.Scripts.AI.Tasks
             };
             EventMessenger.Instance().FireEvent(Event.LISTENING_DEVICE_PLACED, eventPacket);
         }
+
+        public double GetPriority()
+        {
+            // TODO: Check priority on this
+            return 1;
+        }
     }
 }

@@ -58,5 +58,10 @@ namespace Assets.Scripts.AI.Tasks
         {
             return false;
         }
+
+        public double GetPriority()
+        {
+            return _sitData.RestNeed.Status;
+        }
     }
 }

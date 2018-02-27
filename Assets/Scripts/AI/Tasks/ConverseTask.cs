@@ -159,5 +159,10 @@ namespace Assets.Scripts.AI.Tasks
         {
             EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_LISTENING);
         }
+
+        public double GetPriority()
+        {
+            return _converseData.SocialNeed.Status;
+        }
     }
 }

@@ -76,7 +76,7 @@ namespace Assets.Scripts.General
 
         private void SatisfyBladder()
         {
-            AITaskManager.GoToToilet(this.gameObject);
+            AITaskManager.GoToToilet(this.gameObject, this._bladder);
             _bladder.Replenish();
         }
 
@@ -87,25 +87,25 @@ namespace Assets.Scripts.General
 
             if (chanceToSleep > _rest.Status)
             {
-                AITaskManager.GoToBed(this.gameObject);
+                AITaskManager.GoToBed(this.gameObject, this._rest);
                 _rest.Replenish();
             }
             else
             {
-                AITaskManager.SitDown(this.gameObject);
+                AITaskManager.SitDown(this.gameObject, this._rest);
                 _rest.Replenish(0.1f);
             }
         }
 
         private void SatisfySocial()
         {
-            AITaskManager.AwaitConversation(this.gameObject);
+            AITaskManager.AwaitConversation(this.gameObject, this._social);
             _social.Replenish();
         }
 
         private void SatisfyEntertainment()
         {
-            AITaskManager.LookAtArt(this.gameObject);
+            AITaskManager.LookAtArt(this.gameObject, this._entertainment);
             _entertainment.Replenish();
         }
 

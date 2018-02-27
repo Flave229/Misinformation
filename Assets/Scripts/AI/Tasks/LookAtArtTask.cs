@@ -38,6 +38,7 @@ namespace Assets.Scripts.AI.Tasks
         public void SetCompleted()
         {
             _completed = true;
+            _entertainmentNeed.Replenish();
         }
 
         public bool GetCeilingLock()

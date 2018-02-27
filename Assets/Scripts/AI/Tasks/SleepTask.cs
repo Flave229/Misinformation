@@ -54,6 +54,7 @@ namespace Assets.Scripts.AI.Tasks
         public void SetCompleted()
         {
             _completed = true;
+            _sleepData.RestNeed.Replenish();
         }
 
         public bool GetCeilingLock()

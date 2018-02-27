@@ -81,6 +81,7 @@ namespace Assets.Scripts.AI
 
             Stack<ITask> general1TaskChain = new Stack<ITask>();
             Stack<ITask> general2TaskChain = new Stack<ITask>();
+
             general1TaskChain.Push(new ConverseTask(general1ConverseData));
             general2TaskChain.Push(new ConverseTask(general2ConverseData));
 

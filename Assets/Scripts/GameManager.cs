@@ -34,6 +34,7 @@ namespace Assets.Scripts
         public bool RecievingFunding;
         private bool _pause;
         private bool _pendingStart;
+        private bool _gameover;
 
         public int FundingAmount
         {

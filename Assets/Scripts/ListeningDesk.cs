@@ -19,14 +19,16 @@ namespace Assets.Scripts
 		{
 			numOfListeningDevices = GameManager.Instance().ListeningDevList.Count;
 			float distance = Vector3.Distance(GameManager.Instance().ActiveTech.transform.position, this.gameObject.transform.position);
+            
 			if (distance < 1)
 			{
 				if (Input.GetKeyDown(KeyCode.U) && Timer.Instance().GetRemainingTime() > 0)
 				{
-					if (usingDesk == false)
-						UseDesk();
-					else if (usingDesk == true)
-						LeaveDesk();
+                    if (usingDesk == false)
+                        UseDesk();
+                    else if (usingDesk == true)
+                        LeaveDesk();
+                        
 				}
 
 				if (usingDesk == true && Input.GetKeyDown (KeyCode.Y))
@@ -89,7 +91,8 @@ namespace Assets.Scripts
 
 			usingDesk = false;
 			Camera.main.GetComponent<Camera2DFollow>().target = GameManager.Instance().ActiveTech.transform;
-		}
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DESK_OFF, null);
+        }
 
         public void ConsumeEvent(EventSystem.Event subscribeEvent, object eventPacket)
         {

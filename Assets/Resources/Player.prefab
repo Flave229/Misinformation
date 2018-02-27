@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsActive: 0
-  Salary: 180
+  Salary: 200
 --- !u!212 &212957767193479520
 SpriteRenderer:
   m_ObjectHideFlags: 1

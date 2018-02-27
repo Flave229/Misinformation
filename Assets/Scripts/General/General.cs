@@ -17,14 +17,14 @@ namespace Assets.Scripts.General
         private int _trust;
         private int _knowledge;
         private int _perception;
-
+        
         private float _needsCooldown;
         private NeedStatus _bladder;
         private NeedStatus _rest;
         private NeedStatus _social;
         private NeedStatus _entertainment;
 
-        List<GameObject> SeenListeningDevices = new List<GameObject>();
+        private List<GameObject> SeenListeningDevices = new List<GameObject>();
         
         public Name Name;
 
@@ -72,6 +72,16 @@ namespace Assets.Scripts.General
                 else if (randomNumber > Math.Pow(_entertainment.Status, 0.1) && _entertainment.IsPendingRelief() == false)
                     SatisfyEntertainment();
             }
+
+            for(int i = 0; i < SeenListeningDevices.Count; ++i)
+            {
+                if(SeenListeningDevices[i] == null)
+                {
+                    SeenListeningDevices.RemoveAt(i);
+                    --i;
+                }
+            }
+
         }
 
         private void SatisfyBladder()
@@ -132,6 +142,11 @@ namespace Assets.Scripts.General
         void Inform() // pass value or script when general has conversation - list of known devices -R.Walters
         {
             //Does this character know about these listening devices if they do then don't inform-R.Walters
+        }
+
+        public List<GameObject> knowenListeringDevices()
+        {
+            return SeenListeningDevices;
         }
 
         public void ConsumeEvent(Event subscribeEvent, object eventPacket)

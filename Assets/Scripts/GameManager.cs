@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Scripts.AI;
 using Assets.Scripts.General;
 using UnityEngine;
@@ -16,7 +15,7 @@ namespace Assets.Scripts
 		public GameObject ActiveTech;
 		public int ActiveTechNum;
         public int Days;
-
+        public ConversationPanel ConversePanel;
         public Objective CurrentObjective;
 
         [SerializeField]
@@ -69,6 +68,7 @@ namespace Assets.Scripts
 
             if (_pause == false)
                 _pendingStart = true;
+
         }
 
         private void AwakeSingletonManagers()
@@ -89,7 +89,6 @@ namespace Assets.Scripts
 
             _fundingText = GameObject.FindGameObjectsWithTag("FundingText")[0].GetComponent<Text>();
             _fundingText.text = "£" + FundingAmount.ToString("0000");
-
             _dailyReport = UnityEngine.Object.FindObjectOfType<DailyReport>();
         }
 
@@ -146,7 +145,9 @@ namespace Assets.Scripts
         
 		public void CycleTech()
 		{
-			ActiveTech.gameObject.GetComponent<Technician> ().IsActive = false;
+            TechList.Clear();
+            TechList.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+            ActiveTech.gameObject.GetComponent<Technician> ().IsActive = false;
 			if (ActiveTechNum == (TechList.Count - 1))
 				ActiveTechNum = 0;
 			else

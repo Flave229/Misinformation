@@ -188,8 +188,8 @@ namespace Assets.Scripts
                 temp.z = -0.2f;
                 lineRenderer.SetPosition(0, temp);
 
-                temp = GameManager.Instance().ActiveTech.GetComponent<Character2D>().transform.localPosition;
-                temp.y += 0.2f;
+                temp = Camera.main.ScreenToWorldPoint(transform.position);
+                //temp.y += 0.2f;
                 temp.z = -0.2f;
                 lineRenderer.SetPosition(1, temp);
 

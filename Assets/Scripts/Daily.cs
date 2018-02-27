@@ -57,6 +57,13 @@ namespace Assets.Scripts
                 var general = gameObject.GetComponent<General.General>();
                 general.UpdateKnowledgeValue(-1);
                 general.UpdateTrustValue(1);
+                general.GetComponent<Character2D>().ClearTasks();
+            }
+
+            foreach (GameObject gameObject in GameManager.Instance().TechList)
+            {
+                var technician = gameObject.GetComponent<Technician>();
+                technician.GetComponent<Character2D>().ClearTasks();
             }
         }
 

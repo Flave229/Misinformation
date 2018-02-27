@@ -15,7 +15,7 @@ namespace Assets.Scripts
 
         public AIStack Tasks;
         public Animator Animator;
-        public IMovementAI MovementAi;
+        public MovementAI MovementAi;
         public Room CurrentRoom;
         public JobType JobType;
         public float WalkSpeed = 0.1f;
@@ -32,10 +32,10 @@ namespace Assets.Scripts
         public void Start()
         {
             if (JobType == JobType.TECHNICIAN)
-                	MovementAi = new PlayerMovementAI(this, new AStarPathfinding());
+                	MovementAi = new MovementAI(this, new AStarPathfinding());
             else
             {
-                MovementAi = new NPCMovementAI(this, new AStarPathfinding());
+                MovementAi = new MovementAI(this, new AStarPathfinding());
                 Tasks.AddToStack(new IdleTask(new IdleData
                 {
                     General = this.gameObject
@@ -152,6 +152,12 @@ namespace Assets.Scripts
                 EventMessenger.Instance().SubscribeToEvent(this, Event.PLACE_LISTENING_DEVICE);
             else
                 EventMessenger.Instance().SubscribeToEvent(this, Event.LEFT_MOUSE_CLICK);
+        }
+
+        public void ClearTasks()
+        {
+            if (Tasks != null)
+                Tasks.Destroy();
         }
     }
 }

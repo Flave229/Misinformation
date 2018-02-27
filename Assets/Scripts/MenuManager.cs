@@ -48,6 +48,18 @@ namespace Assets.Scripts
             SceneManager.LoadScene(sceneIndex);
         }
 
+        public void PlayGame(int sceneIndex)
+        {
+            GameManager.Instance().Pause(false);
+            LoadByIndex(sceneIndex);
+        }
+
+        public void QuitToMenu(int sceneIndex)
+        {
+            GameManager.Instance().Pause(true);
+            LoadByIndex(sceneIndex);
+        }
+
         public void Quit()
         {
 #if UNITY_EDITOR

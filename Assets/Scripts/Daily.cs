@@ -18,6 +18,8 @@ namespace Assets.Scripts
         public List<Name> leavingGenerals;
         public List<Name> arrivingGenerals;
 
+        public List<GameObject> _technicans = new List<GameObject>();
+
         void Start()
         {
            // GameManager.Instance()._dailyReport = Object.FindObjectOfType<DailyReport>();
@@ -37,6 +39,11 @@ namespace Assets.Scripts
             Timer.Instance().ResetRemainingTime();
 			GameManager.Instance ().Salary ();
             TransitioningDay = false;
+            //_technicans = GameManager.Instance().TechList;
+            //for (int i = 0; i < _technicans.Count; i++)
+            //{
+            //    Instantiate(_technicans[i], new Vector3(0f -i, -12.24f, 0f), Quaternion.identity);
+            //}
         }
 
         public void EndDay()

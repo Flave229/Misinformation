@@ -8,5 +8,6 @@
         public bool Talking { get; set; }
         public string Speech { get; set; }
         public bool Done { get; set; }
+        public bool Listened { get; set; }
     }
 }

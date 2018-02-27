@@ -19,11 +19,9 @@ namespace Assets.Scripts
         {
         }
 
-        void Awake()
+        public void Awake()
         {
-            _translationSkill = Random.Range(0, 8);
-            _equipmentSkill = Random.Range(0, 8);
-            _motivation = Random.Range(0, 8);
+            RandomiseAttributes();
             Debug.Log("Technician");
             Debug.Log("Translator Skill: " + _translationSkill);
             Debug.Log("Equipment Specialist Skill: " + _equipmentSkill);
@@ -41,5 +39,36 @@ namespace Assets.Scripts
             return _equipmentSkill;
         }
 
+        public int GetTranslationSkill()
+        {
+            return _translationSkill;
+        }
+
+        public int GetMotivationSkill()
+        {
+            return _motivation;
+        }
+
+        public void SetEquipmentSkill(int equipmentSkill)
+        {
+            _equipmentSkill = equipmentSkill;
+        }
+
+        public void SetTranslationSkill(int translationSkill)
+        {
+            _translationSkill = translationSkill;
+        }
+
+        public void SetMotivationSkill(int motivation)
+        {
+            _motivation = motivation;
+        }
+
+        public void RandomiseAttributes()
+        {
+            _translationSkill = Random.Range(0, 8);
+            _equipmentSkill = Random.Range(0, 8);
+            _motivation = Random.Range(0, 8);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.AI;
 using Assets.Scripts.General;
 using UnityEngine;
@@ -31,6 +32,8 @@ namespace Assets.Scripts
 
         private DailyReport _dailyReport;
         public bool RecievingFunding;
+        private bool _pause;
+        private bool _pendingStart;
 
         public int FundingAmount
         {
@@ -56,7 +59,15 @@ namespace Assets.Scripts
             CurrentObjective.ptime = Objective.Time;
 
             AwakeSingletonManagers();
-            _dailyManager = Object.FindObjectOfType<Daily>();
+            _dailyManager = UnityEngine.Object.FindObjectOfType<Daily>();
+        }
+
+        internal void Pause(bool pause)
+        {
+            _pause = pause;
+
+            if (_pause == false)
+                _pendingStart = true;
         }
 
         private void AwakeSingletonManagers()
@@ -78,11 +89,34 @@ namespace Assets.Scripts
             _fundingText = GameObject.FindGameObjectsWithTag("FundingText")[0].GetComponent<Text>();
             _fundingText.text = "£" + FundingAmount.ToString("0000");
 
-            _dailyReport = Object.FindObjectOfType<DailyReport>();
+            _dailyReport = UnityEngine.Object.FindObjectOfType<DailyReport>();
         }
 
         public void Update()
         {
+            if (_pause)
+                return;
+
+            if (_pendingStart)
+            {
+                TechList.Clear();
+                GeneralList.Clear();
+                ListeningDevList.Clear();
+                TechList.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+                GeneralList.AddRange(GameObject.FindGameObjectsWithTag("General"));
+                ListeningDevList.AddRange(GameObject.FindGameObjectsWithTag("ListeningDevice"));
+                CurrentObjective = GameObject.FindObjectOfType<Objective>();
+                ActiveTech = TechList[0];
+                SoundManager.Instance().Camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+                SoundManager.Instance().MusicSource = SoundManager.Instance().Camera.gameObject.AddComponent<AudioSource>();
+                _fundingText = GameObject.FindGameObjectsWithTag("FundingText")[0].GetComponent<Text>();
+                AITaskManager.GeneralsAwaitingConversation.Clear();
+                _pendingStart = false;
+            }
+
+            if (ActiveTech == null)
+                ActiveTech = TechList[0];
+
             InputManager.Instance().Update();
             AITaskManager.Instance().Update(GeneralList);
             CurrentObjective.pevent = Objective.Event;
@@ -159,7 +193,6 @@ namespace Assets.Scripts
                     CurrentYear++;
                 }
             }
-
         }
 
         public string GetCurrentDate()
@@ -184,7 +217,7 @@ namespace Assets.Scripts
         public string GetRefNum()
         {
             string REFNUM = "";
-            CurrentRefNum += Random.Range(1, 15);
+            CurrentRefNum += UnityEngine.Random.Range(1, 15);
             REFNUM = "" + CurrentRefNum;
             return REFNUM;
         }
@@ -193,7 +226,5 @@ namespace Assets.Scripts
         {
             return _dailyReport;
         }
-        
     }
-    
 }

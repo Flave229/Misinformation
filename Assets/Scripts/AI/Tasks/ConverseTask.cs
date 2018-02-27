@@ -14,10 +14,11 @@ namespace Assets.Scripts.AI.Tasks
         private readonly ConverseData _converseData;
         private bool _completed;
         private readonly ConversationManager _conversationManager;
+
         private float _timeToTalk;
         private float _timeToWait;
         private readonly GameObject _speechBubble;
-
+        private ConversationPanel _conversationPanel;
 
         public ConverseTask(ConverseData converseData)
         {
@@ -76,6 +77,10 @@ namespace Assets.Scripts.AI.Tasks
                     _converseData.Done = true;
                 }
             }
+            //ConversationPanel.
+           // GameObject.FindGameObjectWithTag("ConversationPanel").SetActive(true);
+            //_convoPanel.SetActive(true);
+            //panelIsHidden = false;
         }
 
         public void SetCompleted()
@@ -107,10 +112,16 @@ namespace Assets.Scripts.AI.Tasks
                     if (listeningDevice.CurrentRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
                         return;
 
+                    if (_converseData.Listened)
+                        return;
+
+                    _converseData.Listened = true;
                     string scrambledText = ScrambleText(listeningDevice);
 
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color> \n";
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
+                    //_conversationPanel.panelIsHidden = false;
+                    //_conversationPanel.HidePanel();
                     break;
             }
         }

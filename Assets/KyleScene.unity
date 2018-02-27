@@ -11795,6 +11795,7 @@ MonoBehaviour:
   GeneralGameObject: {fileID: 1062274446572268, guid: 5194f0862bd436e41a1899e0a7627db8,
     type: 2}
   SpawnRoom: {fileID: 1566115}
+  _technicans: []
 --- !u!114 &867622998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19510,7 +19511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f113ba83eb1b28409abe180312606dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 2061122053}
+  target: {fileID: 1608893457}
   camera: {fileID: 1418226508}
   useKeyboardInput: 1
   useMouseInput: 1
@@ -19892,6 +19893,7 @@ GameObject:
   - component: {fileID: 1445487285}
   - component: {fileID: 1445487284}
   - component: {fileID: 1445487283}
+  - component: {fileID: 1445487288}
   m_Layer: 5
   m_Name: Canvas-MorningReport
   m_TagString: Untagged
@@ -20009,6 +20011,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1445487288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1445487282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c6a6419ae3513c499d22fafc77110c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1455864851
 GameObject:
   m_ObjectHideFlags: 0

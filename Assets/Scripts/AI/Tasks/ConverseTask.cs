@@ -18,11 +18,11 @@ namespace Assets.Scripts.AI.Tasks
         private float _timeToTalk;
         private float _timeToWait;
         private readonly GameObject _speechBubble;
-        private ConversationPanel _conversationPanel;
 
+       
         public ConverseTask(ConverseData converseData)
         {
-            _timeToTalk = 5.0f;
+            _timeToTalk = 50.0f;
             _timeToWait = 30.0f;
             _converseData = converseData;
             _conversationManager = ConversationManager.Instance();
@@ -77,10 +77,6 @@ namespace Assets.Scripts.AI.Tasks
                     _converseData.Done = true;
                 }
             }
-            //ConversationPanel.
-           // GameObject.FindGameObjectWithTag("ConversationPanel").SetActive(true);
-            //_convoPanel.SetActive(true);
-            //panelIsHidden = false;
         }
 
         public void SetCompleted()
@@ -113,13 +109,11 @@ namespace Assets.Scripts.AI.Tasks
                         return;
 
                     string scrambledText = ScrambleText(listeningDevice);
-
+                    
+                    GameManager.Instance().ConversePanel.ShowPanel();
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color> \n";
                     _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
-                    _conversationPanel.panelIsHidden = false;
-                    _conversationPanel.HidePanel();
                     break;
-                    
             }
         }
 

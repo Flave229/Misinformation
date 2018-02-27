@@ -153,5 +153,11 @@ namespace Assets.Scripts
             else
                 EventMessenger.Instance().SubscribeToEvent(this, Event.LEFT_MOUSE_CLICK);
         }
+
+        public void ClearTasks()
+        {
+            if (Tasks != null)
+                Tasks.Destroy();
+        }
     }
 }

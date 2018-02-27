@@ -15,7 +15,7 @@ namespace Assets.Scripts
 		public GameObject ActiveTech;
 		public int ActiveTechNum;
         public int Days;
-
+        public ConversationPanel ConversePanel;
         public Objective CurrentObjective;
 
         [SerializeField]
@@ -77,8 +77,20 @@ namespace Assets.Scripts
 
             _fundingText = GameObject.FindGameObjectsWithTag("FundingText")[0].GetComponent<Text>();
             _fundingText.text = "£" + FundingAmount.ToString("0000");
-
+            ////_conversePanel = new ConversationPanel(GameObject.FindGameObjectWithTag("ConversationPanel").gameObject.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject,
+            ////                      GameObject.FindGameObjectWithTag("ConversationPanel").gameObject.transform.parent.Find("ButtonHide").gameObject,
+            ////                      true);
+            ////_conversePanel._hideButton.GetComponent<Button>().onClick. 
+            ////_conversePanel._hideButton.GetComponent<Button>().onClick.AddListener(_conversePanel.HidePanel);
+            //if (!_conversePanel.panelIsHidden)
+            //{
+            //    _conversePanel._convoPanel.SetActive(false);
+            //    // _hideButton = GameObject.FindGameObjectWithTag("ConversationPanel").gameObject.transform.Find("ButtonHide").gameObject;
+            //    _conversePanel._hideButton.gameObject.transform.Find("TextBtn").GetComponent<Text>().text = "▲";
+            //}
+            //// _conversePanel = GameObject.Find("CanvasConversation").gameObject.transform.parent.Find("ConversationSpeech").GetComponent<ConversationPanel>();
             _dailyReport = Object.FindObjectOfType<DailyReport>();
+            
         }
 
         public void Update()

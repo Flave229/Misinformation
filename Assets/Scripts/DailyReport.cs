@@ -29,7 +29,7 @@ namespace Assets.Scripts
 
         private void Update()
         {
-			player = GameManager.Instance ().ActiveTech;
+			player = GameManager.Instance().ActiveTech;
             float distance = Vector3.Distance(player.transform.position, Typewriter.transform.position);
             if (distance < 1)
             {

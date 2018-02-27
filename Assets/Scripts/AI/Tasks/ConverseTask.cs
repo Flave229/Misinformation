@@ -108,6 +108,10 @@ namespace Assets.Scripts.AI.Tasks
                     if (listeningDevice.CurrentRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
                         return;
 
+                    if (_converseData.Listened)
+                        return;
+
+                    _converseData.Listened = true;
                     string scrambledText = ScrambleText(listeningDevice);
                     
                     GameManager.Instance().ConversePanel.ShowPanel();

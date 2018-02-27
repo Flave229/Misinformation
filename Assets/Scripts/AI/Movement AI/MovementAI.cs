@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using Assets.Scripts.Physics;
+﻿using Assets.Scripts.Physics;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.AI.Movement_AI
 {
-    class NPCMovementAI : IMovementAI
+    public class MovementAI
     {
-		List<General.General> GeneralsList = new List<General.General> ();
+        List<General.General> GeneralsList = new List<General.General>();
 
         private Character2D _character;
         private AStarPathfinding _aStarPathfinding;
@@ -14,11 +15,26 @@ namespace Assets.Scripts.AI.Movement_AI
         private List<Node> _currentPath;
         private Node _previousNode;
 
-        public NPCMovementAI(Character2D character, AStarPathfinding aStarPathfinding)
+        public MovementAI(Character2D character, AStarPathfinding aStarPathfinding)
         {
             _character = character;
             _aStarPathfinding = aStarPathfinding;
             _currentPath = new List<Node>();
+        }
+
+        public void CreatePathTo(Vector3 location)
+        {
+            if (_currentPath.Count > 0)
+                return;
+
+            Node sourceNode = CreateSourceNode(_character.transform.position, (Vector3)location);
+            Node targetNode = CreateTargetNode(sourceNode, (Vector3)location);
+            _currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
+        }
+
+        public List<Node> GetCurrentPath()
+        {
+            return _currentPath;
         }
 
         public bool CheckAndMoveToNextPathNode()
@@ -49,52 +65,15 @@ namespace Assets.Scripts.AI.Movement_AI
             return false;
         }
 
-		public void CreatePathTo(Vector3? location = null)
-		{
-			if (_currentPath.Count > 0)
-				return;
-            if (location != null)
-            {
-                Node sourceNode = CreateSourceNode(_character.transform.position, (Vector3)location);
-                Node targetNode = CreateTargetNode(sourceNode, (Vector3)location);
-                _currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
-            }
-            else
-            {
-                Door[] doors = (Door[])UnityEngine.Object.FindObjectsOfType(typeof(Door));
-                Vector3 randomDoorPosition = doors[new System.Random().Next(0, doors.Length)].transform.position;
-                Node sourceNode = CreateSourceNode(_character.transform.position, randomDoorPosition);
-                Node targetNode = CreateTargetNode(sourceNode, randomDoorPosition);
-                _currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
-            }
-		}
-
-		public void CreatePathToObj(Vector2 TargetPos)
-		{
-			if (_currentPath.Count > 0)
-				return;
-
-			Door[] doors = (Door[])UnityEngine.Object.FindObjectsOfType(typeof(Door));
-			Vector3 randomDoorPosition = doors[new System.Random().Next(0, doors.Length)].transform.position;
-			Node sourceNode = CreateSourceNode(_character.transform.position, TargetPos);
-			Node targetNode = CreateTargetNode(sourceNode, TargetPos);
-			_currentPath = _aStarPathfinding.CreatePath(sourceNode, targetNode);
-		}
-
-        public List<Node> GetCurrentPath()
+        public void ActivateNextPathNode()
         {
-            return _currentPath;
+            _previousNode = _currentPath[_currentPath.Count - 1];
+            _currentPath.RemoveAt(_currentPath.Count - 1);
         }
 
         public void ClearPath()
         {
             _currentPath.Clear();
-        }
-
-        public void ActivateNextPathNode()
-        {
-            _previousNode = _currentPath[_currentPath.Count - 1];
-            _currentPath.RemoveAt(_currentPath.Count - 1);
         }
 
         public void ClearAndReturnToLastNode()
@@ -141,12 +120,19 @@ namespace Assets.Scripts.AI.Movement_AI
                 Vector2 boxColliderPosition = new Vector2(boxCollider.transform.position.x, boxCollider.transform.position.y);
                 if (CollisionBox.PointInBoxCollision(boxColliderPosition + boxCollider.offset, new Vector2(boxCollider.size.x, boxCollider.size.y), position) == false)
                     continue;
-                
+
                 chosenRoom = room;
                 break;
             }
 
-            target.Position = new Vector2(position.x, chosenRoom.gameObject.transform.position.y);
+            if (chosenRoom == null)
+                throw new Exception("No room could be located for the given location");
+
+            if (chosenRoom == _character.CurrentRoom)
+            {
+                target.ConnectingNodes.Add(sourceNode);
+                return target;
+            }
 
             foreach (Transform doorTransform in chosenRoom.transform)
             {
@@ -155,22 +141,8 @@ namespace Assets.Scripts.AI.Movement_AI
                     target.ConnectingNodes.Add(doorComponent.Node);
             }
 
+            target.Position = new Vector2(position.x, target.ConnectingNodes[0].Position.y);
             return target;
         }
-
-		public void ChooseGeneral()
-		{
-			int r = UnityEngine.Random.Range(0, GameManager.Instance().GetGenList().Count);
-
-			if (GameManager.Instance().GetGenList()[r]) 
-			{
-				var genPos = GameManager.Instance().GetGenList()[r].gameObject.transform.position;
-
-				Node sourceNode = CreateSourceNode (_character.transform.position, genPos);
-				Node targetNode = CreateTargetNode (sourceNode, genPos);
-
-				_currentPath = _aStarPathfinding.CreatePath (sourceNode, targetNode);
-			} 
-		}
     }
 }

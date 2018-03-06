@@ -89,7 +89,7 @@ namespace Assets.Scripts.AI
             _tasks.Clear();
         }
 
-        public List<ITask> GetTasksOfType()
+        public List<ITask> GetTasks()
         {
             List<ITask> currentTaskList = new List<ITask>();
 

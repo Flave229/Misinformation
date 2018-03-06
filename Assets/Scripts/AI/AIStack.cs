@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.AI.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -49,6 +50,17 @@ namespace Assets.Scripts.AI
             ITask highestPriorityTask = _tasks.Aggregate((highestPriority, task) => task.GetPriority() > highestPriority.GetPriority() ? task : highestPriority);
             _tasks.Remove(highestPriorityTask);
             _executingTask = highestPriorityTask;
+        }
+
+        public void InterruptCurrentTask()
+        {
+            _executingTask.SetCompleted();
+        }
+        
+        public void InterruptCurrentTaskIfType(Type type)
+        {
+            if (_executingTask != null && _executingTask.GetType() == type)
+                _executingTask.SetCompleted();
         }
 
         public void Destroy()

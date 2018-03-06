@@ -138,11 +138,14 @@ namespace Assets.Scripts
                 MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
                 Location = mouseLocation
             }));
+
+            character.Tasks.InterruptCurrentTaskIfType(typeof(PathfindToLocationTask));
             character.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
         private void MoveToLocation()
         {
+            character.Tasks.InterruptCurrentTaskIfType(typeof(PathfindToLocationTask));
             character.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
             {
                 MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,

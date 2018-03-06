@@ -54,7 +54,8 @@ namespace Assets.Scripts.AI
 
         public void InterruptCurrentTask()
         {
-            _executingTask.SetCompleted();
+            if (_executingTask != null)
+                _executingTask.SetCompleted();
         }
         
         public void InterruptCurrentTaskIfType(Type type)

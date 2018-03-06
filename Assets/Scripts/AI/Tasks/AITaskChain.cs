@@ -51,6 +51,18 @@ namespace Assets.Scripts.AI.Tasks
             return _ceilingLock;
         }
 
+        public List<ITask> GetTasks()
+        {
+            List<ITask> currentTaskList = new List<ITask>();
+            currentTaskList.Add(_executingTask);
+            foreach(ITask task in _tasks)
+            {
+                currentTaskList.Add(task);
+            }
+
+            return currentTaskList;
+		}
+		
         public double GetPriority()
         {
             double highestPriority = 0;

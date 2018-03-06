@@ -88,5 +88,39 @@ namespace Assets.Scripts.AI
                 _executingTask.SetCompleted();
             _tasks.Clear();
         }
+
+        public List<ITask> GetTasksOfType()
+        {
+            List<ITask> currentTaskList = new List<ITask>();
+
+            if (_executingTask.GetType() == typeof(AITaskChain))
+            {
+                AITaskChain taskChain = (AITaskChain)_executingTask;
+
+                foreach(ITask task in taskChain.GetTasks())
+                {
+                    currentTaskList.Add(task);
+                }
+            }
+
+            foreach (ITask task in _tasks)
+            {
+                if (task.GetType() == typeof(AITaskChain))
+                {
+                    AITaskChain taskChain = (AITaskChain)task;
+
+                    foreach (ITask childTask in taskChain.GetTasks())
+                    {
+                        currentTaskList.Add(childTask);
+                    }
+                }
+                else
+                {
+                    currentTaskList.Add(task);
+                }
+            }
+
+            return currentTaskList;
+        }
     }
 }

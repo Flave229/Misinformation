@@ -126,7 +126,7 @@ namespace Assets.Scripts.AI.Movement_AI
             }
 
             if (chosenRoom == null)
-                throw new Exception("No room could be located for the given location");
+                Debug.Log("No room could be located for the given location");
 
             if (chosenRoom == _character.CurrentRoom)
             {

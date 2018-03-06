@@ -52,8 +52,8 @@ namespace Assets.Scripts
 
             if (m_ClickLeft)
             {
-                m_MouseClickLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                EventMessenger.Instance().FireEvent(Event.LEFT_MOUSE_CLICK, m_MouseClickLocation);
+                //m_MouseClickLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                //EventMessenger.Instance().FireEvent(Event.LEFT_MOUSE_CLICK, m_MouseClickLocation);
             }
 
             if (m_ClickRight)

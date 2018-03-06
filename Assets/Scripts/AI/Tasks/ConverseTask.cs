@@ -15,15 +15,15 @@ namespace Assets.Scripts.AI.Tasks
         private bool _completed;
         private readonly ConversationManager _conversationManager;
 
-        private float _timeToTalk;
-        private float _timeToWait;
+        private float _secondsToTalk;
+        private float _secondsToWait;
         private readonly GameObject _speechBubble;
 
        
         public ConverseTask(ConverseData converseData)
         {
-            _timeToTalk = 50.0f;
-            _timeToWait = 30.0f;
+            _secondsToTalk = 7.0f;
+            _secondsToWait = 30.0f;
             _converseData = converseData;
             _conversationManager = ConversationManager.Instance();
             _speechBubble = GameObject.FindGameObjectWithTag("ConversationPanel");
@@ -40,9 +40,9 @@ namespace Assets.Scripts.AI.Tasks
 
             if (_converseData.ConversationPartnerTaskData.ReadyToTalk == false)
             {
-                _timeToWait -= Time.deltaTime;
+                _secondsToWait -= Time.deltaTime;
 
-                if (_timeToWait <= 0.0f)
+                if (_secondsToWait <= 0.0f)
                 {
                     _converseData.Done = true;
                     _converseData.ConversationPartnerTaskData.Done = true;
@@ -69,9 +69,9 @@ namespace Assets.Scripts.AI.Tasks
 
             if (_converseData.Talking)
             {
-                _timeToTalk -= Time.deltaTime;
+                _secondsToTalk -= Time.deltaTime;
 
-                if (_timeToTalk <= 0.0f)
+                if (_secondsToTalk <= 0.0f)
                 {
                     _converseData.Talking = false;
                     _converseData.Done = true;
@@ -82,6 +82,7 @@ namespace Assets.Scripts.AI.Tasks
         public void SetCompleted()
         {
             _completed = true;
+            _converseData.SocialNeed.Replenish();
         }
 
         public bool IsComplete()
@@ -153,6 +154,11 @@ namespace Assets.Scripts.AI.Tasks
         public void SubscribeToEvents()
         {
             EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_LISTENING);
+        }
+
+        public double GetPriority()
+        {
+            return _converseData.SocialNeed.Status;
         }
     }
 }

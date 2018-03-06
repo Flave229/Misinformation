@@ -2,6 +2,7 @@
 {
     public class NeedStatus
     {
+        private bool _pendingRelief;
         private float _status;
         private readonly float _degradationPerMinute;
 
@@ -27,6 +28,17 @@
         public void Replenish(float replenishAmount = 1)
         {
             Status += replenishAmount;
+            _pendingRelief = false;
+        }
+
+        public void SetPendingRelief()
+        {
+            _pendingRelief = true;
+        }
+
+        public bool IsPendingRelief()
+        {
+            return _pendingRelief;
         }
     }
 }

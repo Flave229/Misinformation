@@ -1,25 +1,26 @@
 ﻿using Assets.Scripts.AI.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Scripts.AI
 {
     public class AIStack
     {
         private ITask _executingTask;
-        private readonly Stack<ITask> _tasks;
+        private readonly List<ITask> _tasks;
 
         public AIStack()
         {
-            _tasks = new Stack<ITask>();
+            _tasks = new List<ITask>();
         }
 
         public void AddToStack(ITask task)
         {
             if (_tasks.Count == 0)
-                _tasks.Push(task);
-            else if (_tasks.Peek().GetCeilingLock() == false)
-                _tasks.Push(task);
+                _tasks.Add(task);
+            else if (_tasks[_tasks.Count - 1].GetCeilingLock() == false)
+                _tasks.Add(task);
         }
 
         public void Update()
@@ -28,12 +29,12 @@ namespace Assets.Scripts.AI
                 return;
 
             if (_executingTask == null)
-                _executingTask = _tasks.Pop();
+                SelectNextTask();
 
             if (_executingTask.IsComplete())
             {
                 if (_tasks.Count > 0)
-                    _executingTask = _tasks.Pop();
+                    SelectNextTask();
                 else
                 {
                     _executingTask = null;
@@ -42,6 +43,25 @@ namespace Assets.Scripts.AI
             }
 
             _executingTask.Execute();
+        }
+
+        private void SelectNextTask()
+        {
+            ITask highestPriorityTask = _tasks.Aggregate((highestPriority, task) => task.GetPriority() > highestPriority.GetPriority() ? task : highestPriority);
+            _tasks.Remove(highestPriorityTask);
+            _executingTask = highestPriorityTask;
+        }
+
+        public void InterruptCurrentTask()
+        {
+            if (_executingTask != null)
+                _executingTask.SetCompleted();
+        }
+        
+        public void InterruptCurrentTaskIfType(Type type)
+        {
+            if (_executingTask != null && _executingTask.GetType() == type)
+                _executingTask.SetCompleted();
         }
 
         public void Destroy()

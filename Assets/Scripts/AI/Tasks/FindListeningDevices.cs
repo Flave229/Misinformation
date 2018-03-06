@@ -47,6 +47,12 @@ namespace Assets.Scripts.AI.Tasks
             return false;
         }
 
+        public double GetPriority()
+        {
+            // TODO: Double check priority
+            return 1;
+        }
+
         public bool IsComplete()
         {
             return _completed;

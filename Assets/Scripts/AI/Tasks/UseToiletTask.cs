@@ -45,11 +45,17 @@ namespace Assets.Scripts.AI.Tasks
         public void SetCompleted()
         {
             _completed = true;
+            _toiletData.BladderNeed.Replenish();
         }
 
         public bool GetCeilingLock()
         {
             return false;
+        }
+
+        public double GetPriority()
+        {
+            return _toiletData.BladderNeed.Status;
         }
     }
 }

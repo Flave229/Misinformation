@@ -53,5 +53,11 @@ namespace Assets.Scripts.AI.Tasks
         {
             return false;
         }
+
+        public double GetPriority()
+        {
+            // TODO check priority on this
+            return 0;
+        }
     }
 }

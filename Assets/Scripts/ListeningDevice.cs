@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.EventSystem;
+using Assets.Scripts.EventSystem.EventPackets;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -67,8 +68,14 @@ namespace Assets.Scripts
         public void DestroyDevice()
         {
             toolTipText.UpdateText ("");
+            int myIndex = GameManager.Instance().ListeningDevList.FindIndex(x => x.gameObject);
+            ListeningDevicePacket eventPacket = new ListeningDevicePacket
+            {
+                Device = this,
+                Num = myIndex
+            };
             GameManager.Instance ().ListeningDevList.Remove (this.gameObject);
-            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_DESTROYED, this);
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_DESTROYED, eventPacket);
             Destroy(transform.gameObject);
         }
 

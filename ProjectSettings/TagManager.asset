@@ -18,6 +18,7 @@ TagManager:
   - Canvas
   - ConversationPanel
   - TestText
+  - Interactable
   layers:
   - Default
   - TransparentFX

@@ -78,30 +78,9 @@ namespace Assets.Scripts.AI
             };
             general1ConverseData.ConversationPartnerTaskData = general2ConverseData;
             general2ConverseData.ConversationPartnerTaskData = general1ConverseData;
-
-            Stack<ITask> general1TaskChain = new Stack<ITask>();
-            Stack<ITask> general2TaskChain = new Stack<ITask>();
-
-            general1TaskChain.Push(new ConverseTask(general1ConverseData));
-            general2TaskChain.Push(new ConverseTask(general2ConverseData));
-
-            general1TaskChain.Push(new PathfindToLocationTask(new PathfindData
-            {
-                Location = targetLocation,
-                MovementAi = generalOne.GetComponent<Character2D>().MovementAi
-            }));
-            general2TaskChain.Push(new PathfindToLocationTask(new PathfindData
-            {
-                Location = new Vector3(targetLocation.x + padding, targetLocation.y),
-                MovementAi = generalTwo.GetComponent<Character2D>().MovementAi
-            }));
-
-            AITaskChain general1TaskChainTask = new AITaskChain(general1TaskChain);
-            general1TaskChainTask.SetCeilingLock(true);
-            AITaskChain general2TaskChainTask = new AITaskChain(general2TaskChain);
-            general2TaskChainTask.SetCeilingLock(true);
-            generalOne.GetComponent<Character2D>().Tasks.AddToStack(general1TaskChainTask);
-            generalTwo.GetComponent<Character2D>().Tasks.AddToStack(general2TaskChainTask);
+            
+            generalOne.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTaskV2(general1ConverseData));
+            generalTwo.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTaskV2(general2ConverseData));
         }
 
         public static void GoToToilet(GameObject generalGameObject, NeedStatus bladderNeed)

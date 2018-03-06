@@ -163,7 +163,7 @@ namespace Assets.Scripts.AI.Tasks
 
         public TaskPriorityType GetPriorityType()
         {
-            return TaskPriorityType.CONCURRENT;
+            return TaskPriorityType.WORK;
         }
     }
 }

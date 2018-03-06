@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.EventSystem;
+using Assets.Scripts.EventSystem.EventPackets;
 
 namespace Assets.Scripts
 {
@@ -12,6 +13,7 @@ namespace Assets.Scripts
         public int numOfListeningDevices;
         public Image[] listeningDeviceImages;
         Image activeImage;
+        int activeNum;
 
         void Start()
         {
@@ -23,14 +25,25 @@ namespace Assets.Scripts
             }
         }
 
-        public void HighlightSelectedDevice(object eventPacket)
+
+
+        public void HighlightSelectedDevice(ListeningDevicePacket listeningDeviceData)
         {
             if (activeImage != null)
             {
                 activeImage.GetComponent<Outline>().enabled = false;
             }
-            activeImage = listeningDeviceImages[(int)eventPacket];
-            activeImage.GetComponent<Outline>().enabled = true;
+            if (listeningDeviceData != null)
+            {
+                activeNum = listeningDeviceData.Num;
+                activeImage = listeningDeviceImages[activeNum];
+                activeImage.GetComponent<Outline>().enabled = true;
+            }
+            
+            if (activeNum > numOfListeningDevices)
+            {
+                activeNum = numOfListeningDevices;
+            }
         }
 
         public void UnhighlightDevice(object eventPacket)
@@ -69,9 +82,11 @@ namespace Assets.Scripts
                     break;
                 case EventSystem.Event.LISTENING_DEVICE_DESTROYED:
                     UpdateUI(eventPacket);
+                    HighlightSelectedDevice(null);
                     break;
                 case EventSystem.Event.LISTENING_DEVICE_CYCLED:
-                    HighlightSelectedDevice(eventPacket);
+                    ListeningDevicePacket listeningDeviceData = (ListeningDevicePacket)eventPacket;
+                    HighlightSelectedDevice(listeningDeviceData);
                     break;
                 case EventSystem.Event.LISTENING_DESK_OFF:
                     UnhighlightDevice(eventPacket);

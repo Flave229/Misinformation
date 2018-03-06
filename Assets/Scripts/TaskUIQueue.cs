@@ -1,17 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
+using Assets.Scripts.AI.Tasks;
 using UnityEngine;
 
-public class TaskStack : MonoBehaviour
+public class TaskUIQueue : MonoBehaviour
 {
-    public List<GameObject> taskList;
+    public List<ITask> tasksList;
+    public List<GameObject> taskUIList;
     public Queue<GameObject> taskQueue;
     private GameObject temp;
 
 	void Start ()
     {
         taskQueue = new Queue<GameObject>();
-	}
+        tasksList = GameManager.Instance().ActiveTech.GetComponent<Character2D>().Tasks.GetTasks();
+    }
 
 	void Update ()
     {
@@ -27,7 +31,7 @@ public class TaskStack : MonoBehaviour
 
     public void QueueTask(GameObject task)
     {
-        temp = Instantiate(task, new Vector3(0, -(float)taskQueue.Count/2,0), taskList[0].transform.rotation);
+        temp = Instantiate(task, new Vector3(0, -(float)taskQueue.Count/2,0), taskUIList[0].transform.rotation);
         taskQueue.Enqueue(task);
     } 
 

@@ -10,7 +10,11 @@ namespace Assets.Scripts.Conversation
         public bool TrueEvent;
         public bool TruePlace;
 
+        private bool General1InRoomWithLD;
+        private bool General2InRoomWithLD;
+
         private static List<string> _textStatment = new List<string>();
+        private static List<string> _textStatmentInform = new List<string>();
 
         private static List<string> _textRespondPositive = new List<string>();
         private static List<string> _textRespondUnsure = new List<string>();
@@ -19,17 +23,23 @@ namespace Assets.Scripts.Conversation
         private static List<string> _textRespondNegative = new List<string>();
         private static List<string> _textRespondNegativeEvent = new List<string>();
         private static List<string> _textRespondNegativePlace = new List<string>();
-        
+
+        private static List<string> _textRespondInform = new List<string>();
+        private static List<string> _textRespondInformCanNot = new List<string>();
+        private static List<string> _textRespondInform2 = new List<string>();
+
         private readonly System.Random _randomNumber = new System.Random();
 
         private static ConversationManager _instance;
+
         /** replacement codes
-     *  *XXXX where X is letter, this gives the abilty to give a simi human readable code and have a easy uesed stander to replace with data
-     *  -> *EVNT for EVENT
-     *  -> *LOCN for LOCATION
-     *  -> *TIME for TIME
-     *  -> *RAND for RANDOM
-     */
+         *  *XXXX where X is letter, this gives the abilty to give a simi human readable code and have a easy uesed stander to replace with data
+         *  -> *EVNT for EVENT
+         *  -> *LOCN for LOCATION
+         *  -> *TIME for TIME
+         *  -> *RAND for RANDOM
+         */
+
         private ConversationManager()
         {
             try
@@ -41,6 +51,12 @@ namespace Assets.Scripts.Conversation
                 _textRespondNegative = LoadResponsesFrom("Text/Coversaion/coversaionText-Responce-negative");
                 _textRespondNegativeEvent = LoadResponsesFrom("Text/Coversaion/coversaionText-Responce-negativeEvents");
                 _textRespondNegativePlace = LoadResponsesFrom("Text/Coversaion/conversaionText-Responce-negativePlace");
+
+                //need thise files
+                _textStatmentInform = LoadResponsesFrom("Text/Coversaion/coversaionText-StatmentInform");
+                _textRespondInform = LoadResponsesFrom("Text/Coversaion/coversaionText-Respond-Inform");
+                _textRespondInformCanNot = LoadResponsesFrom("Text/Coversaion/coversaionText-Respond-InformCanNot");
+                _textRespondInform2 = LoadResponsesFrom("Text/Coversaion/coversaionText-Respond-Inform2");
             }
             catch (Exception exception)
             {
@@ -66,6 +82,32 @@ namespace Assets.Scripts.Conversation
             GeneralConversationData general1ConversationData = InitialiseConversationData(general1);
             GeneralConversationData general2ConversationData = InitialiseConversationData(general2);
 
+            //checks if the generals know they are in a room with a Listening Device
+            General1InRoomWithLD = isGeneralInRoomWithListeningDevice(general1);
+            General2InRoomWithLD = isGeneralInRoomWithListeningDevice(general2);
+
+            //decises what type of conversation to have
+            if (General1InRoomWithLD == false)
+            {
+                if (general1.knowenListeringDevices().Count != 0)
+                {
+                    int inform = _randomNumber.Next(0, 1);
+                    if (inform == 1)
+                    {
+                        return InformConversation(general1, general2, conversation, general1ConversationData, general2ConversationData);
+                    }
+                }
+            }
+
+            //need a if statment for the convo type
+            return ObjectiveConversation(general1, general2, conversation, general1ConversationData, general2ConversationData);
+        }
+        
+        //Conversation where they talk objectives, this may include informing about Listening Devices
+        private Dictionary<General.General, string> ObjectiveConversation(General.General general1, General.General general2, Dictionary<General.General, string> conversation,
+            GeneralConversationData general1ConversationData, GeneralConversationData general2ConversationData)
+        {
+            //are the generals lieing?
             if (_textStatment.Count != 0)
                 conversation.Add(general1, TextFill(_textStatment.ElementAt(_randomNumber.Next(_textStatment.Count)), general1ConversationData));
             else
@@ -75,7 +117,7 @@ namespace Assets.Scripts.Conversation
             var responseType = GeneralCompare(general1ConversationData, general2ConversationData, general1, general2);
 
             string tempText = "";
-
+            
             switch (responseType)
             {
                 case 0:
@@ -103,15 +145,69 @@ namespace Assets.Scripts.Conversation
                     tempText = _textRespondUnsure.ElementAt(_randomNumber.Next(_textRespondUnsure.Count));
                     break;           //event\place
                 case 100:
-                    //need text for extaching lisioning deives
+                    tempText = _textRespondInform2.ElementAt(_randomNumber.Next(_textRespondInform2.Count));
+                    General2Inform(general1, general2);
                     break;
                 default:
                     tempText = "ERROR!!";
                     break;
             }
 
+            if(responseType != 100)
+            {
+                if(general2.knowenListeringDevices().Count != 0)
+                {
+                    int inform = _randomNumber.Next(0, 1);
+                    if (inform == 1)
+                    {
+                        General2Inform(general1, general2);
+                    }
+
+                }
+            }
+
             conversation.Add(general2, TextFill(tempText, general2ConversationData));
             return conversation;
+        }
+
+        //Conversation where they openly inform one and other about Listening Devices
+        private Dictionary<General.General, string> InformConversation(General.General general1, General.General general2, Dictionary<General.General, string> conversation,
+            GeneralConversationData general1ConversationData, GeneralConversationData general2ConversationData)
+        {
+
+            if (_textStatmentInform.Count != 0)
+                conversation.Add(general1, TextFill(_textStatmentInform.ElementAt(_randomNumber.Next(_textStatmentInform.Count)), general1ConversationData));
+            else
+                conversation.Add(general1, "Error: Load didn't work");
+
+            general2.Informed(general1.knowenListeringDevices());
+            if (general2.knowenListeringDevices().Count == 0)
+            {
+                if (_textRespondInform.Count != 0)
+                    conversation.Add(general2, TextFill(_textRespondInform.ElementAt(_randomNumber.Next(_textRespondInform.Count)), general2ConversationData));
+                else
+                    conversation.Add(general2, "Error: Load didn't work");
+            }
+            else
+            {
+                if (_textStatmentInform.Count != 0)
+                    conversation.Add(general2, TextFill(_textStatmentInform.ElementAt(_randomNumber.Next(_textStatmentInform.Count)), general2ConversationData));
+                else
+                    conversation.Add(general2, "Error: Load didn't work");
+
+                general1.Informed(general2.knowenListeringDevices());
+            }
+
+            return conversation;
+        }
+        
+        private void General2Inform(General.General general1, General.General general2)
+        {
+            if(general1.knowenListeringDevices().Count != 0)
+            {
+                general2.Informed(general1.knowenListeringDevices());
+            }
+            general1.Informed(general2.knowenListeringDevices());
         }
 
         private GeneralConversationData InitialiseConversationData(General.General general1)
@@ -122,7 +218,7 @@ namespace Assets.Scripts.Conversation
 
             return conversationData;
         }
-
+        
         private int GeneralCompare(GeneralConversationData general1ConversationData, GeneralConversationData general2ConversationData, General.General general1, General.General general2)
         {
             int response = -1;
@@ -153,20 +249,16 @@ namespace Assets.Scripts.Conversation
             switch (general1ConversationData.Truthfulness)
             {
                 case 11:
-                    general1ConversationData.Lying = true;
-                    break;
                 case 1:
                     general1ConversationData.Lying = true;
                     break;
                 case 0:
-                    general1ConversationData.Lying = false;
-                    break;
                 case 10:
                     general1ConversationData.Lying = false;
                     break;
             }
 
-            switch (general1ConversationData.Truthfulness)
+            switch (general2ConversationData.Truthfulness)
             {
                 case 11:
                     TrueEvent = !TrueEvent;
@@ -177,8 +269,6 @@ namespace Assets.Scripts.Conversation
                     general2ConversationData.Lying = true;
                     break;
                 case 0:
-                    general2ConversationData.Lying = false;
-                    break;
                 case 10:
                     general2ConversationData.Lying = false;
                     break;
@@ -226,7 +316,7 @@ namespace Assets.Scripts.Conversation
                     int num = _randomNumber.Next(10);
                     if (num < 5)
                     {
-                        //response = 100;
+                        response = 100;
                     }
                 }
 
@@ -351,5 +441,23 @@ namespace Assets.Scripts.Conversation
             
             return truthfulness;
         }
+
+        private bool isGeneralInRoomWithListeningDevice(General.General general)
+        {
+            Room room = general.GetComponent<Character2D>().CurrentRoom;
+
+            List<GameObject> LD = general.knowenListeringDevices();
+
+            for (int i = 0; i < LD.Count; ++i)
+            {
+                if(LD[i].GetComponent<Character2D>().CurrentRoom == room)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
     }
 }

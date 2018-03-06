@@ -45,5 +45,10 @@ namespace Assets.Scripts.AI.Tasks
         {
             return 0;
         }
+
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.WORK;
+        }
     }
 }

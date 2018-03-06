@@ -48,14 +48,14 @@ namespace Assets.Scripts.AI.Tasks
             _toiletData.BladderNeed.Replenish();
         }
 
-        public bool GetCeilingLock()
-        {
-            return false;
-        }
-
         public double GetPriority()
         {
             return _toiletData.BladderNeed.Status;
+        }
+
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.WORK;
         }
     }
 }

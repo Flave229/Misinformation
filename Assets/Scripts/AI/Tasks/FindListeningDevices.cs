@@ -53,6 +53,11 @@ namespace Assets.Scripts.AI.Tasks
             return 1;
         }
 
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.WORK;
+        }
+
         public bool IsComplete()
         {
             return _completed;

@@ -49,15 +49,15 @@ namespace Assets.Scripts.AI.Tasks
             _completed = true;
         }
 
-        public bool GetCeilingLock()
-        {
-            return false;
-        }
-
         public double GetPriority()
         {
             // TODO check priority on this
             return 0;
+        }
+
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.WORK;
         }
     }
 }

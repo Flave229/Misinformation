@@ -40,10 +40,8 @@ namespace Assets.Scripts
                 activeImage.GetComponent<Outline>().enabled = true;
             }
             
-            if (activeNum > numOfListeningDevices)
-            {
-                activeNum = numOfListeningDevices;
-            }
+            
+
         }
 
         public void UnhighlightDevice(object eventPacket)
@@ -51,6 +49,25 @@ namespace Assets.Scripts
             activeImage.GetComponent<Outline>().enabled = false;
         }
         
+        public void ListeningDeviceDestroyed(ListeningDevicePacket listeningData)
+        {
+            numOfListeningDevices = GameManager.Instance().GetListeningDevices().Count;
+            activeNum = listeningData.Num;
+            if (activeNum > numOfListeningDevices)
+            {
+                activeNum = numOfListeningDevices;
+            }
+            if (activeNum != 0)
+            {
+                activeImage = listeningDeviceImages[activeNum - 1];
+            }
+            else
+            {
+                activeImage = listeningDeviceImages[0];
+            }
+            activeImage.GetComponent<Outline>().enabled = true;
+        }
+
         public void UpdateUI(object eventPacket)
         {
             numOfListeningDevices = GameManager.Instance().GetListeningDevices().Count;
@@ -74,18 +91,19 @@ namespace Assets.Scripts
 
         public void ConsumeEvent(EventSystem.Event subscribeEvent, object eventPacket)
         {
-
+            ListeningDevicePacket listeningDeviceData;
             switch (subscribeEvent)
             {
                 case EventSystem.Event.LISTENING_DEVICE_PLACED:
                     UpdateUI(eventPacket);
                     break;
                 case EventSystem.Event.LISTENING_DEVICE_DESTROYED:
-                    UpdateUI(eventPacket);
-                    HighlightSelectedDevice(null);
+                    listeningDeviceData = (ListeningDevicePacket)eventPacket;
+                    UpdateUI(listeningDeviceData);
+                    ListeningDeviceDestroyed(listeningDeviceData);
                     break;
                 case EventSystem.Event.LISTENING_DEVICE_CYCLED:
-                    ListeningDevicePacket listeningDeviceData = (ListeningDevicePacket)eventPacket;
+                    listeningDeviceData = (ListeningDevicePacket)eventPacket;
                     HighlightSelectedDevice(listeningDeviceData);
                     break;
                 case EventSystem.Event.LISTENING_DESK_OFF:

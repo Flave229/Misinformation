@@ -3158,7 +3158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f113ba83eb1b28409abe180312606dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1197314881}
+  target: {fileID: 1947650470}
   camera: {fileID: 199994924}
   useKeyboardInput: 1
   useMouseInput: 1
@@ -7506,6 +7506,7 @@ MonoBehaviour:
   ActiveTech: {fileID: 0}
   ActiveTechNum: 0
   Days: 0
+  ConversePanel: {fileID: 0}
   CurrentObjective: {fileID: 0}
   _fundingAmount: 2000
   RecievingFunding: 0
@@ -18911,11 +18912,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!4 &1197314881 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4047321553747064, guid: 90092588396e5ce4fb430fe1033a2ee6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1120287570}
 --- !u!1 &1207583627
 GameObject:
   m_ObjectHideFlags: 0
@@ -27538,6 +27534,11 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!4 &1947650470 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4047321553747064, guid: 90092588396e5ce4fb430fe1033a2ee6,
+    type: 2}
+  m_PrefabInternal: {fileID: 1399333548}
 --- !u!1 &1958107399
 GameObject:
   m_ObjectHideFlags: 0

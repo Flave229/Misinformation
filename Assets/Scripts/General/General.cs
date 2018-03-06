@@ -196,7 +196,7 @@ namespace Assets.Scripts.General
                 _social
             };
 
-            string nameOfBiggestNeed = needs.Aggregate((status1, status2) => status2.IsPendingRelief() && status1.Status > status2.Status ? status1 : status2).Name;
+            string nameOfBiggestNeed = needs.Aggregate((status1, status2) => status1.IsPendingRelief() == false && status1.Status > status2.Status ? status1 : status2).Name;
 
             switch (nameOfBiggestNeed)
             {

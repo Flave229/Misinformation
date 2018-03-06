@@ -50,5 +50,37 @@ namespace Assets.Scripts.AI.Tasks
         {
             return _ceilingLock;
         }
+
+        public List<ITask> GetTasks()
+        {
+            List<ITask> currentTaskList = new List<ITask>();
+            currentTaskList.Add(_executingTask);
+            foreach(ITask task in _tasks)
+            {
+                currentTaskList.Add(task);
+            }
+
+            return currentTaskList;
+		}
+		
+        public double GetPriority()
+        {
+            double highestPriority = 0;
+            foreach(var task in _tasks)
+            {
+                if (task.GetPriority() > highestPriority)
+                    highestPriority = task.GetPriority();
+            }
+
+            if (_executingTask != null && _executingTask.GetPriority() > highestPriority)
+                highestPriority = _executingTask.GetPriority();
+
+            return highestPriority;
+        }
+
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.WORK;
+        }
     }
 }

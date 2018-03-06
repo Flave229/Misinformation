@@ -138,6 +138,7 @@ namespace Assets.Scripts
                 MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
                 Location = mouseLocation
             }));
+
             character.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 

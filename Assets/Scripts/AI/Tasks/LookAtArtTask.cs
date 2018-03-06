@@ -8,6 +8,12 @@ namespace Assets.Scripts.AI.Tasks
         private bool _active;
         private int _secondsActive;
         private bool _completed;
+        private NeedStatus _entertainmentNeed;
+
+        public LookAtArtTask(NeedStatus entertainmentNeed)
+        {
+            _entertainmentNeed = entertainmentNeed;
+        }
 
         public void Execute()
         {
@@ -32,11 +38,17 @@ namespace Assets.Scripts.AI.Tasks
         public void SetCompleted()
         {
             _completed = true;
+            _entertainmentNeed.Replenish();
         }
 
-        public bool GetCeilingLock()
+        public double GetPriority()
         {
-            return false;
+            return _entertainmentNeed.Status;
+        }
+
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.WORK;
         }
     }
 }

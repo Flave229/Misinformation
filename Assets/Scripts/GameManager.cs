@@ -68,6 +68,7 @@ namespace Assets.Scripts
 
             if (_pause == false)
                 _pendingStart = true;
+
         }
 
         private void AwakeSingletonManagers()
@@ -144,7 +145,9 @@ namespace Assets.Scripts
         
 		public void CycleTech()
 		{
-			ActiveTech.gameObject.GetComponent<Technician> ().IsActive = false;
+            TechList.Clear();
+            TechList.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+            ActiveTech.gameObject.GetComponent<Technician> ().IsActive = false;
 			if (ActiveTechNum == (TechList.Count - 1))
 				ActiveTechNum = 0;
 			else

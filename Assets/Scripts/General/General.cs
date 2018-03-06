@@ -67,13 +67,13 @@ namespace Assets.Scripts.General
                 _social.Degrade();
 
                 double randomNumber = _randomGenerator.NextDouble();
-                if (randomNumber > Math.Pow(_bladder.Status, 0.1))
+                if (randomNumber > Math.Pow(_bladder.Status, 0.1) && _bladder.IsPendingRelief() == false)
                     SatisfyBladder();
-                else if (randomNumber > Math.Pow(_rest.Status, 0.1))
+                else if (randomNumber > Math.Pow(_rest.Status, 0.1) && _rest.IsPendingRelief() == false)
                     SatisfyRest();
-                else if (randomNumber > Math.Pow(_social.Status, 0.1))
+                else if (randomNumber > Math.Pow(_social.Status, 0.1) && _social.IsPendingRelief() == false)
                     SatisfySocial();
-                else if (randomNumber > Math.Pow(_entertainment.Status, 0.1))
+                else if (randomNumber > Math.Pow(_entertainment.Status, 0.1) && _entertainment.IsPendingRelief() == false)
                     SatisfyEntertainment();
             }
 
@@ -90,8 +90,8 @@ namespace Assets.Scripts.General
 
         private void SatisfyBladder()
         {
-            AITaskManager.GoToToilet(this.gameObject);
-            _bladder.Replenish();
+            AITaskManager.GoToToilet(this.gameObject, this._bladder);
+            _bladder.SetPendingRelief();
         }
 
         private void SatisfyRest()
@@ -101,26 +101,26 @@ namespace Assets.Scripts.General
 
             if (chanceToSleep > _rest.Status)
             {
-                AITaskManager.GoToBed(this.gameObject);
-                _rest.Replenish();
+                AITaskManager.GoToBed(this.gameObject, this._rest);
+                _rest.SetPendingRelief();
             }
             else
             {
-                AITaskManager.SitDown(this.gameObject);
-                _rest.Replenish(0.1f);
+                AITaskManager.SitDown(this.gameObject, this._rest);
+                _rest.SetPendingRelief();
             }
         }
 
         private void SatisfySocial()
         {
-            AITaskManager.AwaitConversation(this.gameObject);
-            _social.Replenish();
+            AITaskManager.AwaitConversation(this.gameObject, this._social);
+            _social.SetPendingRelief();
         }
 
         private void SatisfyEntertainment()
         {
-            AITaskManager.LookAtArt(this.gameObject);
-            _entertainment.Replenish();
+            AITaskManager.LookAtArt(this.gameObject, this._entertainment);
+            _entertainment.SetPendingRelief();
         }
 
         public void UpdateTrustValue(int trustDifference)
@@ -223,7 +223,7 @@ namespace Assets.Scripts.General
                 _social
             };
 
-            string nameOfBiggestNeed = needs.Aggregate((status1, status2) => status1.Status > status2.Status ? status1 : status2).Name;
+            string nameOfBiggestNeed = needs.Aggregate((status1, status2) => status1.IsPendingRelief() == false && status1.Status > status2.Status ? status1 : status2).Name;
 
             switch (nameOfBiggestNeed)
             {

@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.AI.Tasks;
+using System;
 using System.Collections.Generic;
 
 namespace Assets.Scripts.AI
@@ -48,6 +49,40 @@ namespace Assets.Scripts.AI
             if (_executingTask != null)
                 _executingTask.SetCompleted();
             _tasks.Clear();
+        }
+
+        public List<ITask> GetTasksOfType()
+        {
+            List<ITask> currentTaskList = new List<ITask>();
+
+            if (_executingTask.GetType() == typeof(AITaskChain))
+            {
+                AITaskChain taskChain = (AITaskChain)_executingTask;
+
+                foreach(ITask task in taskChain.GetTasks())
+                {
+                    currentTaskList.Add(task);
+                }
+            }
+
+            foreach (ITask task in _tasks)
+            {
+                if (task.GetType() == typeof(AITaskChain))
+                {
+                    AITaskChain taskChain = (AITaskChain)task;
+
+                    foreach (ITask childTask in taskChain.GetTasks())
+                    {
+                        currentTaskList.Add(childTask);
+                    }
+                }
+                else
+                {
+                    currentTaskList.Add(task);
+                }
+            }
+
+            return currentTaskList;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Assets.Scripts
 
         public int numOfListeningDevices;
         public Image[] listeningDeviceImages;
+        Image activeImage;
 
         void Start()
         {
@@ -22,6 +23,20 @@ namespace Assets.Scripts
             }
         }
 
+        public void HighlightSelectedDevice(object eventPacket)
+        {
+            if (activeImage != null)
+            {
+                activeImage.GetComponent<Outline>().enabled = false;
+            }
+            activeImage = listeningDeviceImages[(int)eventPacket];
+            activeImage.GetComponent<Outline>().enabled = true;
+        }
+
+        public void UnhighlightDevice(object eventPacket)
+        {
+            activeImage.GetComponent<Outline>().enabled = false;
+        }
         
         public void UpdateUI(object eventPacket)
         {
@@ -40,6 +55,8 @@ namespace Assets.Scripts
         {
             EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_PLACED);
             EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_DESTROYED);
+            EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DEVICE_CYCLED);
+            EventMessenger.Instance().SubscribeToEvent(this, EventSystem.Event.LISTENING_DESK_OFF);
         }
 
         public void ConsumeEvent(EventSystem.Event subscribeEvent, object eventPacket)
@@ -52,6 +69,12 @@ namespace Assets.Scripts
                     break;
                 case EventSystem.Event.LISTENING_DEVICE_DESTROYED:
                     UpdateUI(eventPacket);
+                    break;
+                case EventSystem.Event.LISTENING_DEVICE_CYCLED:
+                    HighlightSelectedDevice(eventPacket);
+                    break;
+                case EventSystem.Event.LISTENING_DESK_OFF:
+                    UnhighlightDevice(eventPacket);
                     break;
             }
         }

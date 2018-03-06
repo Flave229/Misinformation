@@ -41,14 +41,14 @@ namespace Assets.Scripts.AI.Tasks
             _entertainmentNeed.Replenish();
         }
 
-        public bool GetCeilingLock()
-        {
-            return false;
-        }
-
         public double GetPriority()
         {
             return _entertainmentNeed.Status;
+        }
+
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.WORK;
         }
     }
 }

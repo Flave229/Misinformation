@@ -54,15 +54,15 @@ namespace Assets.Scripts.AI.Tasks
             _completed = true;
             _sitData.RestNeed.Replenish(0.1f);
         }
-
-        public bool GetCeilingLock()
-        {
-            return false;
-        }
-
+        
         public double GetPriority()
         {
             return _sitData.RestNeed.Status;
+        }
+
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.WORK;
         }
     }
 }

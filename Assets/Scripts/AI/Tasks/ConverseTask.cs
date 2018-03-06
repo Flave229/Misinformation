@@ -160,5 +160,10 @@ namespace Assets.Scripts.AI.Tasks
         {
             return _converseData.SocialNeed.Status;
         }
+
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.CONCURRENT;
+        }
     }
 }

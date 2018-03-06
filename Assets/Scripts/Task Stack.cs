@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class TaskStack : MonoBehaviour
 {
-
-    //public Stack<GameObject> taskStack;
+    public List<GameObject> taskList;
     public Queue<GameObject> taskQueue;
+    private GameObject temp;
 
 	void Start ()
     {
@@ -18,13 +18,27 @@ public class TaskStack : MonoBehaviour
 
 	}
 
-    public void PopTask()
+    public void DequeueTask()
     {
-        taskQueue.Dequeue();
+        temp = (GameObject)taskQueue.Dequeue();
+        GameObject.Destroy(temp);
+        ResetQueue();
     }
 
-    public void PushTask()
+    public void QueueTask(GameObject task)
     {
-        //taskQueue.Enqueue(//addHere Needs to inherit);
+        temp = Instantiate(task, new Vector3(0, -(float)taskQueue.Count/2,0), taskList[0].transform.rotation);
+        taskQueue.Enqueue(task);
     } 
+
+    public void ResetQueue()
+    {
+        GameObject[] tempQueue = new GameObject[taskQueue.Count];
+        taskQueue.CopyTo(tempQueue, 0);
+
+        for(int y=0; y<tempQueue.Length; y++)
+        {
+            tempQueue[y].transform.position = new Vector2(0,-(float)y / 2);
+        }
+    }
 }

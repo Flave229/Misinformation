@@ -8,48 +8,66 @@ namespace Assets.Scripts.AI
     public class AIStack
     {
         private ITask _executingTask;
+        private ITask _concurrentTask;
         private readonly List<ITask> _tasks;
+        private readonly List<ITask> _concurrentTasks;
 
         public AIStack()
         {
             _tasks = new List<ITask>();
+            _concurrentTasks = new List<ITask>();
         }
 
         public void AddToStack(ITask task)
         {
-            if (_tasks.Count == 0)
-                _tasks.Add(task);
-            else if (_tasks[_tasks.Count - 1].GetCeilingLock() == false)
-                _tasks.Add(task);
+            switch(task.GetPriorityType())
+            {
+                //case TaskPriorityType.WORK:
+                //    _tasks.Add(task);
+                //    break;
+                //case TaskPriorityType.CONCURRENT:
+                //    _concurrentTasks.Add(task);
+                //    break;
+                default:
+                    _tasks.Add(task);
+                    break;
+            }
+            //_tasks.Add(task);
         }
 
         public void Update()
         {
-            if (_tasks.Count == 0 && _executingTask == null)
+            HandleExecutingTask(_tasks, ref _executingTask);
+            //HandleExecutingTask(_concurrentTasks, ref _concurrentTask);
+        }
+
+        private void HandleExecutingTask(List<ITask> taskList, ref ITask executingTask)
+        {
+            if (taskList.Count == 0 && executingTask == null)
                 return;
 
-            if (_executingTask == null)
-                SelectNextTask();
+            if (executingTask == null)
+                SelectNextTask(ref taskList, ref executingTask);
 
-            if (_executingTask.IsComplete())
+            if (executingTask.IsComplete())
             {
-                if (_tasks.Count > 0)
-                    SelectNextTask();
+                if (taskList.Count > 0)
+                    SelectNextTask(ref taskList, ref executingTask);
                 else
                 {
-                    _executingTask = null;
+                    executingTask = null;
                     return;
                 }
             }
 
-            _executingTask.Execute();
+            executingTask.Execute();
         }
 
-        private void SelectNextTask()
+        private void SelectNextTask(ref List<ITask> taskList, ref ITask executingTask)
         {
-            ITask highestPriorityTask = _tasks.Aggregate((highestPriority, task) => task.GetPriority() > highestPriority.GetPriority() ? task : highestPriority);
-            _tasks.Remove(highestPriorityTask);
-            _executingTask = highestPriorityTask;
+            ITask highestPriorityTask = taskList.Aggregate((highestPriority, task) => task.GetPriority() > highestPriority.GetPriority() ? task : highestPriority);
+            taskList.Remove(highestPriorityTask);
+            executingTask = highestPriorityTask;
         }
 
         public void InterruptCurrentTask()
@@ -69,6 +87,40 @@ namespace Assets.Scripts.AI
             if (_executingTask != null)
                 _executingTask.SetCompleted();
             _tasks.Clear();
+        }
+
+        public List<ITask> GetTasksOfType()
+        {
+            List<ITask> currentTaskList = new List<ITask>();
+
+            if (_executingTask.GetType() == typeof(AITaskChain))
+            {
+                AITaskChain taskChain = (AITaskChain)_executingTask;
+
+                foreach(ITask task in taskChain.GetTasks())
+                {
+                    currentTaskList.Add(task);
+                }
+            }
+
+            foreach (ITask task in _tasks)
+            {
+                if (task.GetType() == typeof(AITaskChain))
+                {
+                    AITaskChain taskChain = (AITaskChain)task;
+
+                    foreach (ITask childTask in taskChain.GetTasks())
+                    {
+                        currentTaskList.Add(childTask);
+                    }
+                }
+                else
+                {
+                    currentTaskList.Add(task);
+                }
+            }
+
+            return currentTaskList;
         }
     }
 }

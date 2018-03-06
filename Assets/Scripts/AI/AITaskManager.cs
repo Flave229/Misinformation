@@ -13,13 +13,13 @@ namespace Assets.Scripts.AI
         private static AITaskManager _instance;
         private int _startingTimeInSeconds;
         private static Random _randomGenerator;
-        public static List<GameObject> GeneralsAwaitingConversation;
+        public static Dictionary<GameObject, NeedStatus> GeneralsAwaitingConversation;
 
         private AITaskManager()
         {
             _startingTimeInSeconds = Timer.Instance().GetStartingTimeInSeconds();
             _randomGenerator = new Random();
-            GeneralsAwaitingConversation = new List<GameObject>();
+            GeneralsAwaitingConversation = new Dictionary<GameObject, NeedStatus>();
         }
 
         public static AITaskManager Instance()
@@ -43,9 +43,13 @@ namespace Assets.Scripts.AI
             if (GeneralsAwaitingConversation.Count < 2)
                 return;
 
-            GameObject generalOne = GeneralsAwaitingConversation[0];
-            GameObject generalTwo = GeneralsAwaitingConversation[1];
-            GeneralsAwaitingConversation.RemoveRange(0, 2);
+            List<GameObject> listOfGeneralsAwaitingConversation = Enumerable.ToList(GeneralsAwaitingConversation.Keys);
+            GameObject generalOne = listOfGeneralsAwaitingConversation[0];
+            NeedStatus generalOneSocialNeed = GeneralsAwaitingConversation[generalOne];
+            GameObject generalTwo = listOfGeneralsAwaitingConversation[1];
+            NeedStatus generalTwoSocialNeed = GeneralsAwaitingConversation[generalTwo];
+            GeneralsAwaitingConversation.Remove(generalOne);
+            GeneralsAwaitingConversation.Remove(generalTwo);
 
             int padding = 1;
             int directionModifier = UnityEngine.Random.Range(0, 1);
@@ -63,18 +67,21 @@ namespace Assets.Scripts.AI
             var general1ConverseData = new ConverseData
             {
                 ReadyToTalk = false,
-                General = generalOne.GetComponent<General.General>()
+                General = generalOne.GetComponent<General.General>(),
+                SocialNeed = generalOneSocialNeed
             };
             var general2ConverseData = new ConverseData
             {
                 ReadyToTalk = false,
-                General = generalTwo.GetComponent<General.General>()
+                General = generalTwo.GetComponent<General.General>(),
+                SocialNeed = generalTwoSocialNeed
             };
             general1ConverseData.ConversationPartnerTaskData = general2ConverseData;
             general2ConverseData.ConversationPartnerTaskData = general1ConverseData;
 
             Stack<ITask> general1TaskChain = new Stack<ITask>();
             Stack<ITask> general2TaskChain = new Stack<ITask>();
+
             general1TaskChain.Push(new ConverseTask(general1ConverseData));
             general2TaskChain.Push(new ConverseTask(general2ConverseData));
 
@@ -97,7 +104,7 @@ namespace Assets.Scripts.AI
             generalTwo.GetComponent<Character2D>().Tasks.AddToStack(general2TaskChainTask);
         }
 
-        public static void GoToToilet(GameObject generalGameObject)
+        public static void GoToToilet(GameObject generalGameObject, NeedStatus bladderNeed)
         {
             Character2D character = generalGameObject.GetComponent<Character2D>();
 
@@ -112,7 +119,8 @@ namespace Assets.Scripts.AI
             taskChain.Push(new UseToiletTask(new ToiletData
             {
                 General = character,
-                Toilet = chosenToilet
+                Toilet = chosenToilet,
+                BladderNeed = bladderNeed
             }));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
@@ -123,7 +131,7 @@ namespace Assets.Scripts.AI
             character.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
-        public static void GoToBed(GameObject generalGameObject)
+        public static void GoToBed(GameObject generalGameObject, NeedStatus restNeed)
         {
             Character2D generalOne = generalGameObject.GetComponent<Character2D>();
 
@@ -138,7 +146,8 @@ namespace Assets.Scripts.AI
             taskChain.Push(new SleepTask(new SleepData
             {
                 General = generalOne,
-                Bed = chosenBed
+                Bed = chosenBed,
+                RestNeed = restNeed
             }));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
@@ -149,7 +158,7 @@ namespace Assets.Scripts.AI
             generalOne.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
-        public static void SitDown(GameObject generalGameObject)
+        public static void SitDown(GameObject generalGameObject, NeedStatus restNeed)
         {
             Character2D character = generalGameObject.GetComponent<Character2D>();
 
@@ -164,7 +173,8 @@ namespace Assets.Scripts.AI
             taskChain.Push(new SitTask(new SitData
             {
                 General = character,
-                Chair = chosenChair
+                Chair = chosenChair,
+                RestNeed = restNeed
             }));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
@@ -175,7 +185,7 @@ namespace Assets.Scripts.AI
             character.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
-        public static void LookAtArt(GameObject generalGameObject)
+        public static void LookAtArt(GameObject generalGameObject, NeedStatus entertainmentNeed)
         {
             GameObject[] interestingObjects = GameObject.FindGameObjectsWithTag("Art");
             if (interestingObjects.Length <= 0)
@@ -185,7 +195,7 @@ namespace Assets.Scripts.AI
 
             Character2D character = generalGameObject.GetComponent<Character2D>();
             Stack<ITask> taskChain = new Stack<ITask>();
-            taskChain.Push(new LookAtArtTask());
+            taskChain.Push(new LookAtArtTask(entertainmentNeed));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
                 MovementAi = character.MovementAi,
@@ -237,9 +247,9 @@ namespace Assets.Scripts.AI
             return potentialListeningDevices.ElementAt(randomIndex);
         }
 
-        public static void AwaitConversation(GameObject gameObject)
+        public static void AwaitConversation(GameObject gameObject, NeedStatus socialNeed)
         {
-            GeneralsAwaitingConversation.Add(gameObject);
+            GeneralsAwaitingConversation.Add(gameObject, socialNeed);
         }
     }
 }

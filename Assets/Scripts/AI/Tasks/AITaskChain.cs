@@ -50,5 +50,20 @@ namespace Assets.Scripts.AI.Tasks
         {
             return _ceilingLock;
         }
+
+        public double GetPriority()
+        {
+            double highestPriority = 0;
+            foreach(var task in _tasks)
+            {
+                if (task.GetPriority() > highestPriority)
+                    highestPriority = task.GetPriority();
+            }
+
+            if (_executingTask != null && _executingTask.GetPriority() > highestPriority)
+                highestPriority = _executingTask.GetPriority();
+
+            return highestPriority;
+        }
     }
 }

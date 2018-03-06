@@ -18,7 +18,7 @@ namespace Assets.Scripts.Conversation
 
         private static List<string> _textRespondNegative = new List<string>();
         private static List<string> _textRespondNegativeEvent = new List<string>();
-        private static List<string> _textRespondNegativePlace = new List<string>(); 
+        private static List<string> _textRespondNegativePlace = new List<string>();
         
         private readonly System.Random _randomNumber = new System.Random();
 
@@ -72,7 +72,7 @@ namespace Assets.Scripts.Conversation
                 conversation.Add(general1, "Error: Load didn't work");
 
             // TODO: Need new code to generate the response type, may need more types of responses to handle this
-            var responseType = GeneralCompare(general1ConversationData, general2ConversationData);
+            var responseType = GeneralCompare(general1ConversationData, general2ConversationData, general1, general2);
 
             string tempText = "";
 
@@ -102,6 +102,9 @@ namespace Assets.Scripts.Conversation
                 case 23:
                     tempText = _textRespondUnsure.ElementAt(_randomNumber.Next(_textRespondUnsure.Count));
                     break;           //event\place
+                case 100:
+                    //need text for extaching lisioning deives
+                    break;
                 default:
                     tempText = "ERROR!!";
                     break;
@@ -120,7 +123,7 @@ namespace Assets.Scripts.Conversation
             return conversationData;
         }
 
-        private int GeneralCompare(GeneralConversationData general1ConversationData, GeneralConversationData general2ConversationData)
+        private int GeneralCompare(GeneralConversationData general1ConversationData, GeneralConversationData general2ConversationData, General.General general1, General.General general2)
         {
             int response = -1;
             string tempEvent;
@@ -197,8 +200,39 @@ namespace Assets.Scripts.Conversation
             {
                 response = 3;
             }
+            
+            if(general2ConversationData.Lying == true)
+            {
+                List<GameObject> general1KnowenDeives = general1.knowenListeringDevices();
+                List<GameObject> general2KnowenDeives = general2.knowenListeringDevices();
 
-            return response;
+                bool match = true;
+
+                for(int i = 0; i < general1KnowenDeives.Count; ++i)
+                {
+                    for (int j = 0; j < general2KnowenDeives.Count; ++j)
+                    {
+                        if(general1KnowenDeives[i] != general2KnowenDeives[j])
+                        {
+                            match = false;
+                            j += general2KnowenDeives.Count;
+                            i += general1KnowenDeives.Count;
+                        }
+                    }
+                }
+
+                if (match == false)
+                {
+                    int num = _randomNumber.Next(10);
+                    if (num < 5)
+                    {
+                        //response = 100;
+                    }
+                }
+
+            }
+
+                return response;
         }
         
         private string TextFill(string temp, GeneralConversationData conversationData)

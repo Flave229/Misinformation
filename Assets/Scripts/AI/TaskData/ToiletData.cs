@@ -6,5 +6,6 @@ namespace Assets.Scripts.AI.TaskData
     {
         public Character2D General { get; set; }
         public Toilet Toilet { get; set; }
+        public NeedStatus BladderNeed { get; set; }
     }
 }

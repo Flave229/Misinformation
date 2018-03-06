@@ -6,5 +6,6 @@
         void SetCompleted();
         bool IsComplete();
         bool GetCeilingLock();
+        double GetPriority();
     }
 }

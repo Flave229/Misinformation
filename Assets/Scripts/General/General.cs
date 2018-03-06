@@ -17,12 +17,13 @@ namespace Assets.Scripts.General
         private int _trust;
         private int _knowledge;
         private int _perception;
-        
+
+        private string ObjectivePlace;
+        private string ObjectiveEvent;
+        private string ObjectiveTime;
+
         private float _needsCooldown;
-        private NeedStatus _bladder;
-        private NeedStatus _rest;
-        private NeedStatus _social;
-        private NeedStatus _entertainment;
+        private Dictionary<NeedType, NeedStatus> _needs;
 
         private List<GameObject> SeenListeningDevices = new List<GameObject>();
         
@@ -38,13 +39,16 @@ namespace Assets.Scripts.General
             _perception = _randomGenerator.Next(0, 10);
             _trust = _randomGenerator.Next(0, 5);
             _knowledge = _randomGenerator.Next(0, 5);
-            _bladder = new NeedStatus("Bladder", (float)_randomGenerator.NextDouble() * 0.8f + 0.2f, 0.06f);
-            _rest = new NeedStatus("Rest", (float)_randomGenerator.NextDouble() * 0.2f + 0.8f, 0.03f);
-            _social = new NeedStatus("Social", (float)_randomGenerator.NextDouble(), 0.25f);
-            _entertainment = new NeedStatus("Entertainment", (float)_randomGenerator.NextDouble(), 0.2f);
+            _needs = new Dictionary<NeedType, NeedStatus>
+            {
+                { NeedType.BLADDER, new NeedStatus((float)_randomGenerator.NextDouble() * 0.8f + 0.2f, 0.06f) },
+                { NeedType.REST, new NeedStatus((float)_randomGenerator.NextDouble() * 0.2f + 0.8f, 0.03f) },
+                { NeedType.SOCIAL, new NeedStatus((float)_randomGenerator.NextDouble(), 0.25f) },
+                { NeedType.ENTERTAINMENT, new NeedStatus((float)_randomGenerator.NextDouble(), 0.2f) },
+            };
         }
 
-        public void Start ()
+        public void Start()
         {
             Name = NameGenerator.GenerateName();
             SubscribeToEvents();
@@ -57,22 +61,37 @@ namespace Assets.Scripts.General
             if (_needsCooldown < 0)
             {
                 _needsCooldown = 1;
-
-                _bladder.Degrade();
-                _rest.Degrade();
-                _social.Degrade();
-
                 double randomNumber = _randomGenerator.NextDouble();
-                if (randomNumber > Math.Pow(_bladder.Status, 0.1))
-                    SatisfyBladder();
-                else if (randomNumber > Math.Pow(_rest.Status, 0.1))
-                    SatisfyRest();
-                else if (randomNumber > Math.Pow(_social.Status, 0.1))
-                    SatisfySocial();
-                else if (randomNumber > Math.Pow(_entertainment.Status, 0.1))
-                    SatisfyEntertainment();
-            }
 
+                foreach (var nameNeed in _needs)
+                {
+                    NeedStatus need = nameNeed.Value;
+                    need.Degrade();
+
+                    if (randomNumber < Math.Pow(need.Status, 0.1))
+                        continue;
+                    if (need.IsPendingRelief())
+                        continue;
+                    
+                    switch (nameNeed.Key)
+                    {
+                        case NeedType.BLADDER:
+                            SatisfyBladder(nameNeed.Value);
+                            break;
+                        case NeedType.ENTERTAINMENT:
+                            SatisfyEntertainment(nameNeed.Value);
+                            break;
+                        case NeedType.REST:
+                            SatisfyRest(nameNeed.Value);
+                            break;
+                        case NeedType.SOCIAL:
+                            SatisfySocial(nameNeed.Value);
+                            break;
+                    }
+                    break;
+                }
+            }
+            
             for(int i = 0; i < SeenListeningDevices.Count; ++i)
             {
                 if(SeenListeningDevices[i] == null)
@@ -84,39 +103,39 @@ namespace Assets.Scripts.General
 
         }
 
-        private void SatisfyBladder()
+        private void SatisfyBladder(NeedStatus need)
         {
-            AITaskManager.GoToToilet(this.gameObject);
-            _bladder.Replenish();
+            AITaskManager.GoToToilet(this.gameObject, need);
+            need.SetPendingRelief();
         }
 
-        private void SatisfyRest()
+        private void SatisfyRest(NeedStatus need)
         {
             // Chance to sleep increases as rest gets low
             float chanceToSleep = (float)_randomGenerator.NextDouble();
 
-            if (chanceToSleep > _rest.Status)
+            if (chanceToSleep > need.Status)
             {
-                AITaskManager.GoToBed(this.gameObject);
-                _rest.Replenish();
+                AITaskManager.GoToBed(this.gameObject, need);
+                need.SetPendingRelief();
             }
             else
             {
-                AITaskManager.SitDown(this.gameObject);
-                _rest.Replenish(0.1f);
+                AITaskManager.SitDown(this.gameObject, need);
+                need.SetPendingRelief();
             }
         }
 
-        private void SatisfySocial()
+        private void SatisfySocial(NeedStatus need)
         {
-            AITaskManager.AwaitConversation(this.gameObject);
-            _social.Replenish();
+            AITaskManager.AwaitConversation(this.gameObject, need);
+            need.SetPendingRelief();
         }
 
-        private void SatisfyEntertainment()
+        private void SatisfyEntertainment(NeedStatus need)
         {
-            AITaskManager.LookAtArt(this.gameObject);
-            _entertainment.Replenish();
+            AITaskManager.LookAtArt(this.gameObject, need);
+            need.SetPendingRelief();
         }
 
         public void UpdateTrustValue(int trustDifference)
@@ -139,9 +158,32 @@ namespace Assets.Scripts.General
                 _knowledge = 10;
         }
 
-        void Inform() // pass value or script when general has conversation - list of known devices -R.Walters
+        public void Informed(List<GameObject> otherGeneralsKnownList)
         {
-            //Does this character know about these listening devices if they do then don't inform-R.Walters
+            if(SeenListeningDevices.Count == 0)
+            {
+                SeenListeningDevices = otherGeneralsKnownList;
+            }
+            else
+            {
+                int seenCount = SeenListeningDevices.Count;
+                for (int i = 0; i < otherGeneralsKnownList.Count; ++i)
+                {
+                    bool notThere = true;
+                    for (int j = 0; j < seenCount; ++j)
+                    {
+                        if(otherGeneralsKnownList[i] == SeenListeningDevices[j])
+                        {
+                            j += seenCount;
+                            notThere = false;
+                        }
+                    }
+                    if(notThere == true)
+                    {
+                        SeenListeningDevices.Add(otherGeneralsKnownList[i]);
+                    }
+                }
+            }
         }
 
         public List<GameObject> knowenListeringDevices()
@@ -186,33 +228,53 @@ namespace Assets.Scripts.General
             return _perception;
         }
 
+        public NeedStatus GetNeed(NeedType needType)
+        {
+            return _needs[needType];
+        }
+
+        public NeedType GetLowestNeed()
+        {
+            return _needs.Aggregate((status1, status2) => status1.Value.Status > status2.Value.Status ? status1 : status2).Key;
+        }
+
         public void SatisfyBiggestNeed()
         {
-            List<NeedStatus> needs = new List<NeedStatus>
-            {
-                _rest,
-                _bladder,
-                _entertainment,
-                _social
-            };
+            var biggestNeed = _needs.Aggregate((status1, status2) => status1.Value.IsPendingRelief() == false && status1.Value.Status > status2.Value.Status ? status1 : status2);
 
-            string nameOfBiggestNeed = needs.Aggregate((status1, status2) => status1.Status > status2.Status ? status1 : status2).Name;
-
-            switch (nameOfBiggestNeed)
+            switch (biggestNeed.Key)
             {
-                case "Rest":
-                    SatisfyRest();
+                case NeedType.BLADDER:
+                    SatisfyBladder(biggestNeed.Value);
                     break;
-                case "Social":
-                    SatisfySocial();
+                case NeedType.ENTERTAINMENT:
+                    SatisfyEntertainment(biggestNeed.Value);
                     break;
-                case "Entertainment":
-                    SatisfyEntertainment();
+                case NeedType.REST:
+                    SatisfyRest(biggestNeed.Value);
                     break;
-                case "Bladder":
-                    SatisfyBladder();
+                case NeedType.SOCIAL:
+                    SatisfySocial(biggestNeed.Value);
                     break;
             }
+
+        }
+        public void GeneralObjectiveKnowlage()
+        {
+            //deturamn what the gernal thinks is ture
+        }
+
+        public string GetObjectivePlace()
+        {
+            return ObjectivePlace;
+        }
+        public string GetObjectiveEvent()
+        {
+            return ObjectiveEvent;
+        }
+        public string GetObjectiveTime()
+        {
+            return ObjectiveTime;
         }
     }
 }

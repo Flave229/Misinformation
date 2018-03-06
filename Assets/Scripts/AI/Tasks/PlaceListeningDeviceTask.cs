@@ -40,11 +40,6 @@ namespace Assets.Scripts.AI.Tasks
             _completed = true;
         }
 
-        public bool GetCeilingLock()
-        {
-            return false;
-        }
-
         public static void PlaceInRoom(Room room, Vector3 position)
         {
             GameManager gameManager = GameManager.Instance();
@@ -65,6 +60,17 @@ namespace Assets.Scripts.AI.Tasks
                 PlacedRoom = room
             };
             EventMessenger.Instance().FireEvent(Event.LISTENING_DEVICE_PLACED, eventPacket);
+        }
+
+        public double GetPriority()
+        {
+            // TODO: Check priority on this
+            return 1;
+        }
+
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.WORK;
         }
     }
 }

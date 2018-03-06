@@ -52,8 +52,9 @@ namespace Assets.Scripts
 			activeDeviceNum = 0;
 			activeDevice.GetComponent<ListeningDevice> ().activeDevice = true;
 			Camera.main.GetComponent<Camera2DFollow> ().target = activeDevice.transform;
-			usingDesk = true;			
-		}
+			usingDesk = true;
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_CYCLED, activeDeviceNum);
+        }
 
 		void CycleDevices()
 		{
@@ -79,7 +80,8 @@ namespace Assets.Scripts
             newActiveDevice.activeDevice = true;
 			Camera.main.GetComponent<Camera2DFollow>().target = activeDevice.transform;
             EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_LISTENING, newActiveDevice);
-		}
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_CYCLED, activeDeviceNum);
+        }
 
 		void LeaveDesk()
 		{

@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Sounds/Button_Press-Marianne Gagnon.wav.meta
 guid: 282cafa9de4ab284c81f936ab0267082
 timeCreated: 1519730576
+=======
+guid: 406b41d59b42f454d97635a63c4715fb
+timeCreated: 1519726328
+>>>>>>> 233a47f91e871735a98c66e64ebab34e34a599b6:Assets/Resources/Sounds/Button_Press-Marianne Gagnon.wav.meta
 licenseType: Pro
 AudioImporter:
   externalObjects: {}

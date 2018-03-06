@@ -17,7 +17,11 @@ namespace Assets.Scripts.General
         private int _trust;
         private int _knowledge;
         private int _perception;
-        
+
+        private string ObjectivePlace;
+        private string ObjectiveEvent;
+        private string ObjectiveTime;
+
         private float _needsCooldown;
         private Dictionary<NeedType, NeedStatus> _needs;
 
@@ -154,9 +158,32 @@ namespace Assets.Scripts.General
                 _knowledge = 10;
         }
 
-        void Inform() // pass value or script when general has conversation - list of known devices -R.Walters
+        public void Informed(List<GameObject> otherGeneralsKnownList)
         {
-            //Does this character know about these listening devices if they do then don't inform-R.Walters
+            if(SeenListeningDevices.Count == 0)
+            {
+                SeenListeningDevices = otherGeneralsKnownList;
+            }
+            else
+            {
+                int seenCount = SeenListeningDevices.Count;
+                for (int i = 0; i < otherGeneralsKnownList.Count; ++i)
+                {
+                    bool notThere = true;
+                    for (int j = 0; j < seenCount; ++j)
+                    {
+                        if(otherGeneralsKnownList[i] == SeenListeningDevices[j])
+                        {
+                            j += seenCount;
+                            notThere = false;
+                        }
+                    }
+                    if(notThere == true)
+                    {
+                        SeenListeningDevices.Add(otherGeneralsKnownList[i]);
+                    }
+                }
+            }
         }
 
         public List<GameObject> knowenListeringDevices()
@@ -230,6 +257,24 @@ namespace Assets.Scripts.General
                     SatisfySocial(biggestNeed.Value);
                     break;
             }
+
+        }
+        public void GeneralObjectiveKnowlage()
+        {
+            //deturamn what the gernal thinks is ture
+        }
+
+        public string GetObjectivePlace()
+        {
+            return ObjectivePlace;
+        }
+        public string GetObjectiveEvent()
+        {
+            return ObjectiveEvent;
+        }
+        public string GetObjectiveTime()
+        {
+            return ObjectiveTime;
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Assets.Scripts
         public static RadialMenuSpawner ins;
         public RadialMenu menuPrefab;
         public Vector3 mouseLocation;
+        public GameObject CanvasHireFire;
 
         void Awake()
         {

@@ -22,23 +22,22 @@ namespace Assets.Scripts.AI
         {
             switch(task.GetPriorityType())
             {
-                //case TaskPriorityType.WORK:
-                //    _tasks.Add(task);
-                //    break;
-                //case TaskPriorityType.CONCURRENT:
-                //    _concurrentTasks.Add(task);
-                //    break;
+                case TaskPriorityType.WORK:
+                    _tasks.Add(task);
+                    break;
+                case TaskPriorityType.CONCURRENT:
+                    _concurrentTasks.Add(task);
+                    break;
                 default:
                     _tasks.Add(task);
                     break;
             }
-            //_tasks.Add(task);
         }
 
         public void Update()
         {
             HandleExecutingTask(_tasks, ref _executingTask);
-            //HandleExecutingTask(_concurrentTasks, ref _concurrentTask);
+            HandleExecutingTask(_concurrentTasks, ref _concurrentTask);
         }
 
         private void HandleExecutingTask(List<ITask> taskList, ref ITask executingTask)
@@ -81,6 +80,8 @@ namespace Assets.Scripts.AI
             if (_executingTask != null && _executingTask.GetType() == type)
                 _executingTask.SetCompleted();
         }
+
+        // TODO: Interrupt task of x index of type 
 
         public void Destroy()
         {

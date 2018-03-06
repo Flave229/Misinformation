@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.EventSystem;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 
 namespace Assets.Scripts.AI.Tasks
 {
-    public class ConverseTask : ITask, IEventListener
+    public class ConverseTaskV2 : ITask, IEventListener
     {
         private static readonly List<char> _randomCharacters = new List<char> { '#', '@', '!', '?', '/', '%', '$', '£' };
 
@@ -20,7 +22,7 @@ namespace Assets.Scripts.AI.Tasks
         private readonly GameObject _speechBubble;
 
        
-        public ConverseTask(ConverseData converseData)
+        public ConverseTaskV2(ConverseData converseData)
         {
             _secondsToTalk = 7.0f;
             _secondsToWait = 30.0f;
@@ -28,12 +30,13 @@ namespace Assets.Scripts.AI.Tasks
             _conversationManager = ConversationManager.Instance();
             _speechBubble = GameObject.FindGameObjectWithTag("ConversationPanel");
             SubscribeToEvents();
+            Debug.Log("Created a converse task for " + _converseData.General.Name.FullName());
         }
 
         public void Execute()
         {
             if (_converseData.ReadyToTalk == false)
-                _converseData.ReadyToTalk = true;
+                CheckIfConversationPartnerIsNear();
             
             if (_converseData.Done && _converseData.ConversationPartnerTaskData.Done)
                 SetCompleted();
@@ -77,6 +80,41 @@ namespace Assets.Scripts.AI.Tasks
                     _converseData.Done = true;
                 }
             }
+        }
+
+        private void CheckIfConversationPartnerIsNear()
+        {
+            float closestGeneralDistance = float.MaxValue;
+            Room generalRoom = _converseData.General.GetComponent<Character2D>().CurrentRoom;
+            List<GameObject> generals = GameManager.Instance().GeneralList
+                .Where(general => general != _converseData.General.gameObject && general.GetComponent<Character2D>().CurrentRoom == generalRoom).ToList();
+
+            if (generals.Count <= 0)
+                return;
+
+            General.General closestGeneral = generals.Aggregate((general1, general2) =>
+                {
+                    closestGeneralDistance = Math.Abs(general1.transform.position.x - _converseData.General.transform.position.x);
+                    float generalDistance = Math.Abs(general2.transform.position.x - _converseData.General.transform.position.x);
+                    if (closestGeneralDistance > generalDistance)
+                        return general2;
+                    return general1;
+                })
+                .GetComponent<General.General>();
+            
+            closestGeneralDistance = Math.Abs(closestGeneral.transform.position.x - _converseData.General.transform.position.x);
+            if (closestGeneralDistance > 1)
+                return;
+
+            Debug.Log(_converseData.General.Name.FullName() + " is close to " + closestGeneral.Name.FullName() + " and will try to initiate conversation");
+            closestGeneral.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTaskV2(new ConverseData
+            {
+                ConversationPartnerTaskData = _converseData,
+                General = closestGeneral,
+                SocialNeed = closestGeneral.GetNeed(NeedType.SOCIAL),
+                ReadyToTalk = true
+            }));
+            _converseData.ReadyToTalk = true;
         }
 
         public void SetCompleted()
@@ -163,7 +201,7 @@ namespace Assets.Scripts.AI.Tasks
 
         public TaskPriorityType GetPriorityType()
         {
-            return TaskPriorityType.WORK;
+            return TaskPriorityType.CONCURRENT;
         }
     }
 }

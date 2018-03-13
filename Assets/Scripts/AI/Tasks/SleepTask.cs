@@ -59,7 +59,7 @@ namespace Assets.Scripts.AI.Tasks
         
         public double GetPriority()
         {
-            return _sleepData.RestNeed.Status;
+            return 1 - _sleepData.RestNeed.Status;
         }
 
         public TaskPriorityType GetPriorityType()

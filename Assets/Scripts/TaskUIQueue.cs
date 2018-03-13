@@ -8,6 +8,10 @@ using UnityEngine.UI;
 
 public class TaskUIQueue : MonoBehaviour
 {
+    public GameObject canvasGO;
+    public RectTransform canvasRT;
+    public Canvas canvas;
+
     public List<ITask>       tasksList;
     public List<GameObject>  taskUIList;
     public Queue<GameObject> taskQueue;
@@ -15,10 +19,10 @@ public class TaskUIQueue : MonoBehaviour
     public  GameObject activeTech;
     private GameObject temp;
 
-    private Image image;
-
 	void Start ()
     {
+        Debug.Log("Initialised");
+        SetupCanvas();
         taskQueue = new Queue<GameObject>();
         activeTech = GameManager.Instance().ActiveTech;
         tasksList = activeTech.GetComponent<Character2D>().Tasks.GetTasks();
@@ -27,11 +31,11 @@ public class TaskUIQueue : MonoBehaviour
         {
             if(cTask.GetType() == typeof(PathfindToLocationTask))
             {
-                //QueueTask();
+                SetupButton(cTask);
             }
             else if(cTask.GetType() == typeof(PlaceListeningDeviceTask))
             {
-                //QueueTask();
+                SetupButton(cTask);
             }
         }
     }
@@ -67,5 +71,41 @@ public class TaskUIQueue : MonoBehaviour
         {
             tempQueue[y].transform.position = new Vector2(0,-(float)y / 2);
         }
+    }
+
+    public void SetupCanvas()
+    {
+        canvasGO = new GameObject();
+        canvasRT = canvasGO.AddComponent<RectTransform>();
+        Canvas canvas = GameObject.Find("Canvas-UI").GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        Vector3 pos = Camera.main.transform.position;
+        pos += Camera.main.transform.forward * 2.0f;
+        canvas.worldCamera = Camera.main;
+    }
+
+    private void SetupButton(ITask task)
+    {
+        GameObject buttonGO = new GameObject();
+        RectTransform buttonRT = buttonGO.AddComponent<RectTransform>();
+        buttonRT.SetParent(canvasRT);
+        buttonRT.sizeDelta = new Vector2(100.0f, 100.0f);
+        Button taskButton = buttonGO.AddComponent<Button>();
+        taskButton.onClick.AddListener(() => { Debug.Log("button clicked"); });
+        Image buttonI = buttonGO.AddComponent<Image>();
+
+        if (task.GetType() == typeof(PathfindToLocationTask))
+        {
+            buttonI.sprite = Resources.Load<Sprite>("UI/WalkBox");
+        }
+        else if (task.GetType() == typeof(PlaceListeningDeviceTask))
+        {
+            buttonI.sprite = Resources.Load<Sprite>("UI/BugBox");
+        }
+    }
+
+    public void HandleClick()
+    {
+
     }
 }

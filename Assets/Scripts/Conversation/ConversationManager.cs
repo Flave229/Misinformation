@@ -91,8 +91,8 @@ namespace Assets.Scripts.Conversation
             {
                 if (general1.knowenListeringDevices().Count != 0)
                 {
-                    int inform = _randomNumber.Next(0, 1);
-                    if (inform == 1)
+                    int inform = _randomNumber.Next(0, 1);      //the second number is used to chagne the chance of informing, (1 is 50%, 2 is 33% and so on)
+                    if (inform == 0)
                     {
                         return InformConversation(general1, general2, conversation, general1ConversationData, general2ConversationData);
                     }
@@ -246,32 +246,48 @@ namespace Assets.Scripts.Conversation
             if (tempPlace.Equals(general1ConversationData.Place))
                 TruePlace = true;
 
-            switch (general1ConversationData.Truthfulness)
+            if (isGeneralInRoomWithListeningDevice(general1))
             {
-                case 11:
-                case 1:
-                    general1ConversationData.Lying = true;
-                    break;
-                case 0:
-                case 10:
-                    general1ConversationData.Lying = false;
-                    break;
+                general1ConversationData.Lying = true;
+            }
+            else
+            {
+                switch (general1ConversationData.Truthfulness)
+                {
+                    case 11:
+                    case 1:
+                        general1ConversationData.Lying = true;
+                        break;
+                    case 0:
+                    case 10:
+                        general1ConversationData.Lying = false;
+                        break;
+                }
             }
 
-            switch (general2ConversationData.Truthfulness)
+            if (isGeneralInRoomWithListeningDevice(general2))
             {
-                case 11:
-                    TrueEvent = !TrueEvent;
-                    TruePlace = !TruePlace;
-                    general2ConversationData.Lying = true;
-                    break;
-                case 1:
-                    general2ConversationData.Lying = true;
-                    break;
-                case 0:
-                case 10:
-                    general2ConversationData.Lying = false;
-                    break;
+                TrueEvent = !TrueEvent;
+                TruePlace = !TruePlace;
+                general2ConversationData.Lying = true;
+            }
+            else
+            {
+                switch (general2ConversationData.Truthfulness)
+                {
+                    case 11:
+                        TrueEvent = !TrueEvent;
+                        TruePlace = !TruePlace;
+                        general2ConversationData.Lying = true;
+                        break;
+                    case 1:
+                        general2ConversationData.Lying = true;
+                        break;
+                    case 0:
+                    case 10:
+                        general2ConversationData.Lying = false;
+                        break;
+                }
             }
 
             if (TrueEvent && TruePlace)
@@ -445,17 +461,17 @@ namespace Assets.Scripts.Conversation
         private bool isGeneralInRoomWithListeningDevice(General.General general)
         {
             Room room = general.GetComponent<Character2D>().CurrentRoom;
-
+            
             List<GameObject> LD = general.knowenListeringDevices();
 
             for (int i = 0; i < LD.Count; ++i)
             {
-                if(LD[i].GetComponent<Character2D>().CurrentRoom == room)
+                if (LD[i].GetComponent<ListeningDevice>().CurrentRoom == room)
                 {
                     return true;
                 }
             }
-
+            
             return false;
         }
         

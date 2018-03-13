@@ -50,7 +50,7 @@ namespace Assets.Scripts.AI.Tasks
 
         public double GetPriority()
         {
-            return _toiletData.BladderNeed.Status;
+            return 1 - _toiletData.BladderNeed.Status;
         }
 
         public TaskPriorityType GetPriorityType()

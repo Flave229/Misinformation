@@ -196,7 +196,7 @@ namespace Assets.Scripts.AI.Tasks
 
         public double GetPriority()
         {
-            return 1 - _converseData.SocialNeed.Status;
+            return _converseData.SocialNeed.Status;
         }
 
         public TaskPriorityType GetPriorityType()

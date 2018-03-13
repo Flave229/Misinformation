@@ -103,7 +103,7 @@ namespace Assets.Scripts.AI
             }));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = character.MovementAi,
+                Character = character,
                 Location = toiletPosition
             }));
 
@@ -130,7 +130,7 @@ namespace Assets.Scripts.AI
             }));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = generalOne.MovementAi,
+                Character = generalOne,
                 Location = bedPosition
             }));
 
@@ -157,7 +157,7 @@ namespace Assets.Scripts.AI
             }));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = character.MovementAi,
+                Character = character,
                 Location = chairPosition
             }));
 
@@ -177,7 +177,7 @@ namespace Assets.Scripts.AI
             taskChain.Push(new LookAtArtTask(entertainmentNeed));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = character.MovementAi,
+                Character = character,
                 Location = objectPosition
             }));
             character.Tasks.AddToStack(new AITaskChain(taskChain));
@@ -207,7 +207,7 @@ namespace Assets.Scripts.AI
                 }));
                 generalOne.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
                 {
-                    MovementAi = generalOne.MovementAi,
+                    Character = generalOne,
                     Location = targetedFurniture.transform.position
                 }));
 

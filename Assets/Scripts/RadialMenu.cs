@@ -142,7 +142,7 @@ namespace Assets.Scripts
 
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
+                Character = GameManager.Instance().ActiveTech.GetComponent<Character2D>(),
                 Location = mouseLocation
             }));
 
@@ -153,7 +153,7 @@ namespace Assets.Scripts
         {
             character.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
+                Character = GameManager.Instance().ActiveTech.GetComponent<Character2D>(),
                 Location = mouseLocation
             }));
         }
@@ -168,7 +168,6 @@ namespace Assets.Scripts
                     defaultName.text = "buggable";
                 }
             }
-            //defaultName.text = "Help, I'm trapped in a menu";
         }
 
         private void Update()

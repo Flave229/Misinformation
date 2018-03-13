@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.EventSystem;
 using UnityEngine;
+using Assets.Scripts.EventSystem.EventPackets;
 
 namespace Assets.Scripts
 {
@@ -53,7 +54,12 @@ namespace Assets.Scripts
 			activeDevice.GetComponent<ListeningDevice> ().activeDevice = true;
 			Camera.main.GetComponent<Camera2DFollow> ().target = activeDevice.transform;
 			usingDesk = true;
-            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_CYCLED, activeDeviceNum);
+            ListeningDevicePacket eventPacket = new ListeningDevicePacket
+            {
+                Device = activeDevice.GetComponent<ListeningDevice>(),
+                Num = activeDeviceNum
+            };
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_CYCLED, eventPacket);
         }
 
 		void CycleDevices()
@@ -79,8 +85,15 @@ namespace Assets.Scripts
             ListeningDevice newActiveDevice = activeDevice.gameObject.GetComponent<ListeningDevice>();
             newActiveDevice.activeDevice = true;
 			Camera.main.GetComponent<Camera2DFollow>().target = activeDevice.transform;
-            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_LISTENING, newActiveDevice);
-            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_CYCLED, activeDeviceNum);
+
+            ListeningDevicePacket eventPacket = new ListeningDevicePacket
+            {
+                Device = newActiveDevice,
+                Num = activeDeviceNum
+            };
+
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_LISTENING, eventPacket);
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_CYCLED, eventPacket);
         }
 
 		void LeaveDesk()

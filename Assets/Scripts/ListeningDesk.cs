@@ -48,7 +48,8 @@ namespace Assets.Scripts
 		{
             if (activeDevice != null || numOfListeningDevices == 0)
                 return;
-            
+
+            GameManager.Instance().SetUsingDesk(true);
 			activeDevice = GameManager.Instance ().ListeningDevList [0];
 			activeDeviceNum = 0;
 			activeDevice.GetComponent<ListeningDevice> ().activeDevice = true;
@@ -104,7 +105,8 @@ namespace Assets.Scripts
 				activeDevice = null;
 			}
 
-			usingDesk = false;
+            GameManager.Instance().SetUsingDesk(false);
+            usingDesk = false;
 			Camera.main.GetComponent<Camera2DFollow>().target = GameManager.Instance().ActiveTech.transform;
             EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DESK_OFF, null);
         }

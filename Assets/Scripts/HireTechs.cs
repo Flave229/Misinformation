@@ -12,13 +12,35 @@ public class HireTechs : MonoBehaviour {
 	public void Awake()
     {
         GenerateTechList();
-        List<GameObject> canvasEquipmentGameObjects = new List<GameObject>();
-        canvasEquipmentGameObjects.AddRange(GameObject.FindGameObjectsWithTag("Finish"));
-        List<GameObject> canvasMotivationGameObjects = new List<GameObject>();
-        canvasMotivationGameObjects.AddRange(GameObject.FindGameObjectsWithTag("Respawn"));
-        List<GameObject> canvasTranslationGameObjects = new List<GameObject>();
-        canvasTranslationGameObjects.AddRange(GameObject.FindGameObjectsWithTag("EditorOnly"));
-        HireTechText(canvasEquipmentGameObjects, canvasMotivationGameObjects, canvasTranslationGameObjects);
+        List<Text> canvasTextGameObjects = new List<Text>();
+        canvasTextGameObjects.AddRange(Object.FindObjectsOfType<Text>());
+
+        List<Text> textEquipmentList = new List<Text>();
+        List<Text> textTranslationtList = new List<Text>();
+        List<Text> textMotivationList = new List<Text>();
+        //TODO: The tech attributes are displayed in the wrong order...
+        for (int i = 0; i < canvasTextGameObjects.Count; i++)
+        {
+            if (canvasTextGameObjects[i].name == "EquipmentText")
+            {
+                textEquipmentList.Add(canvasTextGameObjects[i]);
+            }
+
+            if (canvasTextGameObjects[i].name == "TranslationText")
+            {
+                textTranslationtList.Add(canvasTextGameObjects[i]);
+            }
+
+            if (canvasTextGameObjects[i].name == "MotivationText")
+            {
+                textMotivationList.Add(canvasTextGameObjects[i]);
+            }
+        }
+        //List<GameObject> canvasMotivationGameObjects = new List<GameObject>();
+        //canvasMotivationGameObjects.AddRange(GameObject.FindGameObjectsWithTag("Respawn"));
+        //List<GameObject> canvasTranslationGameObjects = new List<GameObject>();
+        //canvasTranslationGameObjects.AddRange(GameObject.FindGameObjectsWithTag("EditorOnly"));
+        HireTechText(textEquipmentList, textTranslationtList, textMotivationList);
     }
 	
     void GenerateTechList()
@@ -36,7 +58,8 @@ public class HireTechs : MonoBehaviour {
         for (int i = 0; i < _listPossibleTechs.Count; i++)
         {
             Debug.Log(_listPossibleTechs[i].GetComponent<Technician>().Salary);
-            _listPossibleTechs[i].GetComponent<Technician>().RandomiseAttributes();
+            _listPossibleTechs
+                [i].GetComponent<Technician>().RandomiseAttributes();
             Debug.Log("Tech" + i + ": " + _listPossibleTechs[i].GetComponent<Technician>().GetEquipmentSkill());
         }
     }
@@ -56,7 +79,7 @@ public class HireTechs : MonoBehaviour {
         GameManager.Instance().TechList.Add(_listPossibleTechs[2]);
     }
 
-    private void HireTechText(List<GameObject> listEquipment, List<GameObject> listMotivation, List<GameObject> listTranslation)
+    private void HireTechText(List<Text> listEquipment, List<Text> listTranslation, List<Text> listMotivation)
     {
         //Equipment
         List<string> equipmentTextList = new List<string>();
@@ -82,13 +105,14 @@ public class HireTechs : MonoBehaviour {
         for (int i = 0; i < _listPossibleTechs.Count; i++)
         {
             translationIntList.Add(_listPossibleTechs[i].GetComponent<Technician>().GetTranslationSkill());
-            translationTextList.Add(equipmentIntList[i].ToString());
+            translationTextList.Add(translationIntList[i].ToString());
         }
+
         for (int i = 0; i < _listPossibleTechs.Count; i++)
         {
-            listEquipment[i].GetComponent<Text>().text = equipmentTextList[i];
-            listMotivation[i].GetComponent<Text>().text = motivationTextList[i];
-            listTranslation[i].GetComponent<Text>().text = translationTextList[i];
+            listEquipment[i].text = equipmentTextList[i];
+            listMotivation[i].text = motivationTextList[i];
+            listTranslation[i].text = translationTextList[i];
         }
 
     }

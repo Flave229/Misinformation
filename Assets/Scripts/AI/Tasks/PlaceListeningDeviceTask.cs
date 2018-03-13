@@ -72,5 +72,15 @@ namespace Assets.Scripts.AI.Tasks
         {
             return TaskPriorityType.WORK;
         }
+
+        public void Pause()
+        {
+            return;
+        }
+
+        public void UnPause()
+        {
+            return;
+        }
     }
 }

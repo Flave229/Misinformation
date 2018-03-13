@@ -11,7 +11,8 @@ namespace Assets.Scripts.AI.Tasks
         private PathfindData _pathfindData;
         private bool _completed;
         private bool _movementNodeGenerated;
-        
+        private bool _pause;
+
         public PathfindToLocationTask(PathfindData pathfindData)
         {
             _pathfindData = pathfindData;
@@ -20,6 +21,9 @@ namespace Assets.Scripts.AI.Tasks
 
         public void Execute()
         {
+            if (_pause)
+                return;
+
             if (_movementNodeGenerated == false)
             {
                 _movementAI.ClearPath();
@@ -77,6 +81,18 @@ namespace Assets.Scripts.AI.Tasks
         public TaskPriorityType GetPriorityType()
         {
             return TaskPriorityType.WORK;
+        }
+
+        public void Pause()
+        {
+            _pathfindData.Character.Animator.SetBool("IDLE", true);
+            _pause = true;
+        }
+
+        public void UnPause()
+        {
+            _pathfindData.Character.Animator.SetBool("IDLE", false);
+            _pause = false;
         }
     }
 }

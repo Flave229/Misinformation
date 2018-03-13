@@ -7,6 +7,7 @@ namespace Assets.Scripts.AI.Tasks
     {
         private GameObject _general;
         private bool _complete;
+        private bool _pause;
 
         public IdleTask(IdleData dataPacket)
         {
@@ -33,6 +34,8 @@ namespace Assets.Scripts.AI.Tasks
 
         public void SetCompleted()
         {
+            if (_pause)
+                return;
             _complete = true;
         }
 
@@ -49,6 +52,16 @@ namespace Assets.Scripts.AI.Tasks
         public TaskPriorityType GetPriorityType()
         {
             return TaskPriorityType.WORK;
+        }
+
+        public void Pause()
+        {
+            _pause = true;
+        }
+
+        public void UnPause()
+        {
+            _pause = false;
         }
     }
 }

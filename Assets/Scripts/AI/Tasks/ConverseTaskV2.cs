@@ -107,6 +107,8 @@ namespace Assets.Scripts.AI.Tasks
                 return;
 
             Debug.Log(_converseData.General.Name.FullName() + " is close to " + closestGeneral.Name.FullName() + " and will try to initiate conversation");
+            _converseData.General.GetComponent<Character2D>().Tasks.PauseCurrentTask();
+            closestGeneral.GetComponent<Character2D>().Tasks.PauseCurrentTask();
             closestGeneral.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTaskV2(new ConverseData
             {
                 ConversationPartnerTaskData = _converseData,
@@ -119,6 +121,7 @@ namespace Assets.Scripts.AI.Tasks
 
         public void SetCompleted()
         {
+            _converseData.General.GetComponent<Character2D>().Tasks.ContinueCurrentTask();
             _completed = true;
             _converseData.SocialNeed.Replenish();
         }
@@ -202,6 +205,16 @@ namespace Assets.Scripts.AI.Tasks
         public TaskPriorityType GetPriorityType()
         {
             return TaskPriorityType.CONCURRENT;
+        }
+
+        public void Pause()
+        {
+            return;
+        }
+
+        public void UnPause()
+        {
+            return;
         }
     }
 }

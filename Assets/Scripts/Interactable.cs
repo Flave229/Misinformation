@@ -17,7 +17,7 @@ namespace Assets.Scripts
         public Action[] options;
         private void OnMouseOver()
         {
-            if(Input.GetMouseButtonDown(1))
+            if(Input.GetMouseButtonDown(1) && GameManager.Instance().GetUsingDesk() == false)
             {
                 RadialMenuSpawner.ins.SpawnMenu(this);
             }

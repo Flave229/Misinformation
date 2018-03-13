@@ -12,6 +12,7 @@ namespace Assets.Scripts
 
         public int numOfListeningDevices;
         public Image[] listeningDeviceImages;
+        public Text activeText;
         Image activeImage;
         int activeNum;
 
@@ -19,6 +20,7 @@ namespace Assets.Scripts
         {
             SubscribeToEvents();
             listeningDeviceImages = GetComponentsInChildren<Image>();
+            activeText = GetComponentInChildren<Text>();
             for (int i = 0; i < listeningDeviceImages.Length; ++i)
             {
                 listeningDeviceImages[i].enabled = false;
@@ -35,6 +37,7 @@ namespace Assets.Scripts
             }
             if (listeningDeviceData != null)
             {
+                activeText.text = "Quality: " + listeningDeviceData.Device.GetQuality() + " Durability: " + listeningDeviceData.Device.GetDurability();
                 activeNum = listeningDeviceData.Num;
                 activeImage = listeningDeviceImages[activeNum];
                 activeImage.GetComponent<Outline>().enabled = true;
@@ -47,6 +50,7 @@ namespace Assets.Scripts
         public void UnhighlightDevice(object eventPacket)
         {
             activeImage.GetComponent<Outline>().enabled = false;
+            activeText.text = "";
         }
         
         public void ListeningDeviceDestroyed(ListeningDevicePacket listeningData)
@@ -66,6 +70,7 @@ namespace Assets.Scripts
                 activeImage = listeningDeviceImages[0];
             }
             activeImage.GetComponent<Outline>().enabled = true;
+            activeText.text = "Quality: " + listeningData.Device.GetQuality() + " Durability: " + listeningData.Device.GetDurability();
         }
 
         public void UpdateUI(object eventPacket)

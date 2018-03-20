@@ -19,6 +19,7 @@ namespace Assets.Scripts
         public List<Name> arrivingGenerals;
 
         public List<GameObject> _technicans = new List<GameObject>();
+        public int _prevTechs = 1;
 
         void Start()
         {
@@ -40,10 +41,12 @@ namespace Assets.Scripts
 			GameManager.Instance ().Salary ();
             TransitioningDay = false;
             _technicans = GameManager.Instance().TechList;
-            for (int i = 0; i < _technicans.Count - 2; i++)
+            for (int i = 0; i < _technicans.Count - _prevTechs; i++)//Will continue to make more everyday... need to fix...  --- This fixes it.
             {
                 Instantiate(_technicans[i], new Vector3(0f -i, -12.24f, 0f), Quaternion.identity);
             }
+            _prevTechs = _technicans.Count; //Will continue to make more everyday... need to fix...  --- This fixes it.
+            GameManager.Instance().ActiveTech = _technicans[0]; //Need to be able to delete techs as hiring new ones are almost complete.
         }
 
         public void EndDay()
@@ -65,6 +68,12 @@ namespace Assets.Scripts
                 var technician = gameObject.GetComponent<Technician>();
                 technician.GetComponent<Character2D>().ClearTasks();
             }
+            foreach (GameObject gameObject in GameManager.Instance().FireTechList)
+            {
+                GameManager.Instance().ActiveTech = GameManager.Instance().TechList[0];
+                Destroy(gameObject);
+            }
+
         }
 
         public void GenerateGenerals()

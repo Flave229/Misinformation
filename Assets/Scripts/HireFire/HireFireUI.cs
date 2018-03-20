@@ -51,6 +51,7 @@ public class HireFireUI : MonoBehaviour {
         {
             PanelHire.SetActive(true);
             PanelCurrent.SetActive(false);
+
         }
         else
             PanelHire.SetActive(false);

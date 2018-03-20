@@ -11,6 +11,7 @@ namespace Assets.Scripts
         public List<GameObject> ListeningDevList = new List<GameObject>();
         public List<GameObject> GeneralList = new List<GameObject>();
 		public List<GameObject> TechList = new List<GameObject> ();
+        public List<GameObject> FireTechList = new List<GameObject>();
         public List<Name> GeneralNameList = new List<Name>();
 		public GameObject ActiveTech;
 		public int ActiveTechNum;
@@ -160,11 +161,14 @@ namespace Assets.Scripts
 
 		public void Salary()
 		{
-			foreach(GameObject t in TechList)
-			{
-				t.GetComponent<Technician> ().UpdateSalary ();
-				FundingAmount = FundingAmount - t.GetComponent<Technician> ().Salary;
-			}
+            if (ActiveTech != null)
+            {
+                foreach (GameObject t in TechList)
+                {
+                    t.GetComponent<Technician>().UpdateSalary();
+                    FundingAmount = FundingAmount - t.GetComponent<Technician>().Salary;
+                }
+            }
 		}
         
         public List<GameObject> GetListeningDevices()

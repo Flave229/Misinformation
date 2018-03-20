@@ -34,6 +34,7 @@ namespace Assets.Scripts
 
         public void StartDay()
         {
+            //Resources.FindObjectsOfTypeAll<FireTechs>().ToList().First().GetComponent<FireTechs>().OnActive();
             SoundManager.Instance().PlayBGM();
             GameManager.Instance().Days++;
             GameManager.Instance().UpdateCurrentDate();
@@ -44,11 +45,14 @@ namespace Assets.Scripts
             _technicans = GameManager.Instance().TechList;  // not adding to techlist on second hire
             for (int i = _prevTechs; i < _technicans.Count; ++i)//Will continue to make more everyday... need to fix...  --- This fixes it.
             {
-                HireTechs test = Resources.FindObjectsOfTypeAll<HireTechs>().ToList().First().GetComponent<HireTechs>();
-                Technician tech = test.SelectedTech;
+                //HireTechs test = Resources.FindObjectsOfTypeAll<HireTechs>().ToList().First().GetComponent<HireTechs>();
+                Technician tech = Resources.FindObjectsOfTypeAll<HireTechs>().ToList().First().GetComponent<HireTechs>().SelectedTech;
                 _technicans[i] = Resources.Load<GameObject>("Player");
-                Vector3 placementPosition = new Vector3(0f - i, -12.24f, 0f);
+                _technicans[i].GetComponent<Character2D>().CurrentRoom = GameObject.Find("Room-teck").GetComponent<Room>();
+                Vector3 placementPosition = new Vector3(0f - i, -12.28f, 0f);
                 _technicans[i] = UnityEngine.Object.Instantiate(_technicans[i], placementPosition, Quaternion.identity);
+               // Destroy(_technicans[i].GetComponent<Technician>());
+                //Destroy(_technicans[i].GetComponent<Technician>());
                 _technicans[i].AddComponent<Technician>().SetSkills(tech.GetTranslationSkill(), tech.GetEquipmentSkill(), tech.GetMotivationSkill());
             }
             _prevTechs = _technicans.Count; //Will continue to make more everyday... need to fix...  --- This fixes it.

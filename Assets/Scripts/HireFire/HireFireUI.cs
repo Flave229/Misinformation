@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,15 +11,6 @@ public class HireFireUI : MonoBehaviour {
     public GameObject CanvasHireFire;
     private bool _showCanvas;
 
-    void Start()
-    {
-
-    }
-
-    private void Awake()
-    {
-
-    }
 
     void Update()
     {
@@ -41,6 +33,7 @@ public class HireFireUI : MonoBehaviour {
         {
             PanelCurrent.SetActive(true);
             PanelHire.SetActive(false);
+            Resources.FindObjectsOfTypeAll<FireTechs>().ToList().First().GetComponent<FireTechs>().OnActive();
         }
         else
             PanelCurrent.SetActive(false);

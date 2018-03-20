@@ -123,8 +123,8 @@ namespace Assets.Scripts
                 }
                 if (selected.title == "Board")
                 {
-                    MoveToLocation();
-                    CanvasHireFire.SetActive(true); //TODO: Add function to to pause game when menu is open. Add close button to canvas to make canvas inactive.
+                    OpenHireFireUI();
+                    //CanvasHireFire.SetActive(true); //TODO: Add function to to pause game when menu is open. Add close button to canvas to make canvas inactive.
                 }
             }
 
@@ -156,6 +156,21 @@ namespace Assets.Scripts
                 Character = GameManager.Instance().ActiveTech.GetComponent<Character2D>(),
                 Location = mouseLocation
             }));
+        }
+
+        private void OpenHireFireUI()
+        {
+            Stack<ITask> taskChain = new Stack<ITask>();
+            taskChain.Push(new OpenHireFireTask(CanvasHireFire));
+
+            taskChain.Push(new PathfindToLocationTask(new PathfindData
+            {
+                Character = GameManager.Instance().ActiveTech.GetComponent<Character2D>(),
+                Location = mouseLocation
+            }));
+
+            character.Tasks.AddToStack(new AITaskChain(taskChain));
+
         }
 
         private void RadialMenuText()

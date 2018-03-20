@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.General;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -76,9 +77,9 @@ namespace Assets.Scripts.Conversation
             return responses.Split('\n').Select(x => x.Replace("\r", "").Trim()).ToList();
         }
 
-        public Dictionary<General.General, string> ConversationGenerator(General.General general1, General.General general2)
+        public Dictionary<IGeneral, string> ConversationGenerator(IGeneral general1, IGeneral general2)
         {
-            Dictionary<General.General, string> conversation = new Dictionary<General.General, string>();
+            Dictionary<IGeneral, string> conversation = new Dictionary<IGeneral, string>();
             GeneralConversationData general1ConversationData = InitialiseConversationData(general1);
             GeneralConversationData general2ConversationData = InitialiseConversationData(general2);
 
@@ -104,7 +105,7 @@ namespace Assets.Scripts.Conversation
         }
         
         //Conversation where they talk objectives, this may include informing about Listening Devices
-        private Dictionary<General.General, string> ObjectiveConversation(General.General general1, General.General general2, Dictionary<General.General, string> conversation,
+        private Dictionary<IGeneral, string> ObjectiveConversation(IGeneral general1, IGeneral general2, Dictionary<IGeneral, string> conversation,
             GeneralConversationData general1ConversationData, GeneralConversationData general2ConversationData)
         {
             //are the generals lieing?
@@ -171,7 +172,7 @@ namespace Assets.Scripts.Conversation
         }
 
         //Conversation where they openly inform one and other about Listening Devices
-        private Dictionary<General.General, string> InformConversation(General.General general1, General.General general2, Dictionary<General.General, string> conversation,
+        private Dictionary<IGeneral, string> InformConversation(IGeneral general1, IGeneral general2, Dictionary<IGeneral, string> conversation,
             GeneralConversationData general1ConversationData, GeneralConversationData general2ConversationData)
         {
 
@@ -201,7 +202,7 @@ namespace Assets.Scripts.Conversation
             return conversation;
         }
         
-        private void General2Inform(General.General general1, General.General general2)
+        private void General2Inform(IGeneral general1, IGeneral general2)
         {
             if(general1.knowenListeringDevices().Count != 0)
             {
@@ -210,7 +211,7 @@ namespace Assets.Scripts.Conversation
             general1.Informed(general2.knowenListeringDevices());
         }
 
-        private GeneralConversationData InitialiseConversationData(General.General general1)
+        private GeneralConversationData InitialiseConversationData(IGeneral general1)
         {
             GeneralConversationData conversationData = new GeneralConversationData();
             conversationData.Truthfulness = CalculateGeneralTruthfulness(general1);
@@ -219,7 +220,7 @@ namespace Assets.Scripts.Conversation
             return conversationData;
         }
         
-        private int GeneralCompare(GeneralConversationData general1ConversationData, GeneralConversationData general2ConversationData, General.General general1, General.General general2)
+        private int GeneralCompare(GeneralConversationData general1ConversationData, GeneralConversationData general2ConversationData, IGeneral general1, IGeneral general2)
         {
             int response = -1;
             string tempEvent;
@@ -400,7 +401,7 @@ namespace Assets.Scripts.Conversation
             return filled;
         }
         
-        void CalculateEventPlaceTime(General.General general, GeneralConversationData conversationData)
+        void CalculateEventPlaceTime(IGeneral general, GeneralConversationData conversationData)
         {
             string eventString;
             string place;
@@ -445,7 +446,7 @@ namespace Assets.Scripts.Conversation
         }
         
         //Truthfulness to be read int value to be read as >=10 knows the truth, (after -10 if know truth) if  == 1 then will lie
-        int CalculateGeneralTruthfulness(General.General general)
+        int CalculateGeneralTruthfulness(IGeneral general)
         {
             int truthfulness = 0;
 
@@ -458,9 +459,9 @@ namespace Assets.Scripts.Conversation
             return truthfulness;
         }
 
-        private bool isGeneralInRoomWithListeningDevice(General.General general)
+        private bool isGeneralInRoomWithListeningDevice(IGeneral general)
         {
-            Room room = general.GetComponent<Character2D>().CurrentRoom;
+            Room room = general.GetCharacter().CurrentRoom;
             
             List<GameObject> LD = general.knowenListeringDevices();
 

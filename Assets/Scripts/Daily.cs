@@ -132,7 +132,6 @@ namespace Assets.Scripts
                 leavingGenerals.Add(generalComponent.Name);
                 Destroy(GameManager.Instance().GeneralList[randomGeneralIndex]);
                 GameManager.Instance().GeneralList.RemoveAt(randomGeneralIndex);
-                GameManager.Instance().GeneralNameList.Add(GameManager.Instance().GeneralList[randomGeneralIndex].GetComponent<General.General>().Name);
                 NameGenerator.RemoveNameFromPool(GameManager.Instance().GeneralList[randomGeneralIndex].GetComponent<General.General>().Name);
             }
         }

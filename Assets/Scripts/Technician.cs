@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.FileIO;
+using Assets.Scripts.General;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -9,11 +11,13 @@ namespace Assets.Scripts
         private int _motivation;
         public bool IsActive;
 		public int Salary;
+        public Name Name;
+        public string FullName;
 
         void Start()
         {
-            UpdateSalary();
         }
+
         
         void Update()
         {
@@ -29,11 +33,14 @@ namespace Assets.Scripts
 
         public void Awake()
         {
+            Name = NameGenerator.GenerateTechnicianName();
             RandomiseAttributes();
+            UpdateSalary();
             Debug.Log("Technician");
             Debug.Log("Translator Skill: " + _translationSkill);
             Debug.Log("Equipment Specialist Skill: " + _equipmentSkill);
             Debug.Log("Motivation: " + _motivation);
+            FullName = Name.FullName();
         }
 
 

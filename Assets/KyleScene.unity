@@ -2983,7 +2983,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ca8cdc6737314648b47da0c346d5865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartingTimeInSeconds: 12
+  StartingTimeInSeconds: 100
 --- !u!114 &213072226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4256,6 +4256,7 @@ MonoBehaviour:
   PanelCurrent: {fileID: 1031136734}
   PanelHire: {fileID: 790251007}
   CanvasHireFire: {fileID: 70146774}
+  UIClock: {fileID: 213072224}
 --- !u!114 &261626474
 MonoBehaviour:
   m_ObjectHideFlags: 0

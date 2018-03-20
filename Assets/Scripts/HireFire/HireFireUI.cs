@@ -9,6 +9,7 @@ public class HireFireUI : MonoBehaviour {
     public GameObject PanelCurrent;
     public GameObject PanelHire;
     public GameObject CanvasHireFire;
+    public GameObject UIClock;
     private bool _showCanvas;
 
 
@@ -19,11 +20,12 @@ public class HireFireUI : MonoBehaviour {
         if (_showCanvas)
         {
             Time.timeScale = 0;
-
+            UIClock.SetActive(false);
         }
         else
         {
             Time.timeScale = 1;
+            UIClock.SetActive(true);
         }
     }
 

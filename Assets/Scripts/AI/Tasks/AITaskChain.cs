@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets.Scripts.AI.Tasks
 {
@@ -82,6 +81,16 @@ namespace Assets.Scripts.AI.Tasks
         public TaskPriorityType GetPriorityType()
         {
             return TaskPriorityType.WORK;
+        }
+
+        public void Pause()
+        {
+            _executingTask.Pause();
+        }
+
+        public void UnPause()
+        {
+            _executingTask.UnPause();
         }
     }
 }

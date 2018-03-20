@@ -9,6 +9,7 @@ namespace Assets.Scripts.AI.Tasks
         private int _secondsActive;
         private bool _completed;
         private NeedStatus _entertainmentNeed;
+        private bool _pause;
 
         public LookAtArtTask(NeedStatus entertainmentNeed)
         {
@@ -37,6 +38,8 @@ namespace Assets.Scripts.AI.Tasks
 
         public void SetCompleted()
         {
+            if (_pause)
+                return;
             _completed = true;
             _entertainmentNeed.Replenish();
         }
@@ -49,6 +52,16 @@ namespace Assets.Scripts.AI.Tasks
         public TaskPriorityType GetPriorityType()
         {
             return TaskPriorityType.WORK;
+        }
+
+        public void Pause()
+        {
+            _pause = true;
+        }
+
+        public void UnPause()
+        {
+            _pause = false;
         }
     }
 }

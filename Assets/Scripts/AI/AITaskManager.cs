@@ -79,8 +79,8 @@ namespace Assets.Scripts.AI
             general1ConverseData.ConversationPartnerTaskData = general2ConverseData;
             general2ConverseData.ConversationPartnerTaskData = general1ConverseData;
             
-            generalOne.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTaskV2(general1ConverseData));
-            generalTwo.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTaskV2(general2ConverseData));
+            generalOne.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTask(general1ConverseData));
+            generalTwo.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTask(general2ConverseData));
         }
 
         public static void GoToToilet(GameObject generalGameObject, NeedStatus bladderNeed)
@@ -103,7 +103,7 @@ namespace Assets.Scripts.AI
             }));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = character.MovementAi,
+                Character = character,
                 Location = toiletPosition
             }));
 
@@ -130,7 +130,7 @@ namespace Assets.Scripts.AI
             }));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = generalOne.MovementAi,
+                Character = generalOne,
                 Location = bedPosition
             }));
 
@@ -157,7 +157,7 @@ namespace Assets.Scripts.AI
             }));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = character.MovementAi,
+                Character = character,
                 Location = chairPosition
             }));
 
@@ -177,7 +177,7 @@ namespace Assets.Scripts.AI
             taskChain.Push(new LookAtArtTask(entertainmentNeed));
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = character.MovementAi,
+                Character = character,
                 Location = objectPosition
             }));
             character.Tasks.AddToStack(new AITaskChain(taskChain));
@@ -207,7 +207,7 @@ namespace Assets.Scripts.AI
                 }));
                 generalOne.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
                 {
-                    MovementAi = generalOne.MovementAi,
+                    Character = generalOne,
                     Location = targetedFurniture.transform.position
                 }));
 

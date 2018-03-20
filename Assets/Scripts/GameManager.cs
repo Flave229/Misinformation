@@ -35,6 +35,7 @@ namespace Assets.Scripts
         private bool _pause;
         private bool _pendingStart;
         private bool _gameover;
+        private bool _usingDesk = false;
 
         public int FundingAmount
         {
@@ -91,6 +92,10 @@ namespace Assets.Scripts
             _fundingText = GameObject.FindGameObjectsWithTag("FundingText")[0].GetComponent<Text>();
             _fundingText.text = "£" + FundingAmount.ToString("0000");
             _dailyReport = UnityEngine.Object.FindObjectOfType<DailyReport>();
+            //ConversePanel = new ConversationPanel();
+           // ConversePanel._convoPanel = GameObject.FindGameObjectWithTag("ConversationPanel");
+            //ConversePanel._hideButton = GameObject.FindGameObjectWithTag("ConversationPanel").gameObject.transform.parent.Find("ButtonHide").gameObject;
+            //ConversePanel.refScrollbar = FindObjectOfType<Scrollbar>();
         }
 
         public void Update()
@@ -130,13 +135,15 @@ namespace Assets.Scripts
                 _dailyManager.EndDay();
             }
 				
-			if(Input.GetKeyUp(KeyCode.Tab))
+			if(Input.GetKeyUp(KeyCode.Tab) && _usingDesk == false)
 			{
 				CycleTech ();
 			}
 
             if (FundingAmount < 0)
                 FundingAmount = 0;
+
+
         }
 
         public static GameManager Instance()
@@ -231,6 +238,16 @@ namespace Assets.Scripts
         public DailyReport GetDailyReport()
         {
             return _dailyReport;
+        }
+
+        public bool GetUsingDesk()
+        {
+            return _usingDesk;
+        }
+
+        public void SetUsingDesk(bool v)
+        {
+            _usingDesk = v;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.AI.TaskData;
 using Assets.Scripts.Conversation;
 using UnityEngine;
-using UnityEngine.UI;
 using Assets.Scripts.EventSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System;
 
 namespace Assets.Scripts.AI.Tasks
 {
-    public class ConverseTaskV2 : ITask, IEventListener
+    public class ConverseTask : ITask, IEventListener
     {
         private static readonly List<char> _randomCharacters = new List<char> { '#', '@', '!', '?', '/', '%', '$', '£' };
 
@@ -22,7 +21,7 @@ namespace Assets.Scripts.AI.Tasks
         private readonly GameObject _speechBubble;
 
        
-        public ConverseTaskV2(ConverseData converseData)
+        public ConverseTask(ConverseData converseData)
         {
             _secondsToTalk = 7.0f;
             _secondsToWait = 30.0f;
@@ -107,7 +106,9 @@ namespace Assets.Scripts.AI.Tasks
                 return;
 
             Debug.Log(_converseData.General.Name.FullName() + " is close to " + closestGeneral.Name.FullName() + " and will try to initiate conversation");
-            closestGeneral.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTaskV2(new ConverseData
+            _converseData.General.GetComponent<Character2D>().Tasks.PauseCurrentTask();
+            closestGeneral.GetComponent<Character2D>().Tasks.PauseCurrentTask();
+            closestGeneral.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTask(new ConverseData
             {
                 ConversationPartnerTaskData = _converseData,
                 General = closestGeneral,
@@ -119,6 +120,7 @@ namespace Assets.Scripts.AI.Tasks
 
         public void SetCompleted()
         {
+            _converseData.General.GetComponent<Character2D>().Tasks.ContinueCurrentTask();
             _completed = true;
             _converseData.SocialNeed.Replenish();
         }
@@ -154,8 +156,7 @@ namespace Assets.Scripts.AI.Tasks
                     string scrambledText = ScrambleText(listeningDevice);
                     
                     GameManager.Instance().ConversePanel.ShowPanel();
-                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color> \n";
-                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
+                    GameManager.Instance().ConversePanel.addSentence(_converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color>" );
                     break;
             }
         }
@@ -202,6 +203,16 @@ namespace Assets.Scripts.AI.Tasks
         public TaskPriorityType GetPriorityType()
         {
             return TaskPriorityType.CONCURRENT;
+        }
+
+        public void Pause()
+        {
+            return;
+        }
+
+        public void UnPause()
+        {
+            return;
         }
     }
 }

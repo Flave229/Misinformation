@@ -81,6 +81,18 @@ namespace Assets.Scripts.AI
                 _executingTask.SetCompleted();
         }
 
+        public void PauseCurrentTask()
+        {
+            if (_executingTask != null)
+                _executingTask.Pause();
+        }
+
+        public void ContinueCurrentTask()
+        {
+            if (_executingTask != null)
+                _executingTask.UnPause();
+        }
+
         // TODO: Interrupt task of x index of type 
 
         public void Destroy()

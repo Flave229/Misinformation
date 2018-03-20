@@ -23,7 +23,6 @@ namespace Assets.Scripts
 
         void Start()
         {
-           // GameManager.Instance()._dailyReport = Object.FindObjectOfType<DailyReport>();
             leavingGenerals = new List<Name>();
             arrivingGenerals = new List<Name>();
         }
@@ -40,6 +39,7 @@ namespace Assets.Scripts
             Timer.Instance().ResetRemainingTime();
 			GameManager.Instance ().Salary ();
             TransitioningDay = false;
+
             _technicans = GameManager.Instance().TechList;
             for (int i = 0; i < _technicans.Count - _prevTechs; i++)//Will continue to make more everyday... need to fix...  --- This fixes it.
             {
@@ -78,7 +78,7 @@ namespace Assets.Scripts
 
         public void GenerateGenerals()
         {
-            float paddingSpawn = 1.05f;
+            float paddingSpawn = 1.06f;
 
             int generalsToAdd = 0;
             if (_maxGeneralsInHouse - GameManager.Instance().GeneralList.Count < _maxGeneralsPerDay)
@@ -94,7 +94,7 @@ namespace Assets.Scripts
             arrivingGenerals.Clear();
             for (int i = 0; i < generalsToAdd; ++i)
             {
-                Vector2 generalPos = new Vector2(Random.Range(-24.45f, -41.91f) * paddingSpawn, -9.5f);
+                Vector2 generalPos = new Vector2(Random.Range(-24.45f, -39.91f) * paddingSpawn, -9.5f);
                 GameObject general = Instantiate(GeneralGameObject, generalPos, Quaternion.identity);
                 var characterComponent = general.GetComponent<Character2D>();
                 characterComponent.CurrentRoom = SpawnRoom;

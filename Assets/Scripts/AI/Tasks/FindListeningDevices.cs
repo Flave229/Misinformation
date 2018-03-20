@@ -63,9 +63,19 @@ namespace Assets.Scripts.AI.Tasks
             return _completed;
         }
 
+        public void Pause()
+        {
+            return;
+        }
+
         public void SetCompleted()
         {
             _completed = true;
+        }
+
+        public void UnPause()
+        {
+            return;
         }
     }
 }

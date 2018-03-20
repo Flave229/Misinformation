@@ -93,13 +93,15 @@ namespace Assets.Scripts
             {
                 FaceRight();
                 distance = -1.0f;
-                Animator.SetBool("IDLE", false);
+                if (!Pause)
+                    Animator.SetBool("IDLE", false);
             }
             else if (distance > 0.0f)
             {
                 FaceLeft();
                 distance = 1.0f;
-                Animator.SetBool("IDLE", false);
+                if (!Pause)
+                    Animator.SetBool("IDLE", false);
             }
             else
                 Animator.SetBool("IDLE", true);

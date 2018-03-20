@@ -89,6 +89,10 @@ namespace Assets.Scripts
             _fundingText = GameObject.FindGameObjectsWithTag("FundingText")[0].GetComponent<Text>();
             _fundingText.text = "£" + FundingAmount.ToString("0000");
             _dailyReport = UnityEngine.Object.FindObjectOfType<DailyReport>();
+            //ConversePanel = new ConversationPanel();
+           // ConversePanel._convoPanel = GameObject.FindGameObjectWithTag("ConversationPanel");
+            //ConversePanel._hideButton = GameObject.FindGameObjectWithTag("ConversationPanel").gameObject.transform.parent.Find("ButtonHide").gameObject;
+            //ConversePanel.refScrollbar = FindObjectOfType<Scrollbar>();
         }
 
         public void Update()
@@ -135,6 +139,8 @@ namespace Assets.Scripts
 
             if (FundingAmount < 0)
                 FundingAmount = 0;
+
+
         }
 
         public static GameManager Instance()

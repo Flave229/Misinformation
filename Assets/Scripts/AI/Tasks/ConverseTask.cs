@@ -70,7 +70,7 @@ namespace Assets.Scripts.AI.Tasks
             if (_converseData.Talking)
             {
                 _timeToTalk -= Time.deltaTime;
-
+                   
                 if (_timeToTalk <= 0.0f)
                 {
                     _converseData.Talking = false;
@@ -115,8 +115,7 @@ namespace Assets.Scripts.AI.Tasks
                     string scrambledText = ScrambleText(listeningDevice);
                     
                     GameManager.Instance().ConversePanel.ShowPanel();
-                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color> \n";
-                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
+                    GameManager.Instance().ConversePanel.addSentence(_converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color>" );
                     break;
             }
         }

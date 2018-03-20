@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.General;
+using System.Linq;
 
 namespace Assets.Scripts
 {
@@ -39,16 +40,21 @@ namespace Assets.Scripts
             Timer.Instance().ResetRemainingTime();
 			GameManager.Instance ().Salary ();
             TransitioningDay = false;
-
-            _technicans = GameManager.Instance().TechList;
-            for (int i = 0; i < _technicans.Count - _prevTechs; i++)//Will continue to make more everyday... need to fix...  --- This fixes it.
+            
+            _technicans = GameManager.Instance().TechList;  // not adding to techlist on second hire
+            for (int i = _prevTechs; i < _technicans.Count; ++i)//Will continue to make more everyday... need to fix...  --- This fixes it.
             {
-                Instantiate(_technicans[i], new Vector3(0f -i, -12.24f, 0f), Quaternion.identity);
+                HireTechs test = Resources.FindObjectsOfTypeAll<HireTechs>().ToList().First().GetComponent<HireTechs>();
+                Technician tech = test.SelectedTech;
+                _technicans[i] = Resources.Load<GameObject>("Player");
+                Vector3 placementPosition = new Vector3(0f - i, -12.24f, 0f);
+                _technicans[i] = UnityEngine.Object.Instantiate(_technicans[i], placementPosition, Quaternion.identity);
+                _technicans[i].AddComponent<Technician>().SetSkills(tech.GetTranslationSkill(), tech.GetEquipmentSkill(), tech.GetMotivationSkill());
             }
             _prevTechs = _technicans.Count; //Will continue to make more everyday... need to fix...  --- This fixes it.
             GameManager.Instance().ActiveTech = _technicans[0]; //Need to be able to delete techs as hiring new ones are almost complete.
         }
-
+        
         public void EndDay()
         {
             GameManager.Instance().GetDailyReport().Show();
@@ -66,7 +72,8 @@ namespace Assets.Scripts
             foreach (GameObject gameObject in GameManager.Instance().TechList)
             {
                 var technician = gameObject.GetComponent<Technician>();
-                technician.GetComponent<Character2D>().ClearTasks();
+                if (technician.GetComponent<Character2D>() != null)
+                    technician.GetComponent<Character2D>().ClearTasks();
             }
             foreach (GameObject gameObject in GameManager.Instance().FireTechList)
             {

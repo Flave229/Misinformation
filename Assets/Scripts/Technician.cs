@@ -11,12 +11,20 @@ namespace Assets.Scripts
 		public int Salary;
 
         void Start()
-        {        
-			Salary = 100 + (_translationSkill * 20) + (_equipmentSkill * 20) + (_motivation * 10);
+        {
+            UpdateSalary();
         }
         
         void Update()
         {
+        }
+
+        public void SetSkills(int transSkill, int equipSkill, int motSkill)
+        {
+            _translationSkill = transSkill;
+            _equipmentSkill = equipSkill;
+            _motivation = motSkill;
+            UpdateSalary();
         }
 
         public void Awake()
@@ -69,6 +77,7 @@ namespace Assets.Scripts
             _translationSkill = Random.Range(0, 8);
             _equipmentSkill = Random.Range(0, 8);
             _motivation = Random.Range(0, 8);
+            UpdateSalary();
         }
     }
 }

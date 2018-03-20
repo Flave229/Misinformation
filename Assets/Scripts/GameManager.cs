@@ -172,7 +172,7 @@ namespace Assets.Scripts
             {
                 foreach (GameObject t in TechList)
                 {
-                    t.GetComponent<Technician>().UpdateSalary();
+                   // t.GetComponent<Technician>().UpdateSalary();
                     FundingAmount = FundingAmount - t.GetComponent<Technician>().Salary;
                 }
             }

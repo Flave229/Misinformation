@@ -82,5 +82,10 @@ namespace Assets.Scripts.AI.Tasks
         {
             return;
         }
+
+        public bool IsActive()
+        {
+            return true;
+        }
     }
 }

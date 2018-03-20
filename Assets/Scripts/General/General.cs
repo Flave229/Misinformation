@@ -128,7 +128,7 @@ namespace Assets.Scripts.General
 
         private void SatisfySocial(NeedStatus need)
         {
-            AITaskManager.AwaitConversation(this.gameObject, need);
+            AITaskManager.LookForConversation(this.gameObject, need);
             need.SetPendingRelief();
         }
 

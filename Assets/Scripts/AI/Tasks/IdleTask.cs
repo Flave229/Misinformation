@@ -63,5 +63,10 @@ namespace Assets.Scripts.AI.Tasks
         {
             _pause = false;
         }
+
+        public bool IsActive()
+        {
+            return _pause;
+        }
     }
 }

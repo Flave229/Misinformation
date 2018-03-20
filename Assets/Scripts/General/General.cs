@@ -29,6 +29,9 @@ namespace Assets.Scripts.General
         
         public Name Name;
 
+        // This is for Unity Editor Debug purposes. It can be safely removed later (Please don't use it in code) 
+        public string FullName;
+
         public General()
         {
         }
@@ -50,8 +53,9 @@ namespace Assets.Scripts.General
 
         public void Start()
         {
-            Name = NameGenerator.GenerateName();
+            Name = NameGenerator.GenerateGeneralName();
             SubscribeToEvents();
+            FullName = Name.FullName();
         }
 	
         void Update()

@@ -12,7 +12,6 @@ namespace Assets.Scripts
         public List<GameObject> GeneralList = new List<GameObject>();
 		public List<GameObject> TechList = new List<GameObject> ();
         public List<GameObject> FireTechList = new List<GameObject>();
-        public List<Name> GeneralNameList = new List<Name>();
 		public GameObject ActiveTech;
 		public int ActiveTechNum;
         public int Days;
@@ -172,7 +171,7 @@ namespace Assets.Scripts
             {
                 foreach (GameObject t in TechList)
                 {
-                    t.GetComponent<Technician>().UpdateSalary();
+                   // t.GetComponent<Technician>().UpdateSalary();
                     FundingAmount = FundingAmount - t.GetComponent<Technician>().Salary;
                 }
             }

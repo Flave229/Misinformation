@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class HireTechs : MonoBehaviour {
 
     List<GameObject> _listPossibleTechs = new List<GameObject>();
+    public Technician SelectedTech;
 
 	// Use this for initialization
 	public void Awake()
@@ -50,9 +51,9 @@ public class HireTechs : MonoBehaviour {
 	
     void GenerateTechList()
     {
-        GameObject tech1 = new GameObject();
-        GameObject tech2 = new GameObject();
-        GameObject tech3 = new GameObject();
+        GameObject tech1 = new GameObject("tech1");
+        GameObject tech2 = new GameObject("tech2");
+        GameObject tech3 = new GameObject("tech3");
         tech1.AddComponent<Technician>();
         tech2.AddComponent<Technician>();
         tech3.AddComponent<Technician>();
@@ -62,16 +63,14 @@ public class HireTechs : MonoBehaviour {
 
         for (int i = 0; i < _listPossibleTechs.Count; i++)
         {
-            _listPossibleTechs[i].GetComponent<Technician>().UpdateSalary();
             _listPossibleTechs[i].GetComponent<Technician>().RandomiseAttributes();
-            Debug.Log(_listPossibleTechs[i].GetComponent<Technician>().Salary);
-            //Debug.Log("Tech" + i + ": " + _listPossibleTechs[i].GetComponent<Technician>().GetEquipmentSkill());
         }
     }
 
     public void HireTech(int num)
     {
         GameManager.Instance().TechList.Add(_listPossibleTechs[num]);
+        SelectedTech = _listPossibleTechs[num].GetComponent<Technician>();
     }
 
 

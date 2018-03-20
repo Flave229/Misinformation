@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.FileIO;
+using Assets.Scripts.General;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -9,23 +11,36 @@ namespace Assets.Scripts
         private int _motivation;
         public bool IsActive;
 		public int Salary;
+        public Name Name;
+        public string FullName;
 
         void Start()
-        {        
-			Salary = 100 + (_translationSkill * 20) + (_equipmentSkill * 20) + (_motivation * 10);
+        {
         }
+
         
         void Update()
         {
         }
 
+        public void SetSkills(int transSkill, int equipSkill, int motSkill)
+        {
+            _translationSkill = transSkill;
+            _equipmentSkill = equipSkill;
+            _motivation = motSkill;
+            UpdateSalary();
+        }
+
         public void Awake()
         {
+            Name = NameGenerator.GenerateTechnicianName();
             RandomiseAttributes();
+            UpdateSalary();
             Debug.Log("Technician");
             Debug.Log("Translator Skill: " + _translationSkill);
             Debug.Log("Equipment Specialist Skill: " + _equipmentSkill);
             Debug.Log("Motivation: " + _motivation);
+            FullName = Name.FullName();
         }
 
 
@@ -69,6 +84,7 @@ namespace Assets.Scripts
             _translationSkill = Random.Range(0, 8);
             _equipmentSkill = Random.Range(0, 8);
             _motivation = Random.Range(0, 8);
+            UpdateSalary();
         }
     }
 }

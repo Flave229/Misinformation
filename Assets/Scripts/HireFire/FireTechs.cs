@@ -1,12 +1,18 @@
 ﻿using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class FireTechs : MonoBehaviour {
 
     private void Awake()
+    {
+        OnActive();
+    }
+
+    public void OnActive()
     {
         List<Text> canvasTextGameObjects = new List<Text>();
         canvasTextGameObjects.AddRange(Object.FindObjectsOfType<Text>());
@@ -47,6 +53,7 @@ public class FireTechs : MonoBehaviour {
     {
         GameManager.Instance().FireTechList.Add(GameManager.Instance().TechList[num]);
         GameManager.Instance().TechList.RemoveAt(num);
+        Resources.FindObjectsOfTypeAll<Daily>().ToList().First()._prevTechs -= 1;
     }
 
     private void FireTechText(List<Text> listEquipment, List<Text> listTranslation, List<Text> listMotivation, List<Text> listSalary)

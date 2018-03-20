@@ -135,5 +135,10 @@ namespace Assets.Scripts.AI
 
             return currentTaskList;
         }
+
+        internal bool IsConcurrentCurrentTaskActive()
+        {
+            return _concurrentTask != null ? _concurrentTask.IsActive() : false;
+        }
     }
 }

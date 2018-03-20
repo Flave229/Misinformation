@@ -9,7 +9,7 @@ using System;
 
 namespace Assets.Scripts.AI.Tasks
 {
-    public class ConverseTaskV2 : ITask, IEventListener
+    public class ConverseTask : ITask, IEventListener
     {
         private static readonly List<char> _randomCharacters = new List<char> { '#', '@', '!', '?', '/', '%', '$', '£' };
 
@@ -22,7 +22,7 @@ namespace Assets.Scripts.AI.Tasks
         private readonly GameObject _speechBubble;
 
        
-        public ConverseTaskV2(ConverseData converseData)
+        public ConverseTask(ConverseData converseData)
         {
             _secondsToTalk = 7.0f;
             _secondsToWait = 30.0f;
@@ -109,7 +109,7 @@ namespace Assets.Scripts.AI.Tasks
             Debug.Log(_converseData.General.Name.FullName() + " is close to " + closestGeneral.Name.FullName() + " and will try to initiate conversation");
             _converseData.General.GetComponent<Character2D>().Tasks.PauseCurrentTask();
             closestGeneral.GetComponent<Character2D>().Tasks.PauseCurrentTask();
-            closestGeneral.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTaskV2(new ConverseData
+            closestGeneral.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTask(new ConverseData
             {
                 ConversationPartnerTaskData = _converseData,
                 General = closestGeneral,

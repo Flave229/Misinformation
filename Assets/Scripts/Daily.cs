@@ -38,6 +38,12 @@ namespace Assets.Scripts
             Timer.Instance().ResetRemainingTime();
 			GameManager.Instance ().Salary ();
             TransitioningDay = false;
+
+            _technicans = GameManager.Instance().TechList;
+            for (int i = 0; i < _technicans.Count - 2; i++)
+            {
+                Instantiate(_technicans[i], new Vector3(0f -i, -12.24f, 0f), Quaternion.identity);
+            }
         }
 
         public void EndDay()

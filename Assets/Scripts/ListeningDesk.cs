@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.EventSystem;
 using UnityEngine;
+using Assets.Scripts.EventSystem.EventPackets;
 
 namespace Assets.Scripts
 {
@@ -47,13 +48,20 @@ namespace Assets.Scripts
 		{
             if (activeDevice != null || numOfListeningDevices == 0)
                 return;
-            
+
+            GameManager.Instance().SetUsingDesk(true);
 			activeDevice = GameManager.Instance ().ListeningDevList [0];
 			activeDeviceNum = 0;
 			activeDevice.GetComponent<ListeningDevice> ().activeDevice = true;
 			Camera.main.GetComponent<Camera2DFollow> ().target = activeDevice.transform;
-			usingDesk = true;			
-		}
+			usingDesk = true;
+            ListeningDevicePacket eventPacket = new ListeningDevicePacket
+            {
+                Device = activeDevice.GetComponent<ListeningDevice>(),
+                Num = activeDeviceNum
+            };
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_CYCLED, eventPacket);
+        }
 
 		void CycleDevices()
 		{
@@ -78,8 +86,16 @@ namespace Assets.Scripts
             ListeningDevice newActiveDevice = activeDevice.gameObject.GetComponent<ListeningDevice>();
             newActiveDevice.activeDevice = true;
 			Camera.main.GetComponent<Camera2DFollow>().target = activeDevice.transform;
-            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_LISTENING, newActiveDevice);
-		}
+
+            ListeningDevicePacket eventPacket = new ListeningDevicePacket
+            {
+                Device = newActiveDevice,
+                Num = activeDeviceNum
+            };
+
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_LISTENING, eventPacket);
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_CYCLED, eventPacket);
+        }
 
 		void LeaveDesk()
 		{
@@ -89,7 +105,8 @@ namespace Assets.Scripts
 				activeDevice = null;
 			}
 
-			usingDesk = false;
+            GameManager.Instance().SetUsingDesk(false);
+            usingDesk = false;
 			Camera.main.GetComponent<Camera2DFollow>().target = GameManager.Instance().ActiveTech.transform;
             EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DESK_OFF, null);
         }

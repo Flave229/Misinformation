@@ -14,6 +14,7 @@ namespace Assets.Scripts
         public RadialButton buttonPrefab;
         public RadialButton selected;
         public Vector3 mouseLocation;
+        public GameObject CanvasHireFire;
         //Private
         private LineRenderer lineRenderer;
         private InputManager inputManager;
@@ -39,12 +40,13 @@ namespace Assets.Scripts
             */
             lineRenderer.widthMultiplier = 0.05f;
             lineRenderer.positionCount = 2;
+            CanvasHireFire = RadialMenuSpawner.ins.CanvasHireFire;
         }
 
         private void InitialiseInteractableList()
         {
             Buggable = UnityEngine.GameObject.FindObjectsOfType<BuggableFurniture>().Select(x => x.gameObject).ToList();
-            
+
             technician = GameObject.FindGameObjectWithTag("Player"); //Keep this here otherwise cant place stuffs
             defaultName = this.GetComponent<Text>();
         }
@@ -119,8 +121,13 @@ namespace Assets.Scripts
                 {
                     MoveToLocation();
                 }
+                if (selected.title == "Board")
+                {
+                    MoveToLocation();
+                    CanvasHireFire.SetActive(true); //TODO: Add function to to pause game when menu is open. Add close button to canvas to make canvas inactive.
+                }
             }
-            
+
             Destroy(gameObject);
         }
 
@@ -135,9 +142,10 @@ namespace Assets.Scripts
 
             taskChain.Push(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
+                Character = GameManager.Instance().ActiveTech.GetComponent<Character2D>(),
                 Location = mouseLocation
             }));
+
             character.Tasks.AddToStack(new AITaskChain(taskChain));
         }
 
@@ -145,22 +153,21 @@ namespace Assets.Scripts
         {
             character.Tasks.AddToStack(new PathfindToLocationTask(new PathfindData
             {
-                MovementAi = GameManager.Instance().ActiveTech.GetComponent<Character2D>().MovementAi,
+                Character = GameManager.Instance().ActiveTech.GetComponent<Character2D>(),
                 Location = mouseLocation
             }));
         }
 
         private void RadialMenuText()
         {
-			InitialiseInteractableList();
-			for (int i = 0; i < Buggable.Count; i++) 
-			{
-				if (Vector2.Distance (mouseLocation, Buggable[i].transform.position) < 2.0f) 
-				{
-					defaultName.text = "buggable";
-				}
-			}
-            //defaultName.text = "Help, I'm trapped in a menu";
+            InitialiseInteractableList();
+            for (int i = 0; i < Buggable.Count; i++)
+            {
+                if (Vector2.Distance(mouseLocation, Buggable[i].transform.position) < 2.0f)
+                {
+                    defaultName.text = "buggable";
+                }
+            }
         }
 
         private void Update()
@@ -188,14 +195,14 @@ namespace Assets.Scripts
                 temp.z = -0.2f;
                 lineRenderer.SetPosition(0, temp);
 
-                temp = GameManager.Instance().ActiveTech.GetComponent<Character2D>().transform.localPosition;
-                temp.y += 0.2f;
+                temp = Camera.main.ScreenToWorldPoint(transform.position);
+                //temp.y += 0.2f;
                 temp.z = -0.2f;
                 lineRenderer.SetPosition(1, temp);
 
             }
         }
-
     }
+
 }
 

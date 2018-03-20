@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.EventSystem;
+using Assets.Scripts.EventSystem.EventPackets;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
     public class ListeningDevice : MonoBehaviour
     {
 		public GameObject toolTip;
+        public FollowMouse toolTipText;
         private int durability;
         private float dPeriod = 100;
         private double _quality;
@@ -18,7 +22,8 @@ namespace Assets.Scripts
             _player = GameObject.FindGameObjectWithTag("Player");
             _technician = _player.GetComponent<Technician>();
             durability = 2;
-			      toolTip = GameObject.Find ("HoverText");
+			toolTip = GameObject.Find ("HoverText");
+            toolTipText = toolTip.GetComponent<FollowMouse>();
             _quality = (double)((_technician.GetEquipmentSkill() + 1)) / 10;
         }
 	
@@ -43,11 +48,11 @@ namespace Assets.Scripts
 
 		void OnMouseOver()
 		{
-			toolTip.GetComponent<FollowMouse>().UpdateText ("Listening Device\n" + "Durability = " + GetDurability () + "\nQuality = " + (GetQuality() * 10) );
+            toolTipText.UpdateText ("Listening Device\n" + "Durability = " + GetDurability () + "\nQuality = " + (GetQuality() * 10) );
 		}
 		void OnMouseExit()
 		{
-			toolTip.GetComponent<FollowMouse>().isEntered = false;
+            toolTipText.isEntered = false;
 		}
 
         private void ResetPeriod()
@@ -62,8 +67,15 @@ namespace Assets.Scripts
 
         public void DestroyDevice()
         {
-			//toolTip.GetComponent<FollowMouse> ().UpdateText ("");
-			GameManager.Instance ().ListeningDevList.Remove (this.gameObject);
+            toolTipText.UpdateText ("");
+            int myIndex = GameManager.Instance().ListeningDevList.FindIndex(x => x.gameObject);
+            ListeningDevicePacket eventPacket = new ListeningDevicePacket
+            {
+                Device = this,
+                Num = myIndex
+            };
+            GameManager.Instance ().ListeningDevList.Remove (this.gameObject);
+            EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_DESTROYED, eventPacket);
             Destroy(transform.gameObject);
         }
 

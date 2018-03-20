@@ -9,6 +9,7 @@ namespace Assets.Scripts.AI.Tasks
         private int _secondsOnToilet;
         private bool _usingToilet;
         private bool _completed;
+        private bool _pause;
         private readonly ToiletData _toiletData;
 
         public UseToiletTask(ToiletData dataPacket)
@@ -45,11 +46,27 @@ namespace Assets.Scripts.AI.Tasks
         public void SetCompleted()
         {
             _completed = true;
+            _toiletData.BladderNeed.Replenish();
         }
 
-        public bool GetCeilingLock()
+        public double GetPriority()
         {
-            return false;
+            return 1 - _toiletData.BladderNeed.Status;
+        }
+
+        public TaskPriorityType GetPriorityType()
+        {
+            return TaskPriorityType.WORK;
+        }
+
+        public void Pause()
+        {
+            _pause = true;
+        }
+
+        public void UnPause()
+        {
+            _pause = false;
         }
     }
 }

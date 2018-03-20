@@ -34,6 +34,7 @@ namespace Assets.Scripts
         private bool _pause;
         private bool _pendingStart;
         private bool _gameover;
+        private bool _usingDesk = false;
 
         public int FundingAmount
         {
@@ -68,6 +69,7 @@ namespace Assets.Scripts
 
             if (_pause == false)
                 _pendingStart = true;
+
         }
 
         private void AwakeSingletonManagers()
@@ -132,7 +134,7 @@ namespace Assets.Scripts
                 _dailyManager.EndDay();
             }
 				
-			if(Input.GetKeyUp(KeyCode.Tab))
+			if(Input.GetKeyUp(KeyCode.Tab) && _usingDesk == false)
 			{
 				CycleTech ();
 			}
@@ -150,7 +152,9 @@ namespace Assets.Scripts
         
 		public void CycleTech()
 		{
-			ActiveTech.gameObject.GetComponent<Technician> ().IsActive = false;
+            TechList.Clear();
+            TechList.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+            ActiveTech.gameObject.GetComponent<Technician> ().IsActive = false;
 			if (ActiveTechNum == (TechList.Count - 1))
 				ActiveTechNum = 0;
 			else
@@ -230,6 +234,16 @@ namespace Assets.Scripts
         public DailyReport GetDailyReport()
         {
             return _dailyReport;
+        }
+
+        public bool GetUsingDesk()
+        {
+            return _usingDesk;
+        }
+
+        public void SetUsingDesk(bool v)
+        {
+            _usingDesk = v;
         }
     }
 }

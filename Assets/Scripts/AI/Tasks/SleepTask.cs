@@ -11,6 +11,7 @@ namespace Assets.Scripts.AI.Tasks
         private int _secondsSleeping;
         private bool _completed;
         private SleepData _sleepData;
+        private bool _pause;
 
         public SleepTask(SleepData dataPacket)
         {
@@ -53,12 +54,30 @@ namespace Assets.Scripts.AI.Tasks
 
         public void SetCompleted()
         {
+            if (_pause)
+                return;
             _completed = true;
+            _sleepData.RestNeed.Replenish();
+        }
+        
+        public double GetPriority()
+        {
+            return 1 - _sleepData.RestNeed.Status;
         }
 
-        public bool GetCeilingLock()
+        public TaskPriorityType GetPriorityType()
         {
-            return false;
+            return TaskPriorityType.WORK;
+        }
+
+        public void Pause()
+        {
+            _pause = true;
+        }
+
+        public void UnPause()
+        {
+            _pause = false;
         }
     }
 }

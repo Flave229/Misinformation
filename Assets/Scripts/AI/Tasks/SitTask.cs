@@ -11,6 +11,7 @@ namespace Assets.Scripts.AI.Tasks
         private bool _sitting;
         private int _secondsSitting;
         private bool _completed;
+        private bool _pause;
 
         public SitTask(SitData sitData)
         {
@@ -51,12 +52,31 @@ namespace Assets.Scripts.AI.Tasks
 
         public void SetCompleted()
         {
+            if (_pause)
+                return;
+
             _completed = true;
+            _sitData.RestNeed.Replenish(0.1f);
+        }
+        
+        public double GetPriority()
+        {
+            return 1 - _sitData.RestNeed.Status;
         }
 
-        public bool GetCeilingLock()
+        public TaskPriorityType GetPriorityType()
         {
-            return false;
+            return TaskPriorityType.WORK;
+        }
+
+        public void Pause()
+        {
+            _pause = true;
+        }
+
+        public void UnPause()
+        {
+            _pause = false;
         }
     }
 }

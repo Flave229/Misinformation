@@ -11,6 +11,7 @@ namespace Assets.Scripts
         public List<GameObject> ListeningDevList = new List<GameObject>();
         public List<GameObject> GeneralList = new List<GameObject>();
 		public List<GameObject> TechList = new List<GameObject> ();
+        public List<GameObject> FireTechList = new List<GameObject>();
         public List<Name> GeneralNameList = new List<Name>();
 		public GameObject ActiveTech;
 		public int ActiveTechNum;
@@ -91,6 +92,10 @@ namespace Assets.Scripts
             _fundingText = GameObject.FindGameObjectsWithTag("FundingText")[0].GetComponent<Text>();
             _fundingText.text = "£" + FundingAmount.ToString("0000");
             _dailyReport = UnityEngine.Object.FindObjectOfType<DailyReport>();
+            //ConversePanel = new ConversationPanel();
+           // ConversePanel._convoPanel = GameObject.FindGameObjectWithTag("ConversationPanel");
+            //ConversePanel._hideButton = GameObject.FindGameObjectWithTag("ConversationPanel").gameObject.transform.parent.Find("ButtonHide").gameObject;
+            //ConversePanel.refScrollbar = FindObjectOfType<Scrollbar>();
         }
 
         public void Update()
@@ -137,6 +142,8 @@ namespace Assets.Scripts
 
             if (FundingAmount < 0)
                 FundingAmount = 0;
+
+
         }
 
         public static GameManager Instance()
@@ -161,11 +168,14 @@ namespace Assets.Scripts
 
 		public void Salary()
 		{
-			foreach(GameObject t in TechList)
-			{
-				t.GetComponent<Technician> ().UpdateSalary ();
-				FundingAmount = FundingAmount - t.GetComponent<Technician> ().Salary;
-			}
+            if (ActiveTech != null)
+            {
+                foreach (GameObject t in TechList)
+                {
+                    t.GetComponent<Technician>().UpdateSalary();
+                    FundingAmount = FundingAmount - t.GetComponent<Technician>().Salary;
+                }
+            }
 		}
         
         public List<GameObject> GetListeningDevices()

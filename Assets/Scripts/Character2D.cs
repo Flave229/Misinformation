@@ -1,5 +1,4 @@
 using Assets.Scripts.AI;
-using Assets.Scripts.AI.Movement_AI;
 using Assets.Scripts.AI.TaskData;
 using Assets.Scripts.AI.Tasks;
 using Assets.Scripts.EventSystem;
@@ -53,7 +52,7 @@ namespace Assets.Scripts
             if (Timer.Instance().Paused || Pause)
                 return;
 
-            Tasks.Update();            
+            Tasks.Update();
         }
 
         public void Flip()

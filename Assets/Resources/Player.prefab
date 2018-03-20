@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 212957767193479520}
   - component: {fileID: 114030087821069950}
   - component: {fileID: 95990897409735480}
-  - component: {fileID: 114311025767205116}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -77,19 +76,6 @@ MonoBehaviour:
   WalkSpeed: 0.1
   FacingRight: 1
   Pause: 0
---- !u!114 &114311025767205116
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1980240735308804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbdb6a03e5c72294e8f9dca45fa36836, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsActive: 0
-  Salary: 200
 --- !u!212 &212957767193479520
 SpriteRenderer:
   m_ObjectHideFlags: 1

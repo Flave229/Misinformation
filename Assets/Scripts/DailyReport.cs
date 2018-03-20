@@ -29,20 +29,23 @@ namespace Assets.Scripts
 
         private void Update()
         {
-			player = GameManager.Instance().ActiveTech;
-            float distance = Vector3.Distance(player.transform.position, Typewriter.transform.position);
-            if (distance < 1)
+            if (GameManager.Instance().ActiveTech != null)
             {
-                if (Input.GetKeyDown(KeyCode.L) && Timer.Instance().GetRemainingTime() > 0)
+                player = GameManager.Instance().ActiveTech;
+                float distance = Vector3.Distance(player.transform.position, Typewriter.transform.position);
+                if (distance < 1)
                 {
-                    if (reportScreenVisible)
+                    if (Input.GetKeyDown(KeyCode.L) && Timer.Instance().GetRemainingTime() > 0)
                     {
-                        Hide();
-                    }
-                    else
-                    {
-                        SoundManager.Instance().PlaySingle("Typewriter And Bell-tamskp");
-                        Show();
+                        if (reportScreenVisible)
+                        {
+                            Hide();
+                        }
+                        else
+                        {
+                            SoundManager.Instance().PlaySingle("Typewriter And Bell-tamskp");
+                            Show();
+                        }
                     }
                 }
             }

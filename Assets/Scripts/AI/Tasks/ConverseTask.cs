@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.AI.TaskData;
 using Assets.Scripts.Conversation;
 using UnityEngine;
-using UnityEngine.UI;
 using Assets.Scripts.EventSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -152,8 +151,7 @@ namespace Assets.Scripts.AI.Tasks
                     string scrambledText = ScrambleText(listeningDevice);
                     
                     GameManager.Instance().ConversePanel.ShowPanel();
-                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").GetComponent<Text>().text += _converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color> \n";
-                    _speechBubble.transform.Find("Viewport").gameObject.transform.Find("Content").gameObject.transform.Find("Dialogue02").gameObject.SetActive(true);
+                    GameManager.Instance().ConversePanel.addSentence(_converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color>" );
                     break;
             }
         }

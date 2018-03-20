@@ -6,11 +6,8 @@ using UnityEngine.UI;
 
 public class FireTechs : MonoBehaviour {
 
-    List<GameObject> _techList = new List<GameObject>();
-
     private void Awake()
     {
-        _techList = GameManager.Instance().TechList;
         List<Text> canvasTextGameObjects = new List<Text>();
         canvasTextGameObjects.AddRange(Object.FindObjectsOfType<Text>());
 
@@ -48,7 +45,8 @@ public class FireTechs : MonoBehaviour {
 
     public void FireTech(int num)
     {
-        _techList.RemoveAt(num);
+        GameManager.Instance().FireTechList.Add(GameManager.Instance().TechList[num]);
+        GameManager.Instance().TechList.RemoveAt(num);
     }
 
     private void FireTechText(List<Text> listEquipment, List<Text> listTranslation, List<Text> listMotivation, List<Text> listSalary)
@@ -65,28 +63,28 @@ public class FireTechs : MonoBehaviour {
         List<string> salaryTextList = new List<string>();
         List<int> salaryIntList = new List<int>();
 
-        for (int i = 0; i < _techList.Count; i++)
+        for (int i = 0; i < GameManager.Instance().TechList.Count; i++)
         {
             //Equipment
-            equipmentIntList.Add(_techList[i].GetComponent<Technician>().GetEquipmentSkill());
+            equipmentIntList.Add(GameManager.Instance().TechList[i].GetComponent<Technician>().GetEquipmentSkill());
             equipmentTextList.Add(equipmentIntList[i].ToString());
-            Debug.Log("Tech" + i + "Equipment: " + _techList[i].GetComponent<Technician>().GetEquipmentSkill());
+            Debug.Log("Tech" + i + "Equipment: " + GameManager.Instance().TechList[i].GetComponent<Technician>().GetEquipmentSkill());
 
             //Translation
-            translationIntList.Add(_techList[i].GetComponent<Technician>().GetTranslationSkill());
+            translationIntList.Add(GameManager.Instance().TechList[i].GetComponent<Technician>().GetTranslationSkill());
             translationTextList.Add(translationIntList[i].ToString());
-            Debug.Log("Tech" + i + "Translation: " + _techList[i].GetComponent<Technician>().GetTranslationSkill());
+            Debug.Log("Tech" + i + "Translation: " + GameManager.Instance().TechList[i].GetComponent<Technician>().GetTranslationSkill());
 
             //Motivation
-            motivationIntList.Add(_techList[i].GetComponent<Technician>().GetMotivationSkill());
+            motivationIntList.Add(GameManager.Instance().TechList[i].GetComponent<Technician>().GetMotivationSkill());
             motivationTextList.Add(motivationIntList[i].ToString());
-            Debug.Log("Tech" + i + "Motivation: " + _techList[i].GetComponent<Technician>().GetMotivationSkill());
+            Debug.Log("Tech" + i + "Motivation: " + GameManager.Instance().TechList[i].GetComponent<Technician>().GetMotivationSkill());
 
-            salaryIntList.Add(_techList[i].GetComponent<Technician>().Salary);
+            salaryIntList.Add(GameManager.Instance().TechList[i].GetComponent<Technician>().Salary);
             salaryTextList.Add(salaryIntList[i].ToString());
         }
 
-        for (int i = 0; i < _techList.Count; i++)
+        for (int i = 0; i < GameManager.Instance().TechList.Count; i++)
         {
             listEquipment[i].text = equipmentTextList[i];
             listMotivation[i].text = motivationTextList[i];

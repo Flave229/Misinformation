@@ -11470,6 +11470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60dce7f57f7c80b47a8b97e7023ce0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FullName: 
 --- !u!95 &714998843
 Animator:
   serializedVersion: 3
@@ -23117,6 +23118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60dce7f57f7c80b47a8b97e7023ce0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FullName: 
 --- !u!95 &1391846772
 Animator:
   serializedVersion: 3
@@ -25740,6 +25742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60dce7f57f7c80b47a8b97e7023ce0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FullName: 
 --- !u!95 &1559072329
 Animator:
   serializedVersion: 3
@@ -35107,6 +35110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsActive: 0
   Salary: 0
+  FullName: 
 --- !u!95 &2061122055
 Animator:
   serializedVersion: 3

@@ -29,14 +29,14 @@ namespace Assets.Scripts.Progression
 
         public ExperienceProgress GetProgressTowardsNextLevel()
         {
-            int lowestExperienceForThisLevel = Mathf.CeilToInt(Mathf.Pow(CurrentLevel, 1.5f) * 1000);
-            int lowestExperienceForNextLevel = Mathf.CeilToInt(Mathf.Pow(CurrentLevel + 1, 1.5f) * 1000);
+            float lowestExperienceForThisLevel = Mathf.Ceil(Mathf.Pow(CurrentLevel, 1.5f) * 1000);
+            float lowestExperienceForNextLevel = Mathf.Ceil(Mathf.Pow(CurrentLevel + 1, 1.5f) * 1000);
             return new ExperienceProgress
             {
                 CurrentExperience = Mathf.FloorToInt(_currentExperience),
                 CurrentLevel = CurrentLevel,
                 ExperienceForNextLevel = CurrentLevel < _maxLevel ? Mathf.CeilToInt(Mathf.Pow(CurrentLevel + 1, 1.5f) * 1000) : 0,
-                PercentageToNextLevel = CurrentLevel < _maxLevel ? (lowestExperienceForNextLevel / lowestExperienceForThisLevel) * 100 : 100
+                PercentageToNextLevel = CurrentLevel < _maxLevel ? Mathf.FloorToInt(((_currentExperience - lowestExperienceForThisLevel) / (lowestExperienceForNextLevel - lowestExperienceForThisLevel)) * 100) : 100
             };
         }
     }

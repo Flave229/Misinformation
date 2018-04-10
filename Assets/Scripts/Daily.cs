@@ -20,7 +20,7 @@ namespace Assets.Scripts
         public List<Name> arrivingGenerals;
 
         public List<GameObject> _technicans = new List<GameObject>();
-        public int _prevTechs = 1;
+        public int _prevTechs = 1; // THIS NEEDS CHANGING 
 
         void Start()
         {

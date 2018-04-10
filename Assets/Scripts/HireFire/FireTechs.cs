@@ -21,7 +21,8 @@ public class FireTechs : MonoBehaviour {
         List<Text> textTranslationtList = new List<Text>();
         List<Text> textMotivationList = new List<Text>();
         List<Text> textSalaryList = new List<Text>();
-        //TODO: The tech attributes are displayed in the wrong order...
+        List<Text> textNameList = new List<Text>();
+
         for (int j = 1; j < 4; j++)
         {
             for (int i = 0; i < canvasTextGameObjects.Count; i++)
@@ -44,9 +45,13 @@ public class FireTechs : MonoBehaviour {
                 {
                     textSalaryList.Add(canvasTextGameObjects[i]);
                 }
+                if (canvasTextGameObjects[i].name == "TechName" + j)
+                {
+                    textNameList.Add(canvasTextGameObjects[i]);
+                }
             }
         }
-        FireTechText(textEquipmentList, textTranslationtList, textMotivationList, textSalaryList);
+        FireTechText(textEquipmentList, textTranslationtList, textMotivationList, textSalaryList, textNameList);
     }
 
     public void FireTech(int num)
@@ -56,7 +61,7 @@ public class FireTechs : MonoBehaviour {
         Resources.FindObjectsOfTypeAll<Daily>().ToList().First()._prevTechs -= 1;
     }
 
-    private void FireTechText(List<Text> listEquipment, List<Text> listTranslation, List<Text> listMotivation, List<Text> listSalary)
+    private void FireTechText(List<Text> listEquipment, List<Text> listTranslation, List<Text> listMotivation, List<Text> listSalary, List<Text> listName)
     {
         List<string> equipmentTextList = new List<string>();
         List<int> equipmentIntList = new List<int>();
@@ -69,6 +74,8 @@ public class FireTechs : MonoBehaviour {
 
         List<string> salaryTextList = new List<string>();
         List<int> salaryIntList = new List<int>();
+
+        List<string> nameTextList = new List<string>();
 
         for (int i = 0; i < GameManager.Instance().TechList.Count; i++)
         {
@@ -89,6 +96,8 @@ public class FireTechs : MonoBehaviour {
 
             salaryIntList.Add(GameManager.Instance().TechList[i].GetComponent<Technician>().Salary);
             salaryTextList.Add(salaryIntList[i].ToString());
+
+            nameTextList.Add(GameManager.Instance().TechList[i].GetComponent<Technician>().FullName);
         }
 
         for (int i = 0; i < GameManager.Instance().TechList.Count; i++)
@@ -97,6 +106,7 @@ public class FireTechs : MonoBehaviour {
             listMotivation[i].text = motivationTextList[i];
             listTranslation[i].text = translationTextList[i];
             listSalary[i].text = salaryTextList[i];
+            listName[i].text = nameTextList[i];
 
         }
 

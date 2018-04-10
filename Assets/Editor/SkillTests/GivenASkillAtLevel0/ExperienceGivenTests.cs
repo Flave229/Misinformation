@@ -3,18 +3,6 @@ using NUnit.Framework;
 
 namespace Assets.Editor.SkillTests.GivenASkillAtLevel0
 {
-    class When1000ExperienceIsGiven
-    {
-        [Test]
-        public void ThenTheSkillMovesToLevel1()
-        {
-            Skill testSkill = new Skill(0);
-            testSkill.AddExperience(1000);
-
-            Assert.That(testSkill.CurrentLevel, Is.EqualTo(1));
-        }
-    }
-
     class When999ExperienceIsGiven
     {
         [Test]
@@ -24,6 +12,18 @@ namespace Assets.Editor.SkillTests.GivenASkillAtLevel0
             testSkill.AddExperience(999);
 
             Assert.That(testSkill.CurrentLevel, Is.EqualTo(0));
+        }
+    }
+
+    class When1000ExperienceIsGiven
+    {
+        [Test]
+        public void ThenTheSkillMovesToLevel1()
+        {
+            Skill testSkill = new Skill(0);
+            testSkill.AddExperience(1000);
+
+            Assert.That(testSkill.CurrentLevel, Is.EqualTo(1));
         }
     }
 

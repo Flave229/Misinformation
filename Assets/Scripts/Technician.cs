@@ -7,9 +7,10 @@ namespace Assets.Scripts
 {
     public class Technician : MonoBehaviour
     {
-        private Skill _translationSkill;
-        private Skill _equipmentSkill;
-        private Skill _motivation;
+        public Skill TranslationSkill { get; private set; }
+        public Skill EquipmentSkill { get; private set; }
+        public Skill Motivation { get; private set; }
+
         public bool IsActive;
 		public int Salary;
         public Name Name;
@@ -25,9 +26,9 @@ namespace Assets.Scripts
 
         public void SetSkills(int translationLevel, int equipmentLevel, int motivationLevel)
         {
-            _translationSkill = new Skill(translationLevel);
-            _equipmentSkill = new Skill(equipmentLevel);
-            _motivation = new Skill(motivationLevel);
+            TranslationSkill = new Skill(translationLevel);
+            EquipmentSkill = new Skill(equipmentLevel);
+            Motivation = new Skill(motivationLevel);
             UpdateSalary();
         }
 
@@ -37,37 +38,37 @@ namespace Assets.Scripts
             RandomiseAttributes();
             UpdateSalary();
             Debug.Log("Technician");
-            Debug.Log("Translator Skill: " + _translationSkill);
-            Debug.Log("Equipment Specialist Skill: " + _equipmentSkill);
-            Debug.Log("Motivation: " + _motivation);
+            Debug.Log("Translator Skill: " + TranslationSkill);
+            Debug.Log("Equipment Specialist Skill: " + EquipmentSkill);
+            Debug.Log("Motivation: " + Motivation);
             FullName = Name.FullName();
         }
 
 		public void UpdateSalary()
 		{
-			Salary = 100 + (_translationSkill.CurrentLevel * 20) + (_equipmentSkill.CurrentLevel * 20) + (_motivation.CurrentLevel * 10);
+			Salary = 100 + (TranslationSkill.CurrentLevel * 20) + (EquipmentSkill.CurrentLevel * 20) + (Motivation.CurrentLevel * 10);
 		}
 
         public int GetEquipmentSkill()
         {
-            return _equipmentSkill.CurrentLevel;
+            return EquipmentSkill.CurrentLevel;
         }
 
         public int GetTranslationSkill()
         {
-            return _translationSkill.CurrentLevel;
+            return TranslationSkill.CurrentLevel;
         }
 
         public int GetMotivationSkill()
         {
-            return _motivation.CurrentLevel;
+            return Motivation.CurrentLevel;
         }
-
+        
         public void RandomiseAttributes()
         {
-            _translationSkill = new Skill(Random.Range(0, 8));
-            _equipmentSkill = new Skill(Random.Range(0, 8));
-            _motivation = new Skill(Random.Range(0, 8));
+            TranslationSkill = new Skill(Random.Range(0, 6));
+            EquipmentSkill = new Skill(Random.Range(0, 6));
+            Motivation = new Skill(Random.Range(0, 8));
             UpdateSalary();
         }
     }

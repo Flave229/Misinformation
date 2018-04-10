@@ -26,6 +26,7 @@ namespace Assets.Scripts.AI.Tasks
             if (distance <= 2.0f && !IsComplete())
             {
                 PlaceInRoom(_placeListeningDeviceData.PlacedBy.GetComponent<Character2D>().CurrentRoom, _placeListeningDeviceData.PlacedBy.transform.position);
+                _placeListeningDeviceData.PlacedBy.EquipmentSkill.AddExperience(500);
                 _completed = true;
             }
         }

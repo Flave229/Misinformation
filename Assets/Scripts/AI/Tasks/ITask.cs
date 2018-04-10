@@ -7,6 +7,7 @@
         bool IsComplete();
         double GetPriority();
         TaskPriorityType GetPriorityType();
+        bool IsActive();
         void Pause();
         void UnPause();
     }

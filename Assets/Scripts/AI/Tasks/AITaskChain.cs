@@ -92,5 +92,10 @@ namespace Assets.Scripts.AI.Tasks
         {
             _executingTask.UnPause();
         }
+
+        public bool IsActive()
+        {
+            return _executingTask.IsActive();
+        }
     }
 }

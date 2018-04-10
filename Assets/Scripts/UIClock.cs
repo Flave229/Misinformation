@@ -79,5 +79,6 @@ namespace Assets.Scripts
             else
                 _clockImage.overrideSprite = Resources.Load<Sprite>("UI/Clock_12");
         }
+        
     }
 }

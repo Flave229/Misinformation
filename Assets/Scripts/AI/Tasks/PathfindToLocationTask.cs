@@ -94,5 +94,10 @@ namespace Assets.Scripts.AI.Tasks
             _pathfindData.Character.Animator.SetBool("IDLE", false);
             _pause = false;
         }
+
+        public bool IsActive()
+        {
+            return _pause;
+        }
     }
 }

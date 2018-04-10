@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.General;
+using System.Linq;
 
 namespace Assets.Scripts
 {
@@ -19,11 +20,13 @@ namespace Assets.Scripts
         public List<Name> arrivingGenerals;
 
         public List<GameObject> _technicans = new List<GameObject>();
+        public int _prevTechs = 1;
 
         void Start()
         {
             leavingGenerals = new List<Name>();
             arrivingGenerals = new List<Name>();
+            //_prevTechs = GameManager.Instance().TechList.Count();
         }
 
         void Update()
@@ -32,39 +35,52 @@ namespace Assets.Scripts
 
         public void StartDay()
         {
+            //Resources.FindObjectsOfTypeAll<FireTechs>().ToList().First().GetComponent<FireTechs>().OnActive();
             SoundManager.Instance().PlayBGM();
             GameManager.Instance().Days++;
             GameManager.Instance().UpdateCurrentDate();
             Timer.Instance().ResetRemainingTime();
 			GameManager.Instance ().Salary ();
             TransitioningDay = false;
-
+            
             _technicans = GameManager.Instance().TechList;
-            for (int i = 0; i < _technicans.Count - 2; i++)
+            for (int i = _prevTechs; i < _technicans.Count; ++i)
             {
-                Instantiate(_technicans[i], new Vector3(0f -i, -12.24f, 0f), Quaternion.identity);
+                Technician tech = Resources.FindObjectsOfTypeAll<HireTechs>().ToList().First().GetComponent<HireTechs>().SelectedTech;
+                _technicans[i] = Resources.Load<GameObject>("Player");
+                _technicans[i].GetComponent<Character2D>().CurrentRoom = GameObject.Find("Room-teck").GetComponent<Room>();
+                Vector3 placementPosition = new Vector3(0f - i, -12.28f, 0f);
+                _technicans[i] = UnityEngine.Object.Instantiate(_technicans[i], placementPosition, Quaternion.identity);
+                _technicans[i].AddComponent<Technician>().SetSkills(tech.GetTranslationSkill(), tech.GetEquipmentSkill(), tech.GetMotivationSkill());
             }
+            _prevTechs = _technicans.Count;
+            GameManager.Instance().ActiveTech = _technicans[0];
         }
-
+        
         public void EndDay()
         {
                 GameManager.Instance().GetDailyReport().Show();
                 TransitioningDay = true;
-
-                var generalList = GameManager.Instance().GeneralList;
-                foreach (GameObject gameObject in generalList)
-                {
-                    var general = gameObject.GetComponent<General.General>();
-                    general.UpdateKnowledgeValue(-1);
-                    general.UpdateTrustValue(1);
-                    general.GetComponent<Character2D>().ClearTasks();
-                }
-
-                foreach (GameObject gameObject in GameManager.Instance().TechList)
-                {
-                    var technician = gameObject.GetComponent<Technician>();
+            
+            var generalList = GameManager.Instance().GeneralList;
+            foreach (GameObject gameObject in generalList)
+            {
+                var general = gameObject.GetComponent<General.General>();
+                general.UpdateKnowledgeValue(-1);
+                general.UpdateTrustValue(1);
+                general.GetComponent<Character2D>().ClearTasks();
+            }
+            foreach (GameObject gameObject in GameManager.Instance().TechList)
+            {
+                var technician = gameObject.GetComponent<Technician>();
+                if (technician.GetComponent<Character2D>() != null)
                     technician.GetComponent<Character2D>().ClearTasks();
-                }
+            }
+            foreach (GameObject gameObject in GameManager.Instance().FireTechList)
+            {
+                GameManager.Instance().ActiveTech = GameManager.Instance().TechList[0];
+                Destroy(gameObject);
+            }
         }
 
         public void GenerateGenerals()
@@ -112,7 +128,6 @@ namespace Assets.Scripts
                 leavingGenerals.Add(generalComponent.Name);
                 Destroy(GameManager.Instance().GeneralList[randomGeneralIndex]);
                 GameManager.Instance().GeneralList.RemoveAt(randomGeneralIndex);
-                GameManager.Instance().GeneralNameList.Add(GameManager.Instance().GeneralList[randomGeneralIndex].GetComponent<General.General>().Name);
                 NameGenerator.RemoveNameFromPool(GameManager.Instance().GeneralList[randomGeneralIndex].GetComponent<General.General>().Name);
             }
         }

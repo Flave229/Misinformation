@@ -10,7 +10,7 @@ using Event = Assets.Scripts.EventSystem.Event;
 
 namespace Assets.Scripts.General
 {
-    public class General : MonoBehaviour, IEventListener
+    public class General : MonoBehaviour, IEventListener, IGeneral
     {
         private System.Random _randomGenerator;
 
@@ -28,6 +28,9 @@ namespace Assets.Scripts.General
         private List<GameObject> SeenListeningDevices = new List<GameObject>();
         
         public Name Name;
+
+        // This is for Unity Editor Debug purposes. It can be safely removed later (Please don't use it in code) 
+        public string FullName;
 
         public General()
         {
@@ -50,8 +53,9 @@ namespace Assets.Scripts.General
 
         public void Start()
         {
-            Name = NameGenerator.GenerateName();
+            Name = NameGenerator.GenerateGeneralName();
             SubscribeToEvents();
+            FullName = Name.FullName();
         }
 	
         void Update()
@@ -128,7 +132,7 @@ namespace Assets.Scripts.General
 
         private void SatisfySocial(NeedStatus need)
         {
-            AITaskManager.AwaitConversation(this.gameObject, need);
+            AITaskManager.LookForConversation(this.gameObject, need);
             need.SetPendingRelief();
         }
 
@@ -275,6 +279,11 @@ namespace Assets.Scripts.General
         public string GetObjectiveTime()
         {
             return ObjectiveTime;
+        }
+
+        public Character2D GetCharacter()
+        {
+            return this.GetComponent<Character2D>();
         }
     }
 }

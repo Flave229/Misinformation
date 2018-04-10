@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
     public class GameoverScript : MonoBehaviour
     {
+    float TimerTypewriter;
 
     public float letterPause = 0.2f;
     //string message;
@@ -24,7 +26,25 @@ namespace Assets.Scripts
             hasDisplayed = false;
 
     }
+        private void Update()
+        {
+            TypeTextNonIEnum("Game Over \n   Press \"Space\" to return to menu");
+        }
 
+        public void TypeTextNonIEnum(string message)
+        {
+            TimerTypewriter += Time.deltaTime;
+            if (TimerTypewriter == letterPause)
+            {
+                foreach (char letter in message.ToCharArray())
+                {
+                    gameOverText.text += letter;
+                }
+                TimerTypewriter = 0;
+            }
+
+            isFinished = true;
+        }
 
 
         public IEnumerator TypeText(string message)

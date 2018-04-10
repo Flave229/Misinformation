@@ -15,6 +15,7 @@ namespace Assets.Scripts
         public List<Name> GeneralNameList = new List<Name>();
         public GameObject ActiveTech;
         public int ActiveTechNum;
+        public List<GameObject> FireTechList = new List<GameObject>();
         public int Days;
         public ConversationPanel ConversePanel;
         public Objective CurrentObjective;
@@ -41,6 +42,12 @@ namespace Assets.Scripts
         {
             get { return _fundingAmount; }
             set { _fundingAmount = value; _fundingText.text = "£" + FundingAmount.ToString("0000"); }
+        }
+
+        public bool GameoverState
+        {
+            get { return _gameover; }
+            set { _gameover = value; }
         }
 
         private void Awake()
@@ -128,7 +135,8 @@ namespace Assets.Scripts
             if (_dailyManager.TransitioningDay == false && Timer.Instance().GetRemainingTime() <= 0)
             {
                 _dailyManager.EndDay();
-                CallGameover();
+                //CallGameover();
+                displayGameover();
             }
 
             if (Input.GetKeyUp(KeyCode.Tab) && _usingDesk == false)
@@ -151,6 +159,7 @@ namespace Assets.Scripts
         {
             TechList.Clear();
             TechList.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+
             ActiveTech.gameObject.GetComponent<Technician>().IsActive = false;
             if (ActiveTechNum == (TechList.Count - 1))
                 ActiveTechNum = 0;
@@ -164,10 +173,13 @@ namespace Assets.Scripts
 
         public void Salary()
         {
-            foreach (GameObject t in TechList)
+            if (ActiveTech != null)
             {
-                t.GetComponent<Technician>().UpdateSalary();
-                FundingAmount = FundingAmount - t.GetComponent<Technician>().Salary;
+                foreach (GameObject t in TechList)
+                {
+                    t.GetComponent<Technician>().UpdateSalary();
+                    FundingAmount = FundingAmount - t.GetComponent<Technician>().Salary;
+                }
             }
         }
 
@@ -254,20 +266,6 @@ namespace Assets.Scripts
             _usingDesk = v;
         }
         
-        public void CallGameover()
-        {
-            if (_fundingAmount == 0)
-            {
-                _gameover = true;
-                SceneManager.LoadScene(4);
-                ListeningDevList.RemoveRange(0, ListeningDevList.Count);
-                EmptyAIStack();
-                GeneralList.RemoveRange(0, GeneralList.Count);
-                TechList.RemoveRange(0, TechList.Count);
-            }
-            if (ifScene_CurrentlyLoaded_inEditor("GameoverScene") || isScene_CurrentlyLoaded("GameoverScene"))
-                StartCoroutine(FindObjectOfType<GameoverScript>().TypeText("Game Over \n   Press \"Space\" to return to menu"));
-        }
 
         #if UNITY_EDITOR
         bool ifScene_CurrentlyLoaded_inEditor(string sceneName_no_extention)
@@ -300,7 +298,7 @@ namespace Assets.Scripts
             return false;
         }
 
-        void EmptyAIStack()
+        public void EmptyAIStack()
         {
             for (int i = 0; i < GeneralList.Count; i++)
             {
@@ -308,5 +306,21 @@ namespace Assets.Scripts
                     GeneralList[i].GetComponent<Character2D>().Tasks.Destroy();
             }
         }
+
+        public void displayGameover()
+        {
+
+                if (_fundingAmount == 0)
+                {
+                    _gameover = true;
+                    SceneManager.LoadScene(4);
+                    ListeningDevList.RemoveRange(0, ListeningDevList.Count);
+                    EmptyAIStack();
+                    GeneralList.RemoveRange(0, GeneralList.Count);
+                    TechList.RemoveRange(0, TechList.Count);
+                }
+
+        }
+
     }
 }

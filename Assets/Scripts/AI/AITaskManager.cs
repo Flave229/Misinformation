@@ -33,54 +33,8 @@ namespace Assets.Scripts.AI
         public void Update(List<GameObject> generalList)
         {
             int generalCount = generalList.Count;
-
-            PairConversations();
-            ChanceToSearchForListeningDevices(generalList);
-        }
-
-        private void PairConversations()
-        {
-            if (GeneralsAwaitingConversation.Count < 2)
-                return;
-
-            List<GameObject> listOfGeneralsAwaitingConversation = Enumerable.ToList(GeneralsAwaitingConversation.Keys);
-            GameObject generalOne = listOfGeneralsAwaitingConversation[0];
-            NeedStatus generalOneSocialNeed = GeneralsAwaitingConversation[generalOne];
-            GameObject generalTwo = listOfGeneralsAwaitingConversation[1];
-            NeedStatus generalTwoSocialNeed = GeneralsAwaitingConversation[generalTwo];
-            GeneralsAwaitingConversation.Remove(generalOne);
-            GeneralsAwaitingConversation.Remove(generalTwo);
-
-            int padding = 1;
-            int directionModifier = UnityEngine.Random.Range(0, 1);
-            if (directionModifier == 1)
-                padding = padding * -1;
-
-            List<Room> rooms = Object.FindObjectsOfType(typeof(Room)).OfType<Room>().ToList();
-            rooms = rooms.Where(room => room.m_Accessible).ToList();
-
-            int randomIndex = _randomGenerator.Next(0, rooms.Count);
-            Vector3 roomPosition = rooms[randomIndex].transform.position;
-            Vector3 colliderOffset = rooms[randomIndex].GetComponent<BoxCollider2D>().offset;
-            Vector3 targetLocation = new Vector3(roomPosition.x + colliderOffset.x, roomPosition.y + colliderOffset.y, 0);
-
-            var general1ConverseData = new ConverseData
-            {
-                ReadyToTalk = false,
-                General = generalOne.GetComponent<General.General>(),
-                SocialNeed = generalOneSocialNeed
-            };
-            var general2ConverseData = new ConverseData
-            {
-                ReadyToTalk = false,
-                General = generalTwo.GetComponent<General.General>(),
-                SocialNeed = generalTwoSocialNeed
-            };
-            general1ConverseData.ConversationPartnerTaskData = general2ConverseData;
-            general2ConverseData.ConversationPartnerTaskData = general1ConverseData;
             
-            generalOne.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTask(general1ConverseData));
-            generalTwo.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTask(general2ConverseData));
+            ChanceToSearchForListeningDevices(generalList);
         }
 
         public static void GoToToilet(GameObject generalGameObject, NeedStatus bladderNeed)
@@ -230,9 +184,19 @@ namespace Assets.Scripts.AI
             return potentialListeningDevices.ElementAt(randomIndex);
         }
 
-        public static void AwaitConversation(GameObject gameObject, NeedStatus socialNeed)
+        public static void LookForConversation(GameObject gameObject, NeedStatus socialNeed)
         {
-            GeneralsAwaitingConversation.Add(gameObject, socialNeed);
+            General.General generalComponent = gameObject.GetComponent<General.General>();
+            NeedStatus generalOneSocialNeed = generalComponent.GetNeed(NeedType.SOCIAL);
+            
+            var general1ConverseData = new ConverseData
+            {
+                ReadyToTalk = false,
+                General = generalComponent,
+                SocialNeed = generalOneSocialNeed
+            };
+
+            gameObject.GetComponent<Character2D>().Tasks.AddToStack(new ConverseTask(general1ConverseData));
         }
     }
 }

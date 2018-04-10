@@ -21,6 +21,9 @@ namespace Assets.Scripts.Progression
         {
             _currentExperience += experiencePoints;
             CurrentLevel = Mathf.FloorToInt(Mathf.Pow(_currentExperience / 1000, 1 / 1.5f));
+
+            if (CurrentLevel >= _maxLevel)
+                CurrentLevel = _maxLevel;
         }
     }
 }

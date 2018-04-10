@@ -278,4 +278,16 @@ namespace Assets.Editor.SkillTests.GivenASkillAtLevel0
             Assert.That(testSkill.CurrentLevel, Is.EqualTo(10));
         }
     }
+
+    class When99999ExperienceIsGiven
+    {
+        [Test]
+        public void ThenTheSkillMovesToLevel10()
+        {
+            Skill testSkill = new Skill(0);
+            testSkill.AddExperience(99999);
+
+            Assert.That(testSkill.CurrentLevel, Is.EqualTo(10));
+        }
+    }
 }

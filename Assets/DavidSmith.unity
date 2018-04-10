@@ -20287,7 +20287,7 @@ MonoBehaviour:
   menuPrefab: {fileID: 114536261682414124, guid: 6fc41eec6a379dd4ea3504cb099f5455,
     type: 2}
   mouseLocation: {x: 0, y: 0, z: 0}
-  CanvasHireFire: {fileID: 0}
+  CanvasHireFire: {fileID: 1262144864}
 --- !u!114 &1085736258
 MonoBehaviour:
   m_ObjectHideFlags: 0

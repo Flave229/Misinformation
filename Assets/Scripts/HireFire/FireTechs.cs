@@ -107,7 +107,6 @@ public class FireTechs : MonoBehaviour {
             listTranslation[i].text = translationTextList[i];
             listSalary[i].text = salaryTextList[i];
             listName[i].text = nameTextList[i];
-
         }
 
     }
@@ -115,6 +114,6 @@ public class FireTechs : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-		
+        _expBar.rectTransform.localScale = new Vector3(_currentExp, 1, 1);
 	}
 }

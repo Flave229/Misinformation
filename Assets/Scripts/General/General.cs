@@ -10,7 +10,7 @@ using Event = Assets.Scripts.EventSystem.Event;
 
 namespace Assets.Scripts.General
 {
-    public class General : MonoBehaviour, IEventListener
+    public class General : MonoBehaviour, IEventListener, IGeneral
     {
         private System.Random _randomGenerator;
 
@@ -279,6 +279,11 @@ namespace Assets.Scripts.General
         public string GetObjectiveTime()
         {
             return ObjectiveTime;
+        }
+
+        public Character2D GetCharacter()
+        {
+            return this.GetComponent<Character2D>();
         }
     }
 }

@@ -25,9 +25,15 @@ namespace Assets.Scripts
             if (Input.GetKeyDown("escape"))
             {
                 if (_pauseMenu == true)
+                {
                     _pauseMenu = false;
-
-                else _pauseMenu = true;
+                    Timer.Instance().Play();    //unpauses the time
+                }
+                else
+                {
+                    _pauseMenu = true;
+                    Timer.Instance().Pause();   //pauses the time
+                }
 
             }
 

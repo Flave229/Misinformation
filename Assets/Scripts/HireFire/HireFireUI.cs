@@ -20,12 +20,13 @@ public class HireFireUI : MonoBehaviour {
         if (_showCanvas)
         {
             Time.timeScale = 0;
-            UIClock.SetActive(false);
+            //UIClock.SetActive(false);
+            Assets.Scripts.Timer.Instance().Pause();    //pauses the time
         }
         else
         {
             Time.timeScale = 1;
-            UIClock.SetActive(true);
+            //UIClock.SetActive(true);
         }
     }
 
@@ -57,6 +58,7 @@ public class HireFireUI : MonoBehaviour {
         if (CanvasHireFire.activeSelf == true)
         {
             CanvasHireFire.SetActive(false);
+            Assets.Scripts.Timer.Instance().Play();     //unpauses the time
         }
     }
 

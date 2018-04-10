@@ -114,6 +114,6 @@ public class FireTechs : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        _expBar.rectTransform.localScale = new Vector3(_currentExp, 1, 1);
+        //_expBar.rectTransform.localScale = new Vector3(_currentExp, 1, 1);
 	}
 }

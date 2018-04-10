@@ -15,6 +15,7 @@ namespace Assets.Scripts.Progression
             _maxLevel = 10; // Hardcoded cap, can adjust this by passing into constructor if necessary.
             _maxExperience = Mathf.Pow(_maxLevel, 1.5f) * 1000;
             _currentExperience = Mathf.Pow(currentLevel, 1.5f) * 1000;
+            CurrentLevel = currentLevel;
         }
 
         public void AddExperience(float experiencePoints)

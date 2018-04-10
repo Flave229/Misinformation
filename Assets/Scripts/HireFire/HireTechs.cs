@@ -21,6 +21,7 @@ public class HireTechs : MonoBehaviour {
         List<Text> textTranslationtList = new List<Text>();
         List<Text> textMotivationList = new List<Text>();
         List<Text> textSalaryList = new List<Text>();
+        List<Text> textNameList = new List<Text>();
         //TODO: The tech attributes are displayed in the wrong order...
         for (int j = 1; j < 4; j++)
         {
@@ -44,9 +45,13 @@ public class HireTechs : MonoBehaviour {
                 {
                     textSalaryList.Add(canvasTextGameObjects[i]);
                 }
+                if (canvasTextGameObjects[i].name == "HireTechName" + j)
+                {
+                    textNameList.Add(canvasTextGameObjects[i]);
+                }
             }
         }
-        HireTechText(textEquipmentList, textTranslationtList, textMotivationList, textSalaryList);
+        HireTechText(textEquipmentList, textTranslationtList, textMotivationList, textSalaryList, textNameList);
     }
 	
     void GenerateTechList()
@@ -74,7 +79,7 @@ public class HireTechs : MonoBehaviour {
     }
 
 
-    private void HireTechText(List<Text> listEquipment, List<Text> listTranslation, List<Text> listMotivation, List<Text> listSalary)
+    private void HireTechText(List<Text> listEquipment, List<Text> listTranslation, List<Text> listMotivation, List<Text> listSalary, List<Text> listName)
     {
         List<string> equipmentTextList = new List<string>();
         List<int> equipmentIntList = new List<int>();
@@ -87,6 +92,8 @@ public class HireTechs : MonoBehaviour {
 
         List<string> salaryTextList = new List<string>();
         List<int> salaryIntList = new List<int>();
+
+        List<string> nameTextList = new List<string>();
 
         for (int i = 0; i < _listPossibleTechs.Count; i++)
         {
@@ -107,6 +114,8 @@ public class HireTechs : MonoBehaviour {
 
             salaryIntList.Add(_listPossibleTechs[i].GetComponent<Technician>().Salary);
             salaryTextList.Add(salaryIntList[i].ToString());
+
+            nameTextList.Add(_listPossibleTechs[i].GetComponent<Technician>().FullName);
         }
 
         for (int i = 0; i < _listPossibleTechs.Count; i++)
@@ -115,6 +124,7 @@ public class HireTechs : MonoBehaviour {
             listMotivation[i].text = motivationTextList[i];
             listTranslation[i].text = translationTextList[i];
             listSalary[i].text = salaryTextList[i];
+            listName[i].text = nameTextList[i];
         }
 
     }

@@ -203,7 +203,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8636159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2983,7 +2983,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ca8cdc6737314648b47da0c346d5865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartingTimeInSeconds: 100
+  StartingTimeInSeconds: 10
 --- !u!114 &213072226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11470,6 +11470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60dce7f57f7c80b47a8b97e7023ce0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FullName: 
 --- !u!95 &714998843
 Animator:
   serializedVersion: 3
@@ -23117,6 +23118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60dce7f57f7c80b47a8b97e7023ce0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FullName: 
 --- !u!95 &1391846772
 Animator:
   serializedVersion: 3
@@ -25740,6 +25742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60dce7f57f7c80b47a8b97e7023ce0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FullName: 
 --- !u!95 &1559072329
 Animator:
   serializedVersion: 3
@@ -35107,6 +35110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsActive: 0
   Salary: 0
+  FullName: 
 --- !u!95 &2061122055
 Animator:
   serializedVersion: 3

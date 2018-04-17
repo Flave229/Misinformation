@@ -126,7 +126,12 @@ namespace Assets.Scripts
             switch (subscribeEvent)
             {
                 case EventSystem.Event.SPEECH_START:
-                    EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_LISTENING, activeDevice.GetComponent<ListeningDevice>());
+                    ListeningDevicePacket packet = new ListeningDevicePacket
+                    {
+                        Device = activeDevice.GetComponent<ListeningDevice>(),
+                        TechnicianListening = _listeningTechnician
+                    };
+                    EventMessenger.Instance().FireEvent(EventSystem.Event.LISTENING_DEVICE_LISTENING, packet);
                     break;
             }
         }

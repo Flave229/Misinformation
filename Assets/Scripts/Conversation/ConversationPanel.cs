@@ -61,11 +61,12 @@ public class ConversationPanel : MonoBehaviour, IEventListener
 
     public void ScrollStoredSentences(float value)
     {
-        if (value < 1)
-            return;
-        int startIndex = Mathf.RoundToInt(value - 1);
-        int visibleSentences = storedSentences.Count - startIndex >= 6 ? 6 : storedSentences.Count - startIndex;
-        GameObject.FindGameObjectWithTag("Dialogue").GetComponent<Text>().text = string.Join("\n", storedSentences.GetRange(startIndex, visibleSentences).ToArray());
+        //if (value < 1)
+        //    return;
+        //int startIndex = Mathf.RoundToInt(value - 1);
+        //int visibleSentences = storedSentences.Count - startIndex >= 6 ? 6 : storedSentences.Count - startIndex;
+        //GameObject.FindGameObjectWithTag("Dialogue").GetComponent<Text>().text = string.Join("\n", storedSentences.GetRange(startIndex, visibleSentences).ToArray());
+        GameObject.FindGameObjectWithTag("Dialogue").GetComponent<Text>().text = string.Join("\n", storedSentences.ToArray());
     }
 
     public void ShowPanel()

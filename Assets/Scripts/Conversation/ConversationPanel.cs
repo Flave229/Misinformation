@@ -17,21 +17,29 @@ public class ConversationPanel : MonoBehaviour, IEventListener
     void Start()
     {
         SubscribeToEvents();
-        _convoPanel = GameObject.FindGameObjectWithTag("ConversationPanel");
-        _hideButton = GameObject.FindGameObjectWithTag("ConversationPanel").gameObject.transform.parent.Find("ButtonHide").gameObject;
-        refSlider = FindObjectOfType<Slider>();
+        //_convoPanel = GameObject.FindGameObjectWithTag("ConversationPanel");
+       // _hideButton = _convoPanel.gameObject.transform.parent.Find("ButtonHide").gameObject;
+       // refSlider = FindObjectOfType<Slider>();
         refSlider.minValue = 1;
         //refSlider.maxValue = 1;
         refSlider.wholeNumbers = true;
     }
 
+    void Awake()
+    {
+        _convoPanel = GameObject.FindGameObjectWithTag("ConversationPanel");
+        _hideButton = _convoPanel.gameObject.transform.parent.Find("ButtonHide").gameObject;
+        refSlider = FindObjectOfType<Slider>();
+    }
 
     private float _cooldown = 0;
 
 	// Update is called once per frame
 	void Update ()
     {
+        if(storedSentences.Count == 1)
         refSlider.onValueChanged.AddListener(ScrollStoredSentences);
+
         _cooldown -= Time.deltaTime;
 
         if (Input.GetKey(KeyCode.P) && _cooldown <= 0)
@@ -44,7 +52,7 @@ public class ConversationPanel : MonoBehaviour, IEventListener
             refSlider.maxValue = storedSentences.Count >= 6 ? storedSentences.Count - 5 : 1;
         }
 
-        if (storedSentences.Count > 6 && !sliderSeeked)
+        if (storedSentences.Count >= 6 && !sliderSeeked)
         {
             refSlider.value = storedSentences.Count - 6;
             sliderSeeked = true;

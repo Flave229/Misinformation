@@ -57,6 +57,7 @@ namespace Assets.Scripts
         public void PlayGame(int sceneIndex)
         {
             GameManager.Instance().Pause(false);
+            GameManager.Instance().GameoverState = true;
             LoadByIndex(sceneIndex);
         }
 

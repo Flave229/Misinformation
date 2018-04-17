@@ -14,7 +14,7 @@ namespace Assets.Scripts
         public bool TransitioningDay = true;
         public GameObject GeneralGameObject;
         public Room SpawnRoom;
-
+        //bool hasDisplayed = false;
 
         public List<Name> leavingGenerals;
         public List<Name> arrivingGenerals;
@@ -59,9 +59,9 @@ namespace Assets.Scripts
         
         public void EndDay()
         {
-            GameManager.Instance().GetDailyReport().Show();
-            TransitioningDay = true;
-
+                GameManager.Instance().GetDailyReport().Show();
+                TransitioningDay = true;
+            
             var generalList = GameManager.Instance().GeneralList;
             foreach (GameObject gameObject in generalList)
             {
@@ -70,7 +70,6 @@ namespace Assets.Scripts
                 general.UpdateTrustValue(1);
                 general.GetComponent<Character2D>().ClearTasks();
             }
-
             foreach (GameObject gameObject in GameManager.Instance().TechList)
             {
                 var technician = gameObject.GetComponent<Technician>();
@@ -82,7 +81,6 @@ namespace Assets.Scripts
                 GameManager.Instance().ActiveTech = GameManager.Instance().TechList[0];
                 Destroy(gameObject);
             }
-
         }
 
         public void GenerateGenerals()

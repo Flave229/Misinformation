@@ -5,6 +5,7 @@ using Assets.Scripts.EventSystem;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Assets.Scripts.EventSystem.EventPackets;
 
 namespace Assets.Scripts.AI.Tasks
 {
@@ -62,13 +63,6 @@ namespace Assets.Scripts.AI.Tasks
             }
         }
 
-        private void GenerateConversation()
-        {
-            var conversation = _conversationManager.ConversationGenerator(_converseData.General, _converseData.ConversationPartnerTaskData.General);
-            _converseData.Speech = conversation[_converseData.General];
-            _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
-        }
-
         private bool CheckIfConversationPartnerIsNear()
         {
             float closestGeneralDistance = float.MaxValue;
@@ -98,6 +92,7 @@ namespace Assets.Scripts.AI.Tasks
             Debug.Log(_converseData.General.Name.FullName() + " is close to " + closestGeneral.Name.FullName() + " and will try to initiate conversation");
             _converseData.General.GetComponent<Character2D>().Tasks.PauseCurrentTask();
             closestGeneral.GetComponent<Character2D>().Tasks.PauseCurrentTask();
+            closestGeneral.GetComponent<Character2D>().Tasks.FlushConcurrentTasks();
             _converseData.ConversationPartnerTaskData = new ConverseData
             {
                 ConversationPartnerTaskData = _converseData,
@@ -110,6 +105,13 @@ namespace Assets.Scripts.AI.Tasks
             _converseData.ReadyToTalk = true;
             GenerateConversation();
             return true;
+        }
+
+        private void GenerateConversation()
+        {
+            var conversation = _conversationManager.ConversationGenerator(_converseData.General, _converseData.ConversationPartnerTaskData.General);
+            _converseData.Speech = conversation[_converseData.General];
+            _converseData.ConversationPartnerTaskData.Speech = conversation[_converseData.ConversationPartnerTaskData.General];
         }
 
         public void SetCompleted()
@@ -139,16 +141,17 @@ namespace Assets.Scripts.AI.Tasks
             switch(subscribeEvent)
             {
                 case EventSystem.Event.LISTENING_DEVICE_LISTENING:
-                    ListeningDevice listeningDevice = (ListeningDevice)eventPacket;
+                    ListeningDevicePacket listeningDevice = (ListeningDevicePacket)eventPacket;
 
-                    if (listeningDevice.CurrentRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
+                    if (listeningDevice.Device.CurrentRoom != _converseData.General.gameObject.GetComponent<Character2D>().CurrentRoom)
                         return;
 
                     if (_converseData.Listened)
                         return;
 
                     _converseData.Listened = true;
-                    string scrambledText = ScrambleText(listeningDevice);
+                    string scrambledText = ScrambleText(listeningDevice.Device);
+                    listeningDevice.TechnicianListening.TranslationSkill.AddExperience(250);
                     
                     GameManager.Instance().ConversePanel.ShowPanel();
                     GameManager.Instance().ConversePanel.addSentence(_converseData.General.Name.FullName() + ": " + "<color=#585858ff>" + scrambledText + "</color>" );

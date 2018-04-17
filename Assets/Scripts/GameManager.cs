@@ -2,6 +2,7 @@
 using Assets.Scripts.AI;
 using Assets.Scripts.General;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.Scripts
@@ -10,10 +11,11 @@ namespace Assets.Scripts
     {
         public List<GameObject> ListeningDevList = new List<GameObject>();
         public List<GameObject> GeneralList = new List<GameObject>();
-		public List<GameObject> TechList = new List<GameObject> ();
+        public List<GameObject> TechList = new List<GameObject>();
+        public List<Name> GeneralNameList = new List<Name>();
+        public GameObject ActiveTech;
+        public int ActiveTechNum;
         public List<GameObject> FireTechList = new List<GameObject>();
-		public GameObject ActiveTech;
-		public int ActiveTechNum;
         public int Days;
         public ConversationPanel ConversePanel;
         public Objective CurrentObjective;
@@ -40,6 +42,12 @@ namespace Assets.Scripts
         {
             get { return _fundingAmount; }
             set { _fundingAmount = value; _fundingText.text = "£" + FundingAmount.ToString("0000"); }
+        }
+
+        public bool GameoverState
+        {
+            get { return _gameover; }
+            set { _gameover = value; }
         }
 
         private void Awake()
@@ -83,25 +91,21 @@ namespace Assets.Scripts
         {
             GeneralList.AddRange(GameObject.FindGameObjectsWithTag("General"));
             ListeningDevList.AddRange(GameObject.FindGameObjectsWithTag("ListeningDevice"));
-			TechList.AddRange (GameObject.FindGameObjectsWithTag ("Player"));
-			TechList [0].gameObject.GetComponent<Technician> ().IsActive = true;
-			ActiveTech = TechList [0];
-			ActiveTechNum = 0;
+            TechList.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+            TechList[0].gameObject.GetComponent<Technician>().IsActive = true;
+            ActiveTech = TechList[0];
+            ActiveTechNum = 0;
 
             _fundingText = GameObject.FindGameObjectsWithTag("FundingText")[0].GetComponent<Text>();
             _fundingText.text = "£" + FundingAmount.ToString("0000");
             _dailyReport = UnityEngine.Object.FindObjectOfType<DailyReport>();
-            //ConversePanel = new ConversationPanel();
-           // ConversePanel._convoPanel = GameObject.FindGameObjectWithTag("ConversationPanel");
-            //ConversePanel._hideButton = GameObject.FindGameObjectWithTag("ConversationPanel").gameObject.transform.parent.Find("ButtonHide").gameObject;
-            //ConversePanel.refScrollbar = FindObjectOfType<Scrollbar>();
         }
 
         public void Update()
         {
-            if (_pause)
+            if (_pause || _gameover)
                 return;
-
+            
             if (_pendingStart)
             {
                 TechList.Clear();
@@ -119,7 +123,7 @@ namespace Assets.Scripts
                 _pendingStart = false;
             }
 
-            if (ActiveTech == null)
+            if (ActiveTech == null && TechList.Count > 0)
                 ActiveTech = TechList[0];
 
             InputManager.Instance().Update();
@@ -127,17 +131,18 @@ namespace Assets.Scripts
             CurrentObjective.pevent = Objective.Event;
             CurrentObjective.pplace = Objective.Place;
             CurrentObjective.ptime = Objective.Time;
-            //Debug.Log("Event" + currentObjective.pevent + "Place" + currentObjective.pplace + "Time" + currentObjective.ptime);
-
+            
             if (_dailyManager.TransitioningDay == false && Timer.Instance().GetRemainingTime() <= 0)
             {
                 _dailyManager.EndDay();
+                //CallGameover();
+                displayGameover();
             }
-				
-			if(Input.GetKeyUp(KeyCode.Tab) && _usingDesk == false)
-			{
-				CycleTech ();
-			}
+
+            if (Input.GetKeyUp(KeyCode.Tab) && _usingDesk == false)
+            {
+                CycleTech();
+            }
 
             if (FundingAmount < 0)
                 FundingAmount = 0;
@@ -149,34 +154,35 @@ namespace Assets.Scripts
         {
             return _instance ?? (_instance = new GameManager());
         }
-        
-		public void CycleTech()
-		{
+
+        public void CycleTech()
+        {
             TechList.Clear();
             TechList.AddRange(GameObject.FindGameObjectsWithTag("Player"));
-            ActiveTech.gameObject.GetComponent<Technician> ().IsActive = false;
-			if (ActiveTechNum == (TechList.Count - 1))
-				ActiveTechNum = 0;
-			else
-				ActiveTechNum++;
 
-			ActiveTech = TechList [ActiveTechNum];
-			ActiveTech.gameObject.GetComponent<Technician>().IsActive = true;
-			Camera.main.GetComponent<Camera2DFollow> ().target = ActiveTech.transform;
-		}
+            ActiveTech.gameObject.GetComponent<Technician>().IsActive = false;
+            if (ActiveTechNum == (TechList.Count - 1))
+                ActiveTechNum = 0;
+            else
+                ActiveTechNum++;
 
-		public void Salary()
-		{
+            ActiveTech = TechList[ActiveTechNum];
+            ActiveTech.gameObject.GetComponent<Technician>().IsActive = true;
+            Camera.main.GetComponent<Camera2DFollow>().target = ActiveTech.transform;
+        }
+
+        public void Salary()
+        {
             if (ActiveTech != null)
             {
                 foreach (GameObject t in TechList)
                 {
-                   // t.GetComponent<Technician>().UpdateSalary();
+                    t.GetComponent<Technician>().UpdateSalary();
                     FundingAmount = FundingAmount - t.GetComponent<Technician>().Salary;
                 }
             }
-		}
-        
+        }
+
         public List<GameObject> GetListeningDevices()
         {
             return ListeningDevList;
@@ -187,10 +193,10 @@ namespace Assets.Scripts
             return GeneralList;
         }
 
-		public List<GameObject> GetTechList()
-		{
-			return TechList;
-		}
+        public List<GameObject> GetTechList()
+        {
+            return TechList;
+        }
 
         public void UpdateCurrentDate()
         {
@@ -210,17 +216,28 @@ namespace Assets.Scripts
         public string GetCurrentDate()
         {
             string date = CurrentDay + " ";
-            if (CurrentMouth == 1) { date += "January "; } else
-            if (CurrentMouth == 2) { date += "Feburary "; } else
-            if (CurrentMouth == 3) { date += "March "; } else
-            if (CurrentMouth == 4) { date += "April "; } else
-            if (CurrentMouth == 5) { date += "May "; } else
-            if (CurrentMouth == 6) { date += "June "; } else
-            if (CurrentMouth == 7) { date += "July "; } else
-            if (CurrentMouth == 8) { date += "August "; } else
-            if (CurrentMouth == 9) { date += "September "; } else
-            if (CurrentMouth == 10) { date += "October "; } else
-            if (CurrentMouth == 11) { date += "November "; } else
+            if (CurrentMouth == 1) { date += "January "; }
+            else
+            if (CurrentMouth == 2) { date += "Feburary "; }
+            else
+            if (CurrentMouth == 3) { date += "March "; }
+            else
+            if (CurrentMouth == 4) { date += "April "; }
+            else
+            if (CurrentMouth == 5) { date += "May "; }
+            else
+            if (CurrentMouth == 6) { date += "June "; }
+            else
+            if (CurrentMouth == 7) { date += "July "; }
+            else
+            if (CurrentMouth == 8) { date += "August "; }
+            else
+            if (CurrentMouth == 9) { date += "September "; }
+            else
+            if (CurrentMouth == 10) { date += "October "; }
+            else
+            if (CurrentMouth == 11) { date += "November "; }
+            else
             if (CurrentMouth == 12) { date += "December "; }
             date += CurrentYear + "";
             return date;
@@ -248,5 +265,62 @@ namespace Assets.Scripts
         {
             _usingDesk = v;
         }
+        
+
+        #if UNITY_EDITOR
+        bool ifScene_CurrentlyLoaded_inEditor(string sceneName_no_extention)
+        {
+            for (int i = 0; i < UnityEditor.SceneManagement.EditorSceneManager.sceneCount; ++i)
+            {
+                var scene = UnityEditor.SceneManagement.EditorSceneManager.GetSceneAt(i);
+
+                if (scene.name == sceneName_no_extention)
+                {
+                    return true;//the scene is already loaded
+                }
+            }
+            //scene not currently loaded in the hierarchy:
+            return false;
+        }
+        #endif
+
+        bool isScene_CurrentlyLoaded(string sceneName_no_extention)
+        {
+            for (int i = 0; i < SceneManager.sceneCount; ++i)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (scene.name == sceneName_no_extention)
+                {
+                    //the scene is already loaded
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void EmptyAIStack()
+        {
+            for (int i = 0; i < GeneralList.Count; i++)
+            {
+                if (GeneralList[i] != null)
+                    GeneralList[i].GetComponent<Character2D>().Tasks.Destroy();
+            }
+        }
+
+        public void displayGameover()
+        {
+
+                if (_fundingAmount == 0)
+                {
+                    _gameover = true;
+                    SceneManager.LoadScene(4);
+                    ListeningDevList.RemoveRange(0, ListeningDevList.Count);
+                    EmptyAIStack();
+                    GeneralList.RemoveRange(0, GeneralList.Count);
+                    TechList.RemoveRange(0, TechList.Count);
+                }
+
+        }
+
     }
 }

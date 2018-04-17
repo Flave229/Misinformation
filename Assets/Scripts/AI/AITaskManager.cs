@@ -139,6 +139,10 @@ namespace Assets.Scripts.AI
 
         private void ChanceToSearchForListeningDevices(List<GameObject> generalList)
         {
+            if (generalList.Count == 0)
+                return; 
+
+
             List<GameObject> untrustingGenerals = generalList.Where(x => x.GetComponent<General.General>().GetTrust() < 3).ToList();
             int untrustingGeneralCount = untrustingGenerals.Count;
 

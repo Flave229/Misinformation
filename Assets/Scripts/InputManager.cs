@@ -12,6 +12,7 @@ namespace Assets.Scripts
         public bool m_Button4 = false;
         public bool m_ClickLeft = false;
         public bool m_ClickRight = false;
+        public bool m_SpaceBar = false;
 
         public float m_DirectionHorizontal = 0.0f;
         public float m_DirectionVertical = 0.0f;
@@ -46,6 +47,7 @@ namespace Assets.Scripts
             m_Button4 = Input.GetButtonDown("Button4");
             m_ClickLeft = Input.GetButtonDown("Fire1");
             m_ClickRight = Input.GetButtonDown("Fire2");
+            m_SpaceBar = Input.GetKeyDown(KeyCode.Space);
         
             m_DirectionHorizontal = Input.GetAxis("Horizontal");
             m_DirectionVertical   = Input.GetAxis("Vertical");
@@ -63,10 +65,11 @@ namespace Assets.Scripts
             {
                 _currentPlaceCooldown -= Time.deltaTime;
             }
-            else if (Input.GetKeyDown(KeyCode.Space))
+            else if (m_SpaceBar && GameManager.Instance().GameoverState)
             {
-                /* _currentPlaceCooldown = _defaultPlaceCooldown;
-            GameObject technician = GameObject.FindGameObjectWithTag("Player");*/
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                //    /* _currentPlaceCooldown = _defaultPlaceCooldown;
+                //GameObject technician = GameObject.FindGameObjectWithTag("Player");*/
             }
         }
     }

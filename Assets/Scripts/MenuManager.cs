@@ -25,9 +25,15 @@ namespace Assets.Scripts
             if (Input.GetKeyDown("escape"))
             {
                 if (_pauseMenu == true)
+                {
                     _pauseMenu = false;
-
-                else _pauseMenu = true;
+                    Timer.Instance().Play();    //unpauses the time
+                }
+                else
+                {
+                    _pauseMenu = true;
+                    Timer.Instance().Pause();   //pauses the time
+                }
 
             }
 
@@ -51,6 +57,7 @@ namespace Assets.Scripts
         public void PlayGame(int sceneIndex)
         {
             GameManager.Instance().Pause(false);
+            GameManager.Instance().GameoverState = true;
             LoadByIndex(sceneIndex);
         }
 

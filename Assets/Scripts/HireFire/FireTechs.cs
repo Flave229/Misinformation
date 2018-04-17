@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts;
+using Assets.Scripts.Progression;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +8,21 @@ using UnityEngine.UI;
 
 public class FireTechs : MonoBehaviour {
 
-    private void Awake()
+    List<Text> canvasTextGameObjects = new List<Text>();
+    List<Image> canvasImageGameObjects = new List<Image>();
+    public int _currentExpEquipment;
+    public int _currentExpTranslation;
+    public int _currentExpMotivation;
+
+    private void Start()
     {
-        OnActive();
+        canvasTextGameObjects.AddRange(Object.FindObjectsOfType<Text>());
+        canvasImageGameObjects.AddRange(Object.FindObjectsOfType<Image>());
     }
 
     public void OnActive()
     {
-        List<Text> canvasTextGameObjects = new List<Text>();
-        canvasTextGameObjects.AddRange(Object.FindObjectsOfType<Text>());
-
+        
         List<Text> textEquipmentList = new List<Text>();
         List<Text> textTranslationtList = new List<Text>();
         List<Text> textMotivationList = new List<Text>();
@@ -52,6 +58,7 @@ public class FireTechs : MonoBehaviour {
             }
         }
         FireTechText(textEquipmentList, textTranslationtList, textMotivationList, textSalaryList, textNameList);
+        ExpBar();
     }
 
     public void FireTech(int num)
@@ -111,8 +118,45 @@ public class FireTechs : MonoBehaviour {
 
     }
 
+    private void ExpBar()
+    {
+        List<Image> imageEquipmentList = new List<Image>();
+        List<Image> imageTranslationList = new List<Image>();
+        List<Image> imageMotivationList = new List<Image>();
+         
+        for (int j = 1; j < 4; j++)
+        {
+            for (int i = 0; i < canvasImageGameObjects.Count; i++)
+            {
+                if (canvasImageGameObjects[i].name == "ExpBarEquipment" + j)
+                {
+                    imageEquipmentList.Add(canvasImageGameObjects[i]);
+                }
+
+                if (canvasImageGameObjects[i].name == "ExpBarTranslation" + j)
+                {
+                    imageTranslationList.Add(canvasImageGameObjects[i]);
+                }
+
+                if (canvasImageGameObjects[i].name == "ExpBarMotivationText" + j)
+                {
+                    imageMotivationList.Add(canvasImageGameObjects[i]);
+                }
+            }
+        }
+        List<ExperienceProgress> expProg = new List<ExperienceProgress>();
+        List<GameObject> techs = GameManager.Instance().TechList;
+        for (int i = 0; i < techs.Count; ++i)
+        {
+            imageEquipmentList[i].rectTransform.localScale = new Vector3((float)techs[i].GetComponent<Technician>().EquipmentSkill.GetProgressTowardsNextLevel().PercentageToNextLevel / 100, 1, 1);
+        //imageMotivationList[j].rectTransform.localScale = new Vector3((float)techs[i].GetComponent<Technician>().Motivation.GetProgressTowardsNextLevel().PercentageToNextLevel / 100, 1, 1);
+            imageTranslationList[i].rectTransform.localScale = new Vector3((float)techs[i].GetComponent<Technician>().TranslationSkill.GetProgressTowardsNextLevel().PercentageToNextLevel / 100, 1, 1);
+        }
+}
+
     // Update is called once per frame
     void Update ()
     {
+        //_expBar.rectTransform.localScale = new Vector3(_currentExp, 1, 1);
 	}
 }

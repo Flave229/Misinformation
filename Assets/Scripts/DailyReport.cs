@@ -55,7 +55,7 @@ namespace Assets.Scripts
         {
             reportScreenVisible = true;
             Time.timeScale = 0;
-            Timer.Instance().Pause();
+            Timer.Instance().Pause();   //pauses the time
             foreach (GameObject component in DailyReportComponents)
                 component.SetActive(true);
         }
@@ -64,8 +64,7 @@ namespace Assets.Scripts
         {
             reportScreenVisible = false;
             Time.timeScale = 1;
-            Timer.Instance().Play();
-            reportScreenVisible = false;
+            Timer.Instance().Play();    //unpauses the time
             foreach (GameObject component in DailyReportComponents)
                 component.SetActive(false);
             SoundManager.Instance().PlaySingle("Page_Turn-Mark DiAngelo");

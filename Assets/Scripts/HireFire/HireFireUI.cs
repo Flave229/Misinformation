@@ -28,6 +28,10 @@ public class HireFireUI : MonoBehaviour {
             Time.timeScale = 1;
             //UIClock.SetActive(true);
         }
+        if (PanelCurrent.activeSelf == true)
+        {
+            PanelCurrent.GetComponent<FireTechs>().OnActive();
+        }
     }
 
     public void SetActiveCurrent()

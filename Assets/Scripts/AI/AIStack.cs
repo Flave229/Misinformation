@@ -140,5 +140,12 @@ namespace Assets.Scripts.AI
         {
             return _concurrentTask != null ? _concurrentTask.IsActive() : false;
         }
+
+        internal void FlushConcurrentTasks()
+        {
+            if (_concurrentTask != null)
+                _concurrentTask.SetCompleted();
+            _concurrentTasks.Clear();
+        }
     }
 }

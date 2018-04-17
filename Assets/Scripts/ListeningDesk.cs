@@ -6,19 +6,21 @@ namespace Assets.Scripts
 {
     public class ListeningDesk : MonoBehaviour, IEventListener
     {
-		public int numOfListeningDevices;
-		int activeDeviceNum;
-		GameObject activeDevice;
-		bool usingDesk = false;
-        
-		void Start () 
+		public int NumOfListeningDevices;
+
+		private int activeDeviceNum;
+		private GameObject activeDevice;
+		private bool usingDesk = false;
+        private Technician _listeningTechnician = null;
+
+        void Start () 
 		{
             SubscribeToEvents();
 		}
 		
 		void Update () 
 		{
-			numOfListeningDevices = GameManager.Instance().ListeningDevList.Count;
+			NumOfListeningDevices = GameManager.Instance().ListeningDevList.Count;
             if (GameManager.Instance().ActiveTech != null)
             {
                 float distance = Vector3.Distance(GameManager.Instance().ActiveTech.transform.position, this.gameObject.transform.position);
@@ -40,7 +42,7 @@ namespace Assets.Scripts
             }
 			if (usingDesk == true && activeDevice == null)
             {
-				if (numOfListeningDevices == 0)
+				if (NumOfListeningDevices == 0)
 					LeaveDesk ();
 				else
 					UseDesk ();
@@ -49,9 +51,10 @@ namespace Assets.Scripts
 
 		void UseDesk()
 		{
-            if (activeDevice != null || numOfListeningDevices == 0)
+            if (activeDevice != null || NumOfListeningDevices == 0)
                 return;
 
+            _listeningTechnician = GameManager.Instance().ActiveTech.GetComponent<Technician>();
             GameManager.Instance().SetUsingDesk(true);
 			activeDevice = GameManager.Instance ().ListeningDevList [0];
 			activeDeviceNum = 0;
@@ -69,7 +72,7 @@ namespace Assets.Scripts
 		void CycleDevices()
 		{
 			activeDevice.gameObject.GetComponent<ListeningDevice>().activeDevice = false;
-			if (activeDeviceNum == (numOfListeningDevices - 1))
+			if (activeDeviceNum == (NumOfListeningDevices - 1))
 				activeDeviceNum = 0;
 			else
 				activeDeviceNum++;
@@ -78,7 +81,7 @@ namespace Assets.Scripts
 				activeDevice = GameManager.Instance().ListeningDevList [activeDeviceNum];
 			else
             { 
-				if (activeDeviceNum == (numOfListeningDevices - 1))
+				if (activeDeviceNum == (NumOfListeningDevices - 1))
 					activeDeviceNum = 0;
 				else
 					activeDeviceNum++;
@@ -93,6 +96,7 @@ namespace Assets.Scripts
             ListeningDevicePacket eventPacket = new ListeningDevicePacket
             {
                 Device = newActiveDevice,
+                TechnicianListening = _listeningTechnician,
                 Num = activeDeviceNum
             };
 

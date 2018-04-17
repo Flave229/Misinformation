@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/MenuScene.unity
     guid: da270ba0aaf945540a10bb54fb283dab
   - enabled: 1
-    path: Assets/DavidSmith.unity
-    guid: bca0e511e43665644bdbfe851baad297
+    path: Assets/FinalScene.unity
+    guid: 1f49b0f6635bc884c84ccbdad4abc396
   - enabled: 1
     path: Assets/OptionScene.unity
     guid: d97be75f53a15184aa08f1751f96cb32

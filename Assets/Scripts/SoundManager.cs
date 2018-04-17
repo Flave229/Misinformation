@@ -6,7 +6,7 @@ namespace Assets.Scripts
     public class SoundManager : MonoBehaviour
     {
         private static SoundManager _instance;
-		private Dictionary<string,AudioClip> _allAudio;
+		private Dictionary<string, AudioClip> _allAudio;
 
         public AudioSource EfxSource;
         public AudioSource MusicSource;
@@ -15,6 +15,7 @@ namespace Assets.Scripts
 		public float setMusicVolume = 0.7f;
         public float volumeChange = 1.0f;
         public bool soundEnabled = true;
+    
 
         private void Awake()
         {
@@ -47,7 +48,6 @@ namespace Assets.Scripts
         {
             if (soundEnabled == true)
             {
-                MusicSource.clip = _allAudio["bgm1"];
                 MusicSource.loop = true;
                 MusicSource.volume = setMusicVolume * volumeChange;
                 MusicSource.Play();
@@ -131,6 +131,13 @@ namespace Assets.Scripts
         public void ChangeVolume(float volume)
         {
             volumeChange = volume;
+        }
+
+        // This will destroy the instance. Please only call if 100% sure
+        public void Destroy()
+        {
+            Destroy(this.gameObject);
+            _instance = null;
         }
     }
 }

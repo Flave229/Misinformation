@@ -19,4 +19,9 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 		//Debug.LogWarning("MonoSingleton Instance Set!" + gameObject.name);
         Instance = this as T;
     }
+
+    private void OnApplicationQuit()
+    {
+        Instance = null;
+    }
 }

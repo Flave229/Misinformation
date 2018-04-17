@@ -64,6 +64,7 @@ namespace Assets.Scripts
         public void QuitToMenu(int sceneIndex)
         {
             GameManager.Instance().Pause(true);
+            SoundManager.Instance().Destroy();
             LoadByIndex(sceneIndex);
         }
 

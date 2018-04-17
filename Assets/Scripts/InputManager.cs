@@ -65,12 +65,7 @@ namespace Assets.Scripts
             {
                 _currentPlaceCooldown -= Time.deltaTime;
             }
-            else if (m_SpaceBar && GameManager.Instance().GameoverState)
-            {
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-                //    /* _currentPlaceCooldown = _defaultPlaceCooldown;
-                //GameObject technician = GameObject.FindGameObjectWithTag("Player");*/
-            }
+
         }
     }
 }

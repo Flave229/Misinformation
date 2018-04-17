@@ -35,6 +35,7 @@ namespace Assets.Scripts
         public bool RecievingFunding;
         private bool _pause;
         private bool _pendingStart;
+       // [SerializeField]
         private bool _gameover;
         private bool _usingDesk = false;
 
@@ -82,7 +83,7 @@ namespace Assets.Scripts
 
         private void AwakeSingletonManagers()
         {
-            //SoundManager.Instance();            
+            SoundManager.Instance();            
             InputManager.Instance();
             AITaskManager.Instance();
         }
@@ -319,6 +320,7 @@ namespace Assets.Scripts
                     GeneralList.RemoveRange(0, GeneralList.Count);
                     TechList.RemoveRange(0, TechList.Count);
                 }
+           
 
         }
 

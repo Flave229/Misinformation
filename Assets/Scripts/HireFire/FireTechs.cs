@@ -14,7 +14,7 @@ public class FireTechs : MonoBehaviour {
     public int _currentExpTranslation;
     public int _currentExpMotivation;
 
-    private void Start()
+    private void Awake()
     {
         canvasTextGameObjects.AddRange(Object.FindObjectsOfType<Text>());
         canvasImageGameObjects.AddRange(Object.FindObjectsOfType<Image>());
@@ -109,7 +109,7 @@ public class FireTechs : MonoBehaviour {
         for (int i = 0; i < GameManager.Instance().TechList.Count; i++)
         {
             listEquipment[i].text = equipmentTextList[i];
-            listMotivation[i].text = motivationTextList[i];
+            //listMotivation[i].text = motivationTextList[i];
             listTranslation[i].text = translationTextList[i];
             listSalary[i].text = salaryTextList[i];
             listName[i].text = nameTextList[i];

@@ -1376,7 +1376,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &70146775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13747,7 +13747,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &790251008
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15133,9 +15133,9 @@ MonoBehaviour:
   ListeningDevList: []
   GeneralList: []
   TechList: []
-  FireTechList: []
   ActiveTech: {fileID: 0}
   ActiveTechNum: 0
+  FireTechList: []
   Days: 0
   ConversePanel: {fileID: 0}
   CurrentObjective: {fileID: 0}
@@ -15331,7 +15331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3533ee45e9c46f542a56060418b6fd2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numOfListeningDevices: 0
+  NumOfListeningDevices: 0
 --- !u!212 &871970383
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17867,7 +17867,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1031136735
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18574,7 +18574,7 @@ MonoBehaviour:
   - {fileID: 1976018198}
   - {fileID: 1707553101}
   QueueHide: 0
-  player: {fileID: 0}
+  player: {fileID: 2061122052}
   Typewriter: {fileID: 1165679598}
 --- !u!114 &1059493548
 MonoBehaviour:

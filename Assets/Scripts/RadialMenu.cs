@@ -170,7 +170,7 @@ namespace Assets.Scripts
             }));
 
             character.Tasks.AddToStack(new AITaskChain(taskChain));
-
+            //Resources.FindObjectsOfTypeAll<FireTechs>().ToList().First().GetComponent<FireTechs>().OnActive();
         }
 
         private void RadialMenuText()

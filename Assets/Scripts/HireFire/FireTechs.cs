@@ -22,7 +22,6 @@ public class FireTechs : MonoBehaviour {
 
     public void OnActive()
     {
-        
         List<Text> textEquipmentList = new List<Text>();
         List<Text> textTranslationtList = new List<Text>();
         List<Text> textMotivationList = new List<Text>();
